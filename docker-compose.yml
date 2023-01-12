@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  dev-db:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: nest
+    volumes:
+      - mongo-data-dev:/data/db
+    networks:
+      - team-managment-app
+  test-db:
+    image: mongo:latest
+    ports:
+      - 27018:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: nest
+    volumes:
+      - mongo-data-test:/data/db
+    networks:
+      - team-managment-app
+volumes:
+  mongo-data-dev:
+  mongo-data-test:
+networks:
+  team-managment-app:
