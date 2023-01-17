@@ -4,6 +4,7 @@ import { User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { AES, enc } from 'crypto-js';
+import { CryptoService } from 'src/cryptography/crypto.service';
 
 @Injectable()
 export class EmployeeService {
@@ -11,14 +12,11 @@ export class EmployeeService {
   constructor(
     private readonly prisma: PrismaService,
     private config: ConfigService,
+    private cryptoService: CryptoService,
   ) {}
 
   async syncClockifyEmployees(user: User): Promise<any> {
-    const ciphertext = user.hash_api_key;
-
-    const encryptionKey = this.config.get('ENCRYPTION_KEY');
-    const bytes = AES.decrypt(ciphertext, encryptionKey);
-    const apiKey = bytes.toString(enc.Utf8);
+    const apiKey = this.cryptoService.decrypt(user.hash_api_key);
 
     this.clockify = new Clockify(apiKey);
     const workspaces = await this.clockify.workspaces.get();
@@ -27,7 +25,7 @@ export class EmployeeService {
     const employees = await this.clockify.workspaces
       .withId(workspaceId)
       .users.get({});
-    const employeesData = employees.map((employee: any) => ({
+    const employeesData = employees.map((employee) => ({
       clockifyId: employee.id,
       name: employee.name,
       email: employee.email,

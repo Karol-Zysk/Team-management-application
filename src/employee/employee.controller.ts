@@ -40,51 +40,46 @@ export class EmployeeController {
   //   return employee;
   // }
 
-  // @Get()
-  // async getTimeEnteries() {
-  //   // const userId = `63beea4c6e59b4047b6e193d`;
-  //   const userId = `63beea305e398c3868862564`;
-  //   const userId3 = `63beea4c6e59b4047b6e193d`;
-  //   const workspace = `63bdb6b7a938f743f92ac760`;
-  //   const clockifyApiKey = 'OWY1ZTBjMWUtMGI3Ni00YmE1LTllMWYtZjA0YWQwOTYyODg0';
-  //   const clockify = new Clockify(`${clockifyApiKey}`);
+  @Get('me')
+  async getTimeEnteries(@GetUser() user: User) {
+    return user;
 
-  //   const timeEntries = await clockify.workspace
-  //     .withId(workspace)
-  //     .users.get({});
-
-  //   async function countWorkHoursPerUser(timeEntries) {
-  //     const users = new Set();
-  //     const workHours = {};
-
-  //     timeEntries.forEach((entry) => {
-  //       users.add(entry.userId);
-  //     });
-  //     let totalWorkHours = 0;
-
-  //     // Iterate over unique user IDs
-  //     for (const userId of users) {
-  //       // Filter time entries for the current user
-  //       const userEntries = timeEntries.filter(
-  //         (entry) => entry.userId === userId,
-  //       );
-
-  //       userEntries.forEach((entry) => {
-  //         if (entry.timeInterval.end) {
-  //           const start = new Date(entry.timeInterval.start);
-  //           const end = new Date(entry.timeInterval.end);
-  //           const duration = (Number(end) - Number(start)) / 1000 / 60 / 60;
-  //           totalWorkHours += duration;
-  //         }
-  //       });
-
-  //       workHours[`${userId}`] = totalWorkHours;
-  //     }
-  //     return totalWorkHours;
-  //   }
-
-  //   return timeEntries;
-  // }
+    //   // const userId = `63beea4c6e59b4047b6e193d`;
+    //   const userId = `63beea305e398c3868862564`;
+    //   const userId3 = `63beea4c6e59b4047b6e193d`;
+    //   const workspace = `63bdb6b7a938f743f92ac760`;
+    //   const clockifyApiKey = 'OWY1ZTBjMWUtMGI3Ni00YmE1LTllMWYtZjA0YWQwOTYyODg0';
+    //   const clockify = new Clockify(`${clockifyApiKey}`);
+    //   const timeEntries = await clockify.workspace
+    //     .withId(workspace)
+    //     .users.get({});
+    //   async function countWorkHoursPerUser(timeEntries) {
+    //     const users = new Set();
+    //     const workHours = {};
+    //     timeEntries.forEach((entry) => {
+    //       users.add(entry.userId);
+    //     });
+    //     let totalWorkHours = 0;
+    //     // Iterate over unique user IDs
+    //     for (const userId of users) {
+    //       // Filter time entries for the current user
+    //       const userEntries = timeEntries.filter(
+    //         (entry) => entry.userId === userId,
+    //       );
+    //       userEntries.forEach((entry) => {
+    //         if (entry.timeInterval.end) {
+    //           const start = new Date(entry.timeInterval.start);
+    //           const end = new Date(entry.timeInterval.end);
+    //           const duration = (Number(end) - Number(start)) / 1000 / 60 / 60;
+    //           totalWorkHours += duration;
+    //         }
+    //       });
+    //       workHours[`${userId}`] = totalWorkHours;
+    //     }
+    //     return totalWorkHours;
+    //   }
+    //   return timeEntries;
+  }
 
   @Post('report')
   async getReport(@Body() dto: any) {
