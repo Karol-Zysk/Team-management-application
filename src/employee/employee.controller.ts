@@ -57,7 +57,6 @@ export class EmployeeController {
   //     const users = new Set();
   //     const workHours = {};
 
-  //     // Iterate over time entries and add user IDs to the set
   //     timeEntries.forEach((entry) => {
   //       users.add(entry.userId);
   //     });
@@ -70,7 +69,6 @@ export class EmployeeController {
   //         (entry) => entry.userId === userId,
   //       );
 
-  //       // Iterate over user's time entries and calculate total work hours
   //       userEntries.forEach((entry) => {
   //         if (entry.timeInterval.end) {
   //           const start = new Date(entry.timeInterval.start);

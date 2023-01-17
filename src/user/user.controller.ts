@@ -11,12 +11,10 @@ export class UserController {
   constructor(private userService: UserService) {}
   @Get('me')
   getMe(@GetUser() user: User) {
-    return user;
+    return this.userService.getMe(user);
   }
   @Patch('update')
   updateUser(@GetUser() user: User, @Body() dto: UpdateUserDto) {
-    console.log(user);
-
     return this.userService.updateUser(user, dto);
   }
 }

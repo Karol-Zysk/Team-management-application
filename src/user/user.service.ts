@@ -1,23 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from './dto';
-import * as argon from 'argon2';
 import { ConfigService } from '@nestjs/config';
 import { User } from '@prisma/client';
+import { AES, enc } from 'crypto-js';
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService, private config: ConfigService) {}
 
   async updateUser(user: User, dto: UpdateUserDto) {
-    const salt = this.config.get('SALT');
-    console.log(salt);
+    const plaintext = dto.clockify_api_key;
+
+    const encryptionKey = this.config.get('ENCRYPTION_KEY');
+    const hash_api_key = AES.encrypt(plaintext, encryptionKey).toString();
 
     const { id } = user;
-
-    const hash_api_key = await argon.hash(dto.clockify_api_key, {
-      salt: this.config.get('SALT'),
-    });
 
     return await this.prisma.user.update({
       where: { id },
@@ -25,7 +23,7 @@ export class UserService {
     });
   }
 
-  getMe() {
-    return 'elo';
+  getMe(user: User) {
+    return user;
   }
 }

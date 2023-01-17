@@ -1,19 +1,28 @@
-import { Injectable, ForbiddenException } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import Clockify from 'clockify-ts';
-import { Employee, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { ConfigService } from '@nestjs/config';
+import { AES, enc } from 'crypto-js';
 
 @Injectable()
 export class EmployeeService {
   private clockify: Clockify;
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private config: ConfigService,
+  ) {}
 
   async syncClockifyEmployees(user: User): Promise<any> {
-    this.clockify = new Clockify(
-      'OWY1ZTBjMWUtMGI3Ni00YmE1LTllMWYtZjA0YWQwOTYyODg0',
-    );
-    const workspaceId = '63bdb6b7a938f743f92ac760';
+    const ciphertext = user.hash_api_key;
+
+    const encryptionKey = this.config.get('ENCRYPTION_KEY');
+    const bytes = AES.decrypt(ciphertext, encryptionKey);
+    const apiKey = bytes.toString(enc.Utf8);
+
+    this.clockify = new Clockify(apiKey);
+    const workspaces = await this.clockify.workspaces.get();
+    const workspaceId = workspaces[0].id;
 
     const employees = await this.clockify.workspaces
       .withId(workspaceId)
@@ -28,13 +37,15 @@ export class EmployeeService {
 
     for (const employee of employeesData) {
       try {
-        await this.prisma.employee.create({ data: { ...employee } });
-      } catch (error) {
-        if (error instanceof PrismaClientKnownRequestError) {
-          if (error.code === 'P2002') {
-            throw new ForbiddenException(`${error.meta.target} duplicated`);
-          }
+        const existingEmployees = await this.prisma.employee.findMany({
+          where: { clockifyId: employee.clockifyId, userId: user.id },
+        });
+        if (!existingEmployees.length) {
+          await this.prisma.employee.create({ data: { ...employee } });
+        } else {
+          throw new ConflictException('duplicated users finded');
         }
+      } catch (error) {
         throw error;
       }
     }
