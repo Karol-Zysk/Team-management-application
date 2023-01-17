@@ -1,31 +1,24 @@
 version: '3.8'
 services:
   dev-db:
-    image: mongo:latest
+    image: postgres:13
     ports:
-      - 27017:27017
+      - 5434:5432
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
-      MONGO_INITDB_DATABASE: nest
-    volumes:
-      - mongo-data-dev:/data/db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nest
     networks:
-      - team-managment-app
+      - manageapp
   test-db:
-    image: mongo:latest
+    image: postgres:13
     ports:
-      - 27018:27017
+      - 5435:5432
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
-      MONGO_INITDB_DATABASE: nest
-    volumes:
-      - mongo-data-test:/data/db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nest
     networks:
-      - team-managment-app
-volumes:
-  mongo-data-dev:
-  mongo-data-test:
+      - manageapp
 networks:
-  team-managment-app:
+  manageapp:
