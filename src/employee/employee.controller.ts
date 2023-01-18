@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpException,
-  HttpStatus,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { GetUser } from 'src/auth/decorators';
 import { JwtGuard } from 'src/auth/guard';
@@ -20,7 +12,7 @@ export class EmployeeController {
     private prisma: PrismaService,
     private employeeService: EmployeeService,
   ) {}
-  @Post()
+  @Post('syncclockify')
   async syncClockifyEmployees(@GetUser() user: User) {
     return await this.employeeService.syncClockifyEmployees(user);
   }

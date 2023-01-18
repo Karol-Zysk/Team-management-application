@@ -5,6 +5,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { EmployeeModule } from './employee/employee.module';
 import { CryptoModule } from './cryptography/crypto.module';
+import { ClockifyModule } from './clockify/clockify.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CryptoModule } from './cryptography/crypto.module';
     PrismaModule,
     EmployeeModule,
     CryptoModule,
+    ClockifyModule,
   ],
 })
 export class AppModule {}
