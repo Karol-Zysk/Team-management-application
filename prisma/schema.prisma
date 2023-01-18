@@ -16,7 +16,8 @@ model User {
   email        String     @unique
   hash         String
   hash_api_key String?
-  employees    Employee[]
+  employeeId   String[]   @db.ObjectId
+  employees    Employee[] @relation(fields: [employeeId], references: [id])
 
   @@map("users")
 }
@@ -34,9 +35,9 @@ model Employee {
   contract_ends      DateTime?
   profilePicture     String?
   clockifyId         String?
-  userId             String    @db.ObjectId
+  userIds            String[]  @db.ObjectId
 
-  user User @relation(fields: [userId], references: [id])
+  user User[] @relation(fields: [userIds], references: [id])
 
   @@map("employees")
 }
