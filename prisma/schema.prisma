@@ -27,7 +27,7 @@ model Employee {
   firstName      String?
   lastName       String?
   clockifyName   String?
-  email          String
+  email          String   @unique
   hourlyRate     Float?
   hoursWorked    Float?
   profilePicture String?

@@ -83,4 +83,15 @@ export class ClockifyService {
       .delete();
     return;
   }
+  async getEmployeeTimeEntery(user: User, employeeId: string) {
+    await this.initClockify(user);
+    const workspaces = await this.clockify.workspaces.get();
+
+    const timeEntery = await this.clockify.workspace
+      .withId(workspaces[0].id)
+      .users.withId(employeeId)
+      .timeEntries.get();
+
+    return timeEntery;
+  }
 }

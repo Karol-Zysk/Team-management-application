@@ -1,10 +1,9 @@
-import { BadRequestException, HttpCode, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from './dto';
 import { User } from '@prisma/client';
 import { CryptoService } from 'src/cryptography/crypto.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
-import { HttpStatusCode } from 'axios';
 
 @Injectable()
 export class UserService {
