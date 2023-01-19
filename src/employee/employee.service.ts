@@ -20,21 +20,16 @@ export class EmployeeService {
       name: employee.name,
       email: employee.email,
       profilePicture: employee.profilePicture,
-      userIds: user.id,
+      userId: user.id,
     }));
 
     for (const employee of employeesData) {
       try {
         const existingEmployees = await this.prisma.employee.findMany({
-          where: {
-            clockifyId: employee.clockifyId,
-            user: { some: { id: user.id } },
-          },
+          where: { clockifyId: employee.clockifyId, userId: user.id },
         });
         if (!existingEmployees.length) {
-          await this.prisma.employee.create({
-            data: { ...employee, user: { connect: { id: user.id } } },
-          });
+          await this.prisma.employee.create({ data: { ...employee } });
         } else {
           throw new ConflictException('duplicated users finded');
         }

@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { EmployeeModule } from './employee/employee.module';
 import { CryptoModule } from './cryptography/crypto.module';
 import { ClockifyModule } from './clockify/clockify.module';
+import { ProjectsModule } from './projects/projects.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ClockifyModule } from './clockify/clockify.module';
     EmployeeModule,
     CryptoModule,
     ClockifyModule,
+    ProjectsModule,
   ],
 })
 export class AppModule {}
