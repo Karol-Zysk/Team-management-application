@@ -4,6 +4,7 @@ import { GetUser } from 'src/auth/decorators';
 import { JwtGuard } from 'src/auth/guard';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { EmployeeService } from './employee.service';
+import { CreateEmployeeDto } from './dto';
 
 @UseGuards(JwtGuard)
 @Controller('employees')
@@ -18,15 +19,7 @@ export class EmployeeController {
   }
 
   @Post()
-  createEmployee(@Body() dto: any, @GetUser() user: User) {
-    const employee = this.prisma.employee.create({
-      data: {
-        email: dto.email,
-        name: dto.name,
-        user: { connect: { id: user.id } },
-      },
-    });
-
-    return employee;
+  createEmployee(@Body() dto: CreateEmployeeDto, @GetUser() user: User) {
+    return this.employeeService.createEmployee(dto, user);
   }
 }

@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { ClockifyService } from 'src/clockify/clockify.service';
 import { CreateProjectDto, UpdateProjectDto } from './dto';
+import { ForbiddenException } from '@nestjs/common/exceptions';
 
 @Injectable()
 export class ProjectsService {
@@ -37,9 +38,12 @@ export class ProjectsService {
   }
   async deleteProject(user: User, projectId: string) {
     try {
-      return await this.clockify.deleteProject(user, projectId);
+      const deleteUser = await this.clockify.deleteProject(user, projectId);
+      if (deleteUser === undefined) console.log(deleteUser);
+
+      return;
     } catch (error) {
-      throw new BadRequestException('Project already doesent exist');
+      throw new BadRequestException(error.message);
     }
   }
 }

@@ -77,9 +77,10 @@ export class ClockifyService {
     await this.initClockify(user);
     const workspaces = await this.clockify.workspaces.get();
 
-    return await this.clockify.workspace
+    await this.clockify.workspace
       .withId(workspaces[0].id)
       .projects.withId(projectId)
       .delete();
+    return;
   }
 }

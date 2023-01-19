@@ -1,14 +1,13 @@
 import { Injectable, ConflictException } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CryptoService } from 'src/cryptography/crypto.service';
 import { ClockifyService } from 'src/clockify/clockify.service';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateEmployeeDto } from './dto';
 
 @Injectable()
 export class EmployeeService {
   constructor(
     private readonly prisma: PrismaService,
-    private cryptoService: CryptoService,
     private clockify: ClockifyService,
   ) {}
 
@@ -17,7 +16,7 @@ export class EmployeeService {
 
     const employeesData = employees.map((employee) => ({
       clockifyId: employee.id,
-      name: employee.name,
+      clockifyName: employee.name,
       email: employee.email,
       profilePicture: employee.profilePicture,
       userId: user.id,
@@ -37,5 +36,14 @@ export class EmployeeService {
         throw error;
       }
     }
+  }
+  async createEmployee(dto: CreateEmployeeDto, user: User) {
+    const employee = await this.prisma.employee.create({
+      data: {
+        ...dto,
+        user: { connect: { id: user.id } },
+      },
+    });
+    return employee;
   }
 }
