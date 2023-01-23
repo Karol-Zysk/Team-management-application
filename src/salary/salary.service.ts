@@ -7,8 +7,20 @@ import { SalaryParamsDto } from './dto';
 export class SalaryService {
   constructor(private clockify: ClockifyService) {}
 
-  async geEmployeeSalary(user: User, employeeId: string, dto: SalaryParamsDto) {
-    const salary = await this.clockify.geEmployeeSalary(user, employeeId, dto);
+  async geEmployeesSalary(user: User, dto: SalaryParamsDto) {
+    const salary = await this.clockify.geEmployeesSalary(user, dto);
+    return salary;
+  }
+  async geEmployeeSalaryById(
+    user: User,
+    dto: SalaryParamsDto,
+    employeeId: string,
+  ) {
+    const salary = await this.clockify.geEmployeeSalaryById(
+      user,
+      dto,
+      employeeId,
+    );
     return salary;
   }
 }

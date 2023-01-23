@@ -16,20 +16,23 @@ export class UpdateEmployeeDto {
   email: string;
   @IsNumber()
   @IsOptional()
-  total_hours_worked: number;
+  hoursWorked: number;
   @IsNumber()
   @IsOptional()
   project_hours: number;
   @IsNumber()
   @IsOptional()
-  hourly_rate: number;
+  hourlyRate: number;
   @IsDate()
   @IsOptional()
-  contract_ends: Date;
+  contractEnds: Date;
   @IsString()
   @IsOptional()
   profilePicture: string;
   @IsString()
   @IsOptional()
   clockifyId: string;
+  @IsNumber()
+  @IsOptional()
+  salary?: number;
 }

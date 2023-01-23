@@ -7,7 +7,7 @@ import {
 import { User } from '@prisma/client';
 import { ClockifyService } from 'src/clockify/clockify.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateEmployeeDto } from './dto';
+import { CreateEmployeeDto, UpdateEmployeeDto } from './dto';
 
 @Injectable()
 export class EmployeeService {
@@ -43,14 +43,59 @@ export class EmployeeService {
     }
   }
   async createEmployee(dto: CreateEmployeeDto, user: User) {
+    const hourlyRate = dto.hourlyRate || 0;
+    const hoursWorked = dto.hoursWorked || 0;
+
+    const existingEmployee = await this.prisma.employee.findFirst({
+      where: {
+        clockifyId: dto.clockifyId,
+        userId: user.id,
+        OR: {
+          email: dto.email,
+          userId: user.id,
+        },
+      },
+    });
+    if (existingEmployee)
+      throw new ConflictException(
+        'User with this clockifyId or email already exist',
+      );
+
     const employee = await this.prisma.employee.create({
       data: {
         ...dto,
+        salary: hourlyRate * hoursWorked,
         user: { connect: { id: user.id } },
       },
     });
     return employee;
   }
+  async updateEmployee(dto: UpdateEmployeeDto, user: User, employeeId: string) {
+    try {
+      const { hourlyRate, hoursWorked } = await this.prisma.employee.findUnique(
+        {
+          where: { id: employeeId },
+          select: { hourlyRate: true, hoursWorked: true },
+        },
+      );
+
+      const salary =
+        (dto.hourlyRate || hourlyRate) * (dto.hoursWorked || hoursWorked);
+      const updated = await this.prisma.employee.update({
+        where: { id: employeeId },
+        data: {
+          ...dto,
+          salary,
+          user: { connect: { id: user.id } },
+        },
+      });
+
+      return updated;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
   async getAllEmployess(user: User) {
     const employees = await this.prisma.employee.findMany({
       where: {

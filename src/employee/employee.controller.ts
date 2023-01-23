@@ -4,8 +4,8 @@ import { GetUser } from 'src/auth/decorators';
 import { JwtGuard } from 'src/auth/guard';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { EmployeeService } from './employee.service';
-import { CreateEmployeeDto } from './dto';
-import { Delete } from '@nestjs/common/decorators';
+import { CreateEmployeeDto, UpdateEmployeeDto } from './dto';
+import { Delete, Patch } from '@nestjs/common/decorators';
 
 @UseGuards(JwtGuard)
 @Controller('employees')
@@ -23,6 +23,16 @@ export class EmployeeController {
   createEmployee(@Body() dto: CreateEmployeeDto, @GetUser() user: User) {
     return this.employeeService.createEmployee(dto, user);
   }
+
+  @Patch(':id')
+  updateEmployee(
+    @Body() dto: UpdateEmployeeDto,
+    @GetUser() user: User,
+    @Param('id') employeeId: string,
+  ) {
+    return this.employeeService.updateEmployee(dto, user, employeeId);
+  }
+
   @Get()
   getAllEmployess(@GetUser() user: User) {
     return this.employeeService.getAllEmployess(user);

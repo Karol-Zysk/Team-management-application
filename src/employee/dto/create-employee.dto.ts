@@ -23,6 +23,9 @@ export class CreateEmployeeDto {
   @IsString()
   profilePicture: string;
   @IsOptional()
-  @IsNumber()
+  @IsString()
   clockifyId: string;
+  @IsOptional()
+  @IsNumber()
+  salary: number;
 }

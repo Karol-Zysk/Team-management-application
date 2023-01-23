@@ -11,6 +11,8 @@ export class SalaryParamsDto {
   @IsString()
   description?: string;
   @IsOptional()
+  date: string;
+  @IsOptional()
   start?: any;
   @IsOptional()
   end?: any;

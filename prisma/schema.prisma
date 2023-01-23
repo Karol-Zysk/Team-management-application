@@ -27,9 +27,10 @@ model Employee {
   firstName      String?
   lastName       String?
   clockifyName   String?
-  email          String   @unique
-  hourlyRate     Float?
-  hoursWorked    Float?
+  email          String
+  hourlyRate     Float?   @default(0)
+  hoursWorked    Float?   @default(0)
+  salary         Float?
   profilePicture String?
   clockifyId     String?
   userId         String   @db.ObjectId

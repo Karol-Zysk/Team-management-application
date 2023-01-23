@@ -16,12 +16,16 @@ import { SalaryParamsDto } from './dto';
 export class SalaryController {
   constructor(private salaryService: SalaryService) {}
 
+  @Get('')
+  geEmployeesSalary(@GetUser() user: User, @Body() dto: SalaryParamsDto) {
+    return this.salaryService.geEmployeesSalary(user, dto);
+  }
   @Get(':id')
-  geEmployeeSalary(
+  geEmployeeSalaryById(
     @GetUser() user: User,
     @Param('id') employeeId: string,
     @Body() dto: SalaryParamsDto,
   ) {
-    return this.salaryService.geEmployeeSalary(user, employeeId, dto);
+    return this.salaryService.geEmployeeSalaryById(user, dto, employeeId);
   }
 }
