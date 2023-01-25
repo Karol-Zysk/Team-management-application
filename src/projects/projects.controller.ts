@@ -4,7 +4,8 @@ import { User } from '@prisma/client';
 import { JwtGuard } from 'src/auth/guard';
 import { GetUser } from 'src/auth/decorators';
 import { Body, Param, Post, Patch, Delete } from '@nestjs/common/decorators';
-import { CreateProjectDto, UpdateProjectDto } from './dto';
+import { CreateProjectDto, ReportParamsDto, UpdateProjectDto } from './dto';
+import { SalaryParamsDto } from 'src/salary/dto';
 
 @UseGuards(JwtGuard)
 @Controller('projects')
@@ -44,5 +45,17 @@ export class ProjectsController {
   @Delete(':id')
   async deleteProject(@GetUser() user: User, @Param('id') projectId: string) {
     return this.projectsservice.deleteProject(user, projectId);
+  }
+  @Post('report/:id')
+  async projectReport(
+    @GetUser() user: User,
+    @Param('id') projectId: string,
+    @Body() dto: ReportParamsDto,
+  ) {
+    return this.projectsservice.createProjectReport(user, projectId, dto);
+  }
+  @Delete('report/:id')
+  async deleteProjectReport(@Param('id') projectId: string) {
+    return this.projectsservice.deleteProjectReport(projectId);
   }
 }
