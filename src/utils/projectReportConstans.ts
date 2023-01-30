@@ -1,5 +1,6 @@
 import { ReportParamsDto } from 'src/projects/dto';
 import { duration } from 'moment';
+import { Employee } from '@prisma/client';
 
 export async function projectReportConstans({
   projectId,
@@ -30,12 +31,21 @@ export async function projectReportConstans({
   const timeEstimate = dto.timeEstimate || parsedEstimate || 0;
 
   const members = await Promise.all(
-    project.memberships.map(async (member) => {
-      const employee = await this.prisma.employee.findFirst({
+    project.memberships.map(async (member: Employee) => {
+      const data = await this.prisma.employee.findFirst({
         where: { clockifyId: member.userId },
-        select: { clockifyName: true },
       });
-      return employee.clockifyName;
+      const { firstName, lastName, email, salary, hourlyRate, hoursWorked } =
+        data;
+
+      return {
+        firstName,
+        lastName,
+        email,
+        hourlyRate,
+        hoursWorked,
+        salary,
+      };
     }),
   );
 

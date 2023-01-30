@@ -1,12 +1,9 @@
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 
-export class ReportParamsDto {
-  @IsString()
+export class UpdateReportDto {
   @IsOptional()
+  @IsNumber()
   projectName: string;
-  @IsString()
-  @IsOptional()
-  project: string;
   @IsOptional()
   @IsNumber()
   budgetEstimate: number;

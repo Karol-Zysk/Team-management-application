@@ -1,9 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { ClockifyService } from 'src/clockify/clockify.service';
-import { CreateProjectDto, ReportParamsDto, UpdateProjectDto } from './dto';
 import {
-  ForbiddenException,
+  CreateProjectDto,
+  ReportParamsDto,
+  UpdateProjectDto,
+  UpdateReportDto,
+} from './dto';
+import {
+  ConflictException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common/exceptions';
@@ -63,26 +68,42 @@ export class ProjectsService {
     dto: ReportParamsDto,
   ) {
     try {
-      const { reportParams, salary } = await this.clockify.projectReport(
-        user,
-        projectId,
-        dto,
-      );
       //RETRIEVING AND PROCESSING DATA FROM THE PROJECT OBJECT
       const {
-        project,
-        members,
-        timeEstimate,
-        parsedDuration,
-        summary,
-        budgetEstimate,
-      } = reportParams;
+        reportParams: {
+          project,
+          timeEstimate,
+          parsedDuration,
+          summary,
+          budgetEstimate,
+        },
+        salary,
+      } = await this.clockify.projectReport(user, projectId, dto);
+
+      const projectMembers = await this.prisma.employee.findMany({
+        where: {
+          AND: [{ userId: user.id }, { hoursWorked: { gt: 0 } }],
+        },
+        select: {
+          clockifyId: true,
+          clockifyName: true,
+          hoursWorked: true,
+          hourlyRate: true,
+          salary: true,
+          profilePicture: true,
+        },
+      });
+
+      const member = projectMembers.map((member) => {
+        return member;
+      });
+
       const existingProjectSummary = await this.prisma.project.findUnique({
         where: { projectId: project.id },
       });
 
       if (existingProjectSummary)
-        throw new ForbiddenException(
+        throw new Error(
           'This Project summary already exist. Update existing one',
         );
 
@@ -96,7 +117,7 @@ export class ProjectsService {
           timeEstimate,
           summary,
           note: dto.note || project.note,
-          memberships: members,
+          memberships: member,
           active: !project.archived,
           clientName: project.clientName,
           clientId: project.clientId,
@@ -106,7 +127,7 @@ export class ProjectsService {
 
       return projectSummary;
     } catch (error) {
-      throw new UnauthorizedException(error.message);
+      throw new ConflictException(error.message);
     }
   }
   async deleteProjectReport(projectId: string) {
@@ -119,6 +140,46 @@ export class ProjectsService {
         where: { projectId },
       });
       return 'Deleted';
+    } catch (error) {
+      throw new UnauthorizedException(error.message);
+    }
+  }
+  async updateProjectReport(
+    projectId: string,
+    dto: UpdateReportDto,
+    user: User,
+  ) {
+    try {
+      const totalSalary = await this.prisma.employee.aggregate({
+        where: { userId: user.id },
+        _sum: { salary: true },
+      });
+      const {
+        _sum: { salary },
+      } = totalSalary;
+
+      const project = await this.prisma.project.findFirst({
+        where: { projectId },
+      });
+      if (!project) throw new NotFoundException('Invalid Id');
+
+      const budgetEstimate = dto.budgetEstimate || project.budgetEstimate;
+      const timeEstimate = dto.timeEstimate || project.timeEstimate;
+      const summary = budgetEstimate - salary;
+
+      const report = await this.prisma.project.update({
+        where: { projectId },
+        data: {
+          projectName: dto.projectName,
+          budgetEstimate,
+          timeEstimate,
+          expenses: salary,
+          summary,
+          note: dto.note,
+        },
+      });
+
+      return report;
     } catch (error) {
       throw new UnauthorizedException(error.message);
     }

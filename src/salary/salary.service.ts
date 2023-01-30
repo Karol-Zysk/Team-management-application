@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { ClockifyService } from 'src/clockify/clockify.service';
 import { SalaryParamsDto } from './dto';
+import { EmployeesSalaryReporDto } from 'src/employee/dto';
 
 @Injectable()
 export class SalaryService {
@@ -22,5 +23,9 @@ export class SalaryService {
       employeeId,
     );
     return salary;
+  }
+
+  employeesSalaryReport(user: User, dto: EmployeesSalaryReporDto) {
+    return this.clockify.employeesSalaryReport(user, dto);
   }
 }

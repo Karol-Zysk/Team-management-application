@@ -6,6 +6,7 @@ import {
 import { User } from '@prisma/client';
 import Clockify from 'clockify-ts';
 import { CryptoService } from 'src/cryptography/crypto.service';
+import { EmployeesSalaryReporDto } from 'src/employee/dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   CreateProjectDto,
@@ -28,7 +29,7 @@ export class ClockifyService {
     private prisma: PrismaService,
   ) {}
 
-  private async initClockify(user: User) {
+  async initClockify(user: User) {
     if (!user.hash_api_key)
       throw new ForbiddenException('Set up clockify apiKey first');
     const apiKey = this.cryptoService.decrypt(user.hash_api_key);
@@ -108,32 +109,28 @@ export class ClockifyService {
   async calculateSalary(
     clockifyId: string,
     user: User,
-    dto: SalaryParamsDto,
-    date: { start: Date; end: Date },
+    dto?: any,
+    date?: { start: Date; end: Date },
   ) {
-    try {
-      await this.initClockify(user);
-      const options = { clockifyId, dto, date };
-      const hours = await getHoursWorked.bind(this)(options);
-      console.log(hours);
+    await this.initClockify(user);
 
-      const { hourlyRate } = await this.prisma.employee.findFirst({
-        where: { clockifyId: clockifyId, userId: user.id },
-      });
+    const options = { clockifyId, dto, date };
+    const hours = await getHoursWorked.bind(this)(options);
 
-      const salary = hours * hourlyRate;
+    const { hourlyRate } = await this.prisma.employee.findFirst({
+      where: { clockifyId: clockifyId, userId: user.id },
+    });
 
-      await this.prisma.employee.updateMany({
-        where: { clockifyId: clockifyId, userId: user.id },
-        data: { hoursWorked: hours, salary },
-      });
+    const salary = hours * hourlyRate;
 
-      return await this.prisma.employee.findFirst({
-        where: { clockifyId: clockifyId, userId: user.id },
-      });
-    } catch (error) {
-      throw new ForbiddenException(error.message);
-    }
+    await this.prisma.employee.updateMany({
+      where: { clockifyId: clockifyId, userId: user.id },
+      data: { hoursWorked: hours, salary },
+    });
+
+    return await this.prisma.employee.findFirst({
+      where: { clockifyId: clockifyId, userId: user.id },
+    });
   }
 
   async geEmployeesSalary(user: User, dto: SalaryParamsDto) {
@@ -217,6 +214,44 @@ export class ClockifyService {
       });
 
       return { reportParams, salary };
+    } catch (error) {
+      throw new UnauthorizedException(error.message);
+    }
+  }
+  async employeesSalaryReport(user: User, dto: EmployeesSalaryReporDto) {
+    const salary = await this.geEmployeesSalary(user, dto);
+    const employeesSalary = salary.map((data) => {
+      const {
+        firstName,
+        lastName,
+        email,
+        clockifyName,
+        hourlyRate,
+        hoursWorked,
+        salary,
+      } = data;
+      return {
+        firstName,
+        lastName,
+        email,
+        clockifyName,
+        hourlyRate,
+        hoursWorked,
+        salary,
+      };
+    });
+
+    try {
+      const report = await this.prisma.report.create({
+        data: {
+          reportName: `Software Partner report ${
+            dto.date ? dto.date : dto.start + ' ' + dto.end
+          }`,
+          userId: user.id,
+          employees: employeesSalary,
+        },
+      });
+      return report;
     } catch (error) {
       throw new UnauthorizedException(error.message);
     }

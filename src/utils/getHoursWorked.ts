@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 export async function getHoursWorked({
   clockifyId: clockifyId,
   dto: dto,
@@ -15,7 +17,7 @@ export async function getHoursWorked({
         ? new Date(dto.start)
         : date
         ? new Date(date?.start)
-        : new Date('2015'),
+        : new Date('2020'),
       end: dto.end
         ? new Date(dto.end)
         : date
@@ -25,11 +27,14 @@ export async function getHoursWorked({
     });
 
   let totalWorkingTime = 0;
+
   timeEntries.forEach((timeEntry) => {
-    const start = new Date(timeEntry.timeInterval.start).getTime();
-    const end = new Date(timeEntry.timeInterval.end).getTime();
-    const workingTime = end - start;
-    totalWorkingTime += workingTime;
+    const start = moment(timeEntry.timeInterval.start);
+    const end = moment(timeEntry.timeInterval.end);
+    if (start.isValid() && end.isValid()) {
+      const workingTime = moment.duration(end.diff(start));
+      totalWorkingTime += workingTime.asMilliseconds();
+    }
   });
   const hours = Number((totalWorkingTime / (1000 * 60 * 60)).toFixed(1));
 

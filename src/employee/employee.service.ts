@@ -1,7 +1,6 @@
 import {
   Injectable,
   ConflictException,
-  ForbiddenException,
   BadRequestException,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
@@ -35,7 +34,7 @@ export class EmployeeService {
             },
           });
         } else {
-          throw new ConflictException('duplicated users finded');
+          continue;
         }
       } catch (error) {
         throw error;
