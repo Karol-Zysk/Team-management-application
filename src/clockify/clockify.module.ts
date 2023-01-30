@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ClockifyService } from './clockify.service';
-import { CryptoModule } from 'src/cryptography/crypto.module';
-import { CryptoService } from 'src/cryptography/crypto.service';
+import { CryptoModule } from '../cryptography/crypto.module';
+import { CryptoService } from '../cryptography/crypto.service';
 
 @Module({
   imports: [CryptoModule],

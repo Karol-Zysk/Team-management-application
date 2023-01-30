@@ -4,8 +4,8 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { ClockifyService } from 'src/clockify/clockify.service';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { ClockifyService } from '../clockify/clockify.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateEmployeeDto, UpdateEmployeeDto } from './dto';
 
 @Injectable()
@@ -41,6 +41,7 @@ export class EmployeeService {
       }
     }
   }
+
   async createEmployee(dto: CreateEmployeeDto, user: User) {
     const hourlyRate = dto.hourlyRate || 0;
     const hoursWorked = dto.hoursWorked || 0;
@@ -69,6 +70,7 @@ export class EmployeeService {
     });
     return employee;
   }
+
   async updateEmployee(dto: UpdateEmployeeDto, user: User, employeeId: string) {
     try {
       const { hourlyRate, hoursWorked } = await this.prisma.employee.findUnique(
@@ -103,6 +105,7 @@ export class EmployeeService {
     });
     return employees;
   }
+
   async getEmployeeById(user: User, employeeId: string) {
     try {
       const employee = await this.prisma.employee.findUnique({
@@ -111,15 +114,15 @@ export class EmployeeService {
         },
       });
 
-      if (employee.userId !== user.id) {
+      if (employee.userId !== user.id)
         throw new BadRequestException('Invalid User Id');
-      }
 
       return employee;
     } catch (error) {
-      throw new BadRequestException('Invalid id');
+      throw new BadRequestException(error.message);
     }
   }
+
   async deleteEmployeeById(user: User, employeeId: string) {
     try {
       const employee = await this.prisma.employee.deleteMany({

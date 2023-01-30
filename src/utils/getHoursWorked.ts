@@ -31,6 +31,7 @@ export async function getHoursWorked({
   timeEntries.forEach((timeEntry) => {
     const start = moment(timeEntry.timeInterval.start);
     const end = moment(timeEntry.timeInterval.end);
+
     if (start.isValid() && end.isValid()) {
       const workingTime = moment.duration(end.diff(start));
       totalWorkingTime += workingTime.asMilliseconds();

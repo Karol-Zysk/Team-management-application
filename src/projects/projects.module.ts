@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { ProjectsController } from './projects.controller';
-import { ClockifyModule } from 'src/clockify/clockify.module';
-import { ClockifyService } from 'src/clockify/clockify.service';
-import { CryptoModule } from 'src/cryptography/crypto.module';
-import { CryptoService } from 'src/cryptography/crypto.service';
+import { ClockifyModule } from '../clockify/clockify.module';
+import { ClockifyService } from '../clockify/clockify.service';
+import { CryptoModule } from '../cryptography/crypto.module';
+import { CryptoService } from '../cryptography/crypto.service';
 
 @Module({
   imports: [ClockifyModule, CryptoModule],

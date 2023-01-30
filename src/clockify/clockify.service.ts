@@ -5,20 +5,20 @@ import {
 } from '@nestjs/common';
 import { User } from '@prisma/client';
 import Clockify from 'clockify-ts';
-import { CryptoService } from 'src/cryptography/crypto.service';
-import { EmployeesSalaryReporDto } from 'src/employee/dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { CryptoService } from '../cryptography/crypto.service';
+import { EmployeesSalaryReporDto } from '../employee/dto';
+import { PrismaService } from '../prisma/prisma.service';
 import {
   CreateProjectDto,
   UpdateProjectDto,
   ReportParamsDto,
-} from 'src/projects/dto';
-import { SalaryParamsDto } from 'src/salary/dto';
+} from '../projects/dto';
+import { SalaryParamsDto } from '../salary/dto';
 import {
   getDatesForMonth,
   projectReportConstans,
   getHoursWorked,
-} from 'src/utils';
+} from '../utils';
 
 @Injectable()
 export class ClockifyService {
@@ -61,6 +61,7 @@ export class ClockifyService {
 
     return projects;
   }
+
   async getProjectById(user: User, projectId: string) {
     await this.initClockify(user);
     const workspaces = await this.clockify.workspaces.get();
@@ -72,6 +73,7 @@ export class ClockifyService {
 
     return project;
   }
+
   async createProject(user: User, dto: CreateProjectDto) {
     await this.initClockify(user);
     const workspaces = await this.clockify.workspaces.get();
@@ -85,6 +87,7 @@ export class ClockifyService {
 
     return project;
   }
+
   async updateProject(user: User, dto: UpdateProjectDto, projectId: string) {
     await this.initClockify(user);
     const workspaces = await this.clockify.workspaces.get();
@@ -96,6 +99,7 @@ export class ClockifyService {
 
     return updatedProject;
   }
+
   async deleteProject(user: User, projectId: string) {
     await this.initClockify(user);
     const workspaces = await this.clockify.workspaces.get();
@@ -106,6 +110,7 @@ export class ClockifyService {
       .delete();
     return;
   }
+
   async calculateSalary(
     clockifyId: string,
     user: User,
@@ -198,7 +203,6 @@ export class ClockifyService {
           data: { hoursWorked: hours, salary },
         });
       }
-      //CALCULATING THE TOTAL PAYROLL FOR ALL EMPLOYEES FOR A GIVEN PROJECT USING AGGREGATION
       const totalSalary = await this.prisma.employee.aggregate({
         where: { userId: user.id },
         _sum: { salary: true },
@@ -206,18 +210,19 @@ export class ClockifyService {
       const {
         _sum: { salary },
       } = totalSalary;
-      //RETRIEVING AND PROCESSING DATA FROM THE PROJECT OBJECT
+
       const reportParams = await projectReportConstans.bind(this)({
         projectId,
         dto,
         salary,
       });
 
-      return { reportParams, salary };
+      return { ...reportParams, salary };
     } catch (error) {
       throw new UnauthorizedException(error.message);
     }
   }
+
   async employeesSalaryReport(user: User, dto: EmployeesSalaryReporDto) {
     const salary = await this.geEmployeesSalary(user, dto);
     const employeesSalary = salary.map((data) => {

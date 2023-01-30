@@ -1,19 +1,16 @@
 import { Controller } from '@nestjs/common';
 import { SalaryService } from './salary.service';
-import {
-  Get,
-  Post,
-} from '@nestjs/common/decorators/http/request-mapping.decorator';
+import { Post } from '@nestjs/common/decorators/http/request-mapping.decorator';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
-import { JwtGuard } from 'src/auth/guard';
-import { GetUser } from 'src/auth/decorators';
+import { JwtGuard } from '../auth/guard';
+import { GetUser } from '../auth/decorators';
 import { User } from '@prisma/client';
 import {
   Param,
   Body,
 } from '@nestjs/common/decorators/http/route-params.decorator';
 import { SalaryParamsDto } from './dto';
-import { EmployeesSalaryReporDto } from 'src/employee/dto';
+import { EmployeesSalaryReporDto } from '../employee/dto';
 
 @UseGuards(JwtGuard)
 @Controller('salary')
@@ -24,6 +21,7 @@ export class SalaryController {
   geEmployeesSalary(@GetUser() user: User, @Body() dto: SalaryParamsDto) {
     return this.salaryService.geEmployeesSalary(user, dto);
   }
+
   @Post('/report')
   employeesSalaryReport(
     @GetUser() user: User,
@@ -31,6 +29,7 @@ export class SalaryController {
   ) {
     return this.salaryService.employeesSalaryReport(user, dto);
   }
+
   @Post(':id')
   geEmployeeSalaryById(
     @GetUser() user: User,

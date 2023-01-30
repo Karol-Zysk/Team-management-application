@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { SignInDto, SignUpDto } from './dto';
-import * as argon from 'argon2';
+import * as bcrypt from 'bcrypt';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { ForbiddenException } from '@nestjs/common/exceptions';
 import { JwtService } from '@nestjs/jwt/dist';
@@ -14,8 +14,10 @@ export class AuthService {
     private jwt: JwtService,
     private config: ConfigService,
   ) {}
+
   async signUp(dto: SignUpDto) {
-    const hash = await argon.hash(dto.password);
+    const salt = this.config.get('SALT_ROUNDS');
+    const hash = await bcrypt.hash(dto.password, 12);
     try {
       const user = await this.prisma.user.create({
         data: {
@@ -44,7 +46,7 @@ export class AuthService {
     });
     if (!user) throw new ForbiddenException('Credentials incorrect');
 
-    const pwMatches = await argon.verify(user.hash, dto.password);
+    const pwMatches = await bcrypt.compare(dto.password, user.hash);
 
     if (!pwMatches) throw new ForbiddenException('Credentials incorrect');
 
@@ -62,7 +64,7 @@ export class AuthService {
     };
 
     const token = await this.jwt.signAsync(payload, {
-      expiresIn: '35m',
+      expiresIn: '50m',
       secret,
     });
 

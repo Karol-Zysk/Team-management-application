@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { ClockifyService } from 'src/clockify/clockify.service';
+import { ClockifyService } from '../clockify/clockify.service';
 import {
   CreateProjectDto,
   ReportParamsDto,
@@ -12,7 +12,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common/exceptions';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class ProjectsService {
@@ -29,6 +29,7 @@ export class ProjectsService {
       throw new UnauthorizedException(error.message);
     }
   }
+
   async getProjectsById(user: User, projectId: string) {
     try {
       const project = await this.clockify.getProjectById(user, projectId);
@@ -37,6 +38,7 @@ export class ProjectsService {
       throw new UnauthorizedException(error.message);
     }
   }
+
   async createProject(user: User, dto: CreateProjectDto) {
     try {
       const project = await this.clockify.createProject(user, dto);
@@ -45,6 +47,7 @@ export class ProjectsService {
       throw new UnauthorizedException(error.message);
     }
   }
+
   async updateProject(user: User, dto: UpdateProjectDto, projectId: string) {
     try {
       const project = await this.clockify.updateProject(user, dto, projectId);
@@ -53,6 +56,7 @@ export class ProjectsService {
       throw new UnauthorizedException(error.message);
     }
   }
+
   async deleteProject(user: User, projectId: string) {
     try {
       await this.clockify.deleteProject(user, projectId);
@@ -62,21 +66,19 @@ export class ProjectsService {
       throw new UnauthorizedException(error.message);
     }
   }
+
   async createProjectReport(
     user: User,
     projectId: string,
     dto: ReportParamsDto,
   ) {
     try {
-      //RETRIEVING AND PROCESSING DATA FROM THE PROJECT OBJECT
       const {
-        reportParams: {
-          project,
-          timeEstimate,
-          parsedDuration,
-          summary,
-          budgetEstimate,
-        },
+        project,
+        timeEstimate,
+        parsedDuration,
+        summary,
+        budgetEstimate,
         salary,
       } = await this.clockify.projectReport(user, projectId, dto);
 
@@ -130,6 +132,7 @@ export class ProjectsService {
       throw new ConflictException(error.message);
     }
   }
+
   async deleteProjectReport(projectId: string) {
     try {
       const report = await this.prisma.project.findFirst({
@@ -144,6 +147,7 @@ export class ProjectsService {
       throw new UnauthorizedException(error.message);
     }
   }
+
   async updateProjectReport(
     projectId: string,
     dto: UpdateReportDto,
