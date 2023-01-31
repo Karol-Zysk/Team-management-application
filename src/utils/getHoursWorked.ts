@@ -29,15 +29,14 @@ export async function getHoursWorked({
   let totalWorkingTime = 0;
 
   timeEntries.forEach((timeEntry) => {
-    const start = moment(timeEntry.timeInterval.start);
-    const end = moment(timeEntry.timeInterval.end);
+    const workingTime = moment.duration(timeEntry.timeInterval.duration);
 
-    if (start.isValid() && end.isValid()) {
-      const workingTime = moment.duration(end.diff(start));
+    if (workingTime) {
       totalWorkingTime += workingTime.asMilliseconds();
     }
   });
-  const hours = Number((totalWorkingTime / (1000 * 60 * 60)).toFixed(1));
+
+  const hours = Number((totalWorkingTime / (1000 * 60 * 60)).toFixed(2));
 
   return hours;
 }
