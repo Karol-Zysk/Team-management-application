@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  name         String     @default("")
+  email        String     @unique
+  hash         String
+  hash_api_key String?
+  employees    Employee[]
+  Report       Report[]
+  Project      Project[]
+
+  @@map("users")
+}
+
+model Employee {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  firstName      String?
+  lastName       String?
+  clockifyName   String?
+  email          String
+  hourlyRate     Float?   @default(0)
+  hoursWorked    Float?   @default(0)
+  salary         Float?
+  profilePicture String?
+  clockifyId     String?
+  userId         String   @db.ObjectId
+  user           User     @relation(fields: [userId], references: [id])
+
+  @@map("employees")
+}
+
+model Project {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  clientName     String
+  clientId       String
+  projectId      String   @unique
+  active         Boolean
+  projectName    String
+  duration       Float
+  budgetEstimate Float?   @default(0)
+  timeEstimate   Float?   @default(0)
+  expenses       Float
+  note           String?
+  memberships    Json[]
+  summary        Float?
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Report {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  reportName String?
+  employees  Json[]
+  userId     String   @db.ObjectId
+  user       User     @relation(fields: [userId], references: [id])
+}
