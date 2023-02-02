@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+  HttpCode,
+} from '@nestjs/common';
 import { User } from '@prisma/client';
 import { GetUser } from '../auth/decorators';
 import { JwtGuard } from '../auth/guard';
@@ -6,6 +14,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { EmployeeService } from './employee.service';
 import { CreateEmployeeDto, UpdateEmployeeDto } from './dto';
 import { Delete, Patch } from '@nestjs/common/decorators';
+import { HttpStatus } from '@nestjs/common/enums';
 
 @UseGuards(JwtGuard)
 @Controller('employees')
@@ -42,7 +51,7 @@ export class EmployeeController {
   getEmployeeById(@GetUser() user: User, @Param('id') id: string) {
     return this.employeeService.getEmployeeById(user, id);
   }
-
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   deleteEmployeeById(@GetUser() user: User, @Param('id') id: string) {
     return this.employeeService.deleteEmployeeById(user, id);

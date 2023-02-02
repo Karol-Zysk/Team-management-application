@@ -3,13 +3,21 @@ import { ProjectsService } from './projects.service';
 import { User } from '@prisma/client';
 import { JwtGuard } from '../auth/guard';
 import { GetUser } from '../auth/decorators';
-import { Body, Param, Post, Patch, Delete } from '@nestjs/common/decorators';
+import {
+  Body,
+  Param,
+  Post,
+  Patch,
+  Delete,
+  HttpCode,
+} from '@nestjs/common/decorators';
 import {
   CreateProjectDto,
   ReportParamsDto,
   UpdateReportDto,
   UpdateProjectDto,
 } from './dto';
+import { HttpStatus } from '@nestjs/common/enums';
 
 @UseGuards(JwtGuard)
 @Controller('projects')
@@ -46,6 +54,7 @@ export class ProjectsController {
     return this.projectsservice.updateProject(user, payload, projectId);
   }
 
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   async deleteProject(@GetUser() user: User, @Param('id') projectId: string) {
     return this.projectsservice.deleteProject(user, projectId);

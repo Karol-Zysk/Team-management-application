@@ -142,7 +142,7 @@ export class ProjectsService {
       await this.prisma.project.delete({
         where: { projectId },
       });
-      return 'Deleted';
+      return;
     } catch (error) {
       throw new UnauthorizedException(error.message);
     }

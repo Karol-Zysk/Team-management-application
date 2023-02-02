@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import {
   BadRequestException,
   ForbiddenException,
+  ConflictException,
 } from '@nestjs/common/exceptions';
 import { JwtService } from '@nestjs/jwt/dist';
 import { ConfigService } from '@nestjs/config/dist';
@@ -22,7 +23,7 @@ export class AuthService {
       where: { email: dto.email },
     });
     if (userExists) {
-      throw new BadRequestException('User already exists');
+      throw new ConflictException('User already exists');
     }
 
     // Hash password

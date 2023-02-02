@@ -1,5 +1,6 @@
 import {
   ForbiddenException,
+  BadRequestException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -161,7 +162,7 @@ export class ClockifyService {
         where: { userId: user.id, workspaceId },
       });
     } catch (error) {
-      throw new ForbiddenException(error.message);
+      throw new BadRequestException(error.message);
     }
   }
 
@@ -175,7 +176,7 @@ export class ClockifyService {
       if (dto.date) date = getDatesForMonth(dto.date);
       return this.calculateSalary(employeeId, user, dto, date);
     } catch (error) {
-      throw new ForbiddenException(error.message);
+      throw new BadRequestException(error.message);
     }
   }
 

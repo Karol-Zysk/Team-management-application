@@ -134,9 +134,11 @@ export class EmployeeService {
   }
 
   async getAllEmployess(user: User) {
+    const { workspaceId } = await this.clockify.getEmployees(user);
     const employees = await this.prisma.employee.findMany({
       where: {
         userId: user.id,
+        workspaceId,
       },
     });
     return employees;
@@ -170,7 +172,7 @@ export class EmployeeService {
       if (employee.count === 0) {
         throw new BadRequestException('Invalid User Id');
       }
-      return 'Successfuly deleted';
+      return;
     } catch (error) {
       throw new BadRequestException(error.message);
     }

@@ -1,6 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { SalaryService } from './salary.service';
-import { Post } from '@nestjs/common/decorators/http/request-mapping.decorator';
+import {
+  Get,
+  Post,
+} from '@nestjs/common/decorators/http/request-mapping.decorator';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
 import { JwtGuard } from '../auth/guard';
 import { GetUser } from '../auth/decorators';
@@ -17,7 +20,7 @@ import { EmployeesSalaryReporDto } from '../employee/dto';
 export class SalaryController {
   constructor(private salaryService: SalaryService) {}
 
-  @Post('')
+  @Get('')
   geEmployeesSalary(@GetUser() user: User, @Body() dto: SalaryParamsDto) {
     return this.salaryService.geEmployeesSalary(user, dto);
   }
@@ -30,7 +33,7 @@ export class SalaryController {
     return this.salaryService.employeesSalaryReport(user, dto);
   }
 
-  @Post(':id')
+  @Get(':id')
   geEmployeeSalaryById(
     @GetUser() user: User,
     @Param('id') employeeId: string,
