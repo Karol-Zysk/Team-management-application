@@ -1,7 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto, SignUpDto } from './dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { RefreshTokenGuard } from './guard';
+import { GetUser } from './decorators';
+import { User } from '@prisma/client';
 
 @Controller('auth')
 export class AuthController {
@@ -23,5 +26,12 @@ export class AuthController {
   @Get('clean')
   Clean() {
     return this.prisma.cleanDB();
+  }
+  @UseGuards(RefreshTokenGuard)
+  @Get('refresh')
+  refreshTokens(@GetUser() user: User) {
+    const userId = user['sub'];
+    const refreshToken = user.refreshToken;
+    return this.authService.refreshTokens(userId, refreshToken);
   }
 }

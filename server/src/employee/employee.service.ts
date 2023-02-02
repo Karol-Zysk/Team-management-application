@@ -2,6 +2,7 @@ import {
   Injectable,
   ConflictException,
   BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { ClockifyService } from '../clockify/clockify.service';
@@ -16,7 +17,7 @@ export class EmployeeService {
   ) {}
 
   async syncClockifyEmployees(user: User): Promise<any> {
-    const employees = await this.clockify.getEmployees(user);
+    const { employees, workspaceId } = await this.clockify.getEmployees(user);
 
     for (const employee of employees) {
       try {
@@ -31,6 +32,7 @@ export class EmployeeService {
               clockifyName: employee.name,
               profilePicture: employee.profilePicture,
               userId: user.id,
+              workspaceId,
             },
           });
         } else {
@@ -44,35 +46,71 @@ export class EmployeeService {
 
   async createEmployee(dto: CreateEmployeeDto, user: User) {
     const hourlyRate = dto.hourlyRate || 0;
-    const hoursWorked = dto.hoursWorked || 0;
+    const hoursWorked = 0;
 
-    const existingEmployee = await this.prisma.employee.findFirst({
-      where: {
-        clockifyId: dto.clockifyId,
-        userId: user.id,
-        OR: {
-          email: dto.email,
+    try {
+      const { employees, workspaceId } = await this.clockify.getEmployees(user);
+      const employeeId = employees.find((e) => e.id === dto.clockifyId);
+      if (!employeeId)
+        throw new NotFoundException(
+          `There is no employee with clockifyId: ${dto.clockifyId} in your workspace`,
+        );
+
+      const existingClockifyId = await this.prisma.employee.findMany({
+        where: {
           userId: user.id,
         },
-      },
-    });
-    if (existingEmployee)
-      throw new ConflictException(
-        'User with this clockifyId or email already exist',
+        select: {
+          clockifyId: true,
+        },
+      });
+
+      const existingId = existingClockifyId.find(
+        (e) => e.clockifyId === dto.clockifyId,
       );
 
-    const employee = await this.prisma.employee.create({
-      data: {
-        ...dto,
-        salary: hourlyRate * hoursWorked,
-        user: { connect: { id: user.id } },
-      },
-    });
-    return employee;
+      if (existingId)
+        throw new ConflictException(
+          'User with this clockifyId or email already exist',
+        );
+
+      const existingEmployee = await this.prisma.employee.findFirst({
+        where: {
+          userId: user.id,
+          email: dto.email,
+        },
+      });
+      if (existingEmployee)
+        throw new ConflictException(
+          'User elo with this clockifyId or email already exist',
+        );
+
+      const employee = await this.prisma.employee.create({
+        data: {
+          ...dto,
+          salary: hourlyRate * hoursWorked,
+          user: { connect: { id: user.id } },
+          workspaceId,
+        },
+      });
+      return employee;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   async updateEmployee(dto: UpdateEmployeeDto, user: User, employeeId: string) {
     try {
+      const { employees, workspaceId } = await this.clockify.getEmployees(user);
+      const existingEmployee = await this.prisma.employee.findUnique({
+        where: { id: employeeId },
+      });
+      if (!existingEmployee) throw new NotFoundException('Invalid User Id');
+      const duplicateEmail = employees.find((e) => e.email === dto.email);
+      if (duplicateEmail)
+        throw new NotFoundException(
+          `This email is already taken by user in your workspace`,
+        );
       const { hourlyRate, hoursWorked } = await this.prisma.employee.findUnique(
         {
           where: { id: employeeId },
@@ -80,18 +118,16 @@ export class EmployeeService {
         },
       );
 
-      const salary =
-        (dto.hourlyRate || hourlyRate) * (dto.hoursWorked || hoursWorked);
-      const updated = await this.prisma.employee.update({
-        where: { id: employeeId },
+      const salary = (dto.hourlyRate || hourlyRate) * hoursWorked;
+      await this.prisma.employee.updateMany({
+        where: { id: employeeId, workspaceId, userId: user.id },
         data: {
           ...dto,
           salary,
-          user: { connect: { id: user.id } },
         },
       });
 
-      return updated;
+      return 'Updated';
     } catch (error) {
       throw new BadRequestException(error.message);
     }

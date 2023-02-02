@@ -1,0 +1,1686 @@
+{
+	"info": {
+		"_postman_id": "45bce76b-212a-441e-b68e-bbe25e9ee799",
+		"name": "Dashboard SP",
+		"description": "//Krótki opis.\n\nDashboard SP API ułatwia generowanie raportów płacowych dla osób korzystających z Clockify.\n\nGłówne możliwości :\n\nRejestracja i Logowanie, Update Użytkownika z dodaniem Clockify_API_Key,\n\n**Jeśli został wprowadzony ważny klucz API Clockify dostępne są funkcje**\n\n\\-Synchronizacja pracowników z Clockify,\n\n\\-Aktualizowanie stawki godzinowej pracownika jak i dodawanie informacji jak imię, nazwisko.\n\n\\-Pobieranie informacji o projektach clockify,\n\n\\-Generowanie raportów zarobków miesięcznych lub okresowych dla pracowników.\n\n\\-Generowanie podsumowań dla projektu z możliwością dodania estymacji czasowej jak i budżetowej.\n\nRaport zlicza przepracowane przez pracowników godziny jak i wynagrodzenie i porównuje z estymacjami.\n\n// Ograniczenia API.\n\nStawki godzinowe dla użytkowników, które nie są dostarczane przez API Clockify muszą być aktualizowane ręcznie. Przykładowo jeśli pracownik aktualnie zarabia 25zł/h to przed wygenerowaniem raportu dla danego pracownika lub zespołu lub raportu dla projektu musimy zaktualizować stawkę do takiej którą miał wtedy inaczej dane będą sfałszowane.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13343611"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Sign In",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"jwt\", pm.response.json().access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"email@email.pl\",\r\n    \"password\" : \"pass123\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}auth/signin",
+							"host": [
+								"{{url}}auth"
+							],
+							"path": [
+								"signin"
+							]
+						},
+						"description": "Endpoint pozwalający na utworzenie nowego użytkownika. Wymaga podania imienia, unikalnego emaila i hasła .\n\nZwaraca w odpowiedzi jwt token"
+					},
+					"response": [
+						{
+							"name": "Sign In",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\" : \"admin3@admin2.pl\",\r\n    \"password\" : \"pass123\"\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}auth/signin",
+									"host": [
+										"{{url}}auth"
+									],
+									"path": [
+										"signin"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\r\n    \"access_token\": \"token\"\r\n}"
+						}
+					]
+				},
+				{
+					"name": "Sign Up",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"jwt\", pm.response.json().access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"email@email.pl\",\r\n    \"name\" : \"Michael Scott\",\r\n    \"password\" : \"pass123\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}auth/signup",
+							"host": [
+								"{{url}}auth"
+							],
+							"path": [
+								"signup"
+							]
+						},
+						"description": "endpoint odpowiadający za zalogowanie istiejącego użytkownika zwracający w odpowiedzi jwt token"
+					},
+					"response": [
+						{
+							"name": "Sign Up",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\" : {{email}},\r\n    \"name\" : \"user\",\r\n    \"password\" : {{password}}\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}auth/signup",
+									"host": [
+										"{{url}}auth"
+									],
+									"path": [
+										"signup"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\r\n    \"access_token\": \"token\"\r\n}"
+						}
+					]
+				}
+			],
+			"description": "Endpointy odpowiedzialne za logowanie i rejestrację."
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Update Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"clockify_api_key\" : \"valid clockify_api_key\",\r\n    \"name\" : \"Dwight Schrutt\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}users",
+							"host": [
+								"{{url}}users"
+							]
+						},
+						"description": "Endpoint umożliwiający zmianę imienia i dodanie clocckify_api_key dającego umożliwiającego synchronizację użytkowników z clockify i generowanie raportów."
+					},
+					"response": [
+						{
+							"name": "Update Profile",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"clockify_api_key\" : \"valid clockify api key\",\r\n    \"name\" : \"Name\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}users",
+									"host": [
+										"{{url}}users"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\r\n    \"id\": \"63d30bb2f68d33770cfa29e4\",\r\n    \"createdAt\": \"2023-01-26T23:24:34.991Z\",\r\n    \"updatedAt\": \"2023-01-27T00:21:19.330Z\",\r\n    \"name\": \"Dwight Schrutt\",\r\n    \"email\": \"email@email.pl\"\r\n}"
+						}
+					]
+				},
+				{
+					"name": "Get User Data",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}users/me",
+							"host": [
+								"{{url}}users"
+							],
+							"path": [
+								"me"
+							]
+						},
+						"description": "Endpoint pozwala na pobranie danych zalogowanego użytkownika."
+					},
+					"response": [
+						{
+							"name": "Get User Data",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}users/me",
+									"host": [
+										"{{url}}users"
+									],
+									"path": [
+										"me"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\r\n    \"id\": \"63d30bb2f68d33770cfa29e4\",\r\n    \"createdAt\": \"2023-01-26T23:24:34.991Z\",\r\n    \"updatedAt\": \"2023-01-27T00:21:19.330Z\",\r\n    \"name\": \"Michael Scott\",\r\n    \"email\": \"email@email.pl\"\r\n}"
+						}
+					]
+				}
+			],
+			"description": "Endpoints responsible for managing user parameters.",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{jwt}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Employees",
+			"item": [
+				{
+					"name": "Sync Employees From Clockify",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}employees/syncclockify",
+							"host": [
+								"{{url}}employees"
+							],
+							"path": [
+								"syncclockify"
+							]
+						},
+						"description": "Endpoint odpowiedzialny za pobieranie listy pracowników z Clockify i dodawanie ich do bazy danych. Wymaga prawidłowego klucza API Clockify, w przeciwnym razie zwraca określony błąd."
+					},
+					"response": [
+						{
+							"name": "Sync Employees From Clockify",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}employees/syncclockify",
+									"host": [
+										"{{url}}employees"
+									],
+									"path": [
+										"syncclockify"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "Success"
+						}
+					]
+				},
+				{
+					"name": "Create Employee",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"email2@email.pl\",\r\n    \"firstName\" : \"Creed\",\r\n    \"lastName\" : \"Bratton\",\r\n    \"hourlyRate\" : 12,\r\n   \"hoursWorked\": 19, \r\n    \"clockifyId\" : \"63beea305e398c3868862564\"\r\n   \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}employees",
+							"host": [
+								"{{url}}employees"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create Employee",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\" : \"email2@email.pl\",\r\n    \"firstName\" : \"Creed\",\r\n    \"lastName\" : \"Bratton\",\r\n    \"hourlyRate\" : 12,\r\n   \"hoursWorked\": 19\r\n   \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}employees",
+									"host": [
+										"{{url}}employees"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\r\n    \"id\": \"63d31cdd8ac529babccebd51\",\r\n    \"createdAt\": \"2023-01-27T00:37:49.196Z\",\r\n    \"updatedAt\": \"2023-01-27T00:37:49.196Z\",\r\n    \"firstName\": \"Creed\",\r\n    \"lastName\": \"Bratton\",\r\n    \"clockifyName\": null,\r\n    \"email\": \"email2@email.pl\",\r\n    \"hourlyRate\": 12,\r\n    \"hoursWorked\": 19,\r\n    \"salary\": 228,\r\n    \"profilePicture\": null,\r\n    \"clockifyId\": null,\r\n    \"userId\": \"63d30bb2f68d33770cfa29e4\"\r\n}"
+						}
+					]
+				},
+				{
+					"name": "Get All Employees",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}employees",
+							"host": [
+								"{{url}}employees"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get All Employees",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}employees",
+									"host": [
+										"{{url}}employees"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "[\r\n    {\r\n        \"id\": \"63d31bf5d76dce8811ff746e\",\r\n        \"createdAt\": \"2023-01-27T00:33:57.078Z\",\r\n        \"updatedAt\": \"2023-01-27T00:33:57.078Z\",\r\n        \"firstName\": null,\r\n        \"lastName\": null,\r\n        \"clockifyName\": \"Pracownik 1\",\r\n        \"email\": \"karol.p.zysk@gmail.com\",\r\n        \"hourlyRate\": 0,\r\n        \"hoursWorked\": 0,\r\n        \"salary\": null,\r\n        \"profilePicture\": \"https://img.clockify.me/no-user-image.png\",\r\n        \"clockifyId\": \"63beea4c6e59b4047b6e193d\",\r\n        \"userId\": \"63d30bb2f68d33770cfa29e4\"\r\n    },\r\n    {\r\n        \"id\": \"63d31cdd8ac529babccebd51\",\r\n        \"createdAt\": \"2023-01-27T00:37:49.196Z\",\r\n        \"updatedAt\": \"2023-01-27T00:37:49.196Z\",\r\n        \"firstName\": \"Creed\",\r\n        \"lastName\": \"Bratton\",\r\n        \"clockifyName\": null,\r\n        \"email\": \"email2@email.pl\",\r\n        \"hourlyRate\": 12,\r\n        \"hoursWorked\": 19,\r\n        \"salary\": 228,\r\n        \"profilePicture\": null,\r\n        \"clockifyId\": null,\r\n        \"userId\": \"63d30bb2f68d33770cfa29e4\"\r\n    }\r\n]"
+						}
+					]
+				},
+				{
+					"name": "Get Employee By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}employees/63cf0321a4e49eb6a3779786",
+							"host": [
+								"{{url}}employees"
+							],
+							"path": [
+								"63cf0321a4e49eb6a3779786"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Employee By Id",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}employees/63cf0321a4e49eb6a3779786",
+									"host": [
+										"{{url}}employees"
+									],
+									"path": [
+										"63cf0321a4e49eb6a3779786"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\r\n    \"id\": \"63d31bf5d76dce8811ff746e\",\r\n    \"createdAt\": \"2023-01-27T00:33:57.078Z\",\r\n    \"updatedAt\": \"2023-01-27T00:33:57.078Z\",\r\n    \"firstName\": null,\r\n    \"lastName\": null,\r\n    \"clockifyName\": \"Pracownik 1\",\r\n    \"email\": \"karol.p.zysk@gmail.com\",\r\n    \"hourlyRate\": 0,\r\n    \"hoursWorked\": 0,\r\n    \"salary\": null,\r\n    \"profilePicture\": \"https://img.clockify.me/no-user-image.png\",\r\n    \"clockifyId\": \"63beea4c6e59b4047b6e193d\",\r\n    \"userId\": \"63d30bb2f68d33770cfa29e4\"\r\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Employee By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}employees/63c943ecc60c9b775da78bea",
+							"host": [
+								"{{url}}employees"
+							],
+							"path": [
+								"63c943ecc60c9b775da78bea"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Delete Employee By Id",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}employees/63c943ecc60c9b775da78bea",
+									"host": [
+										"{{url}}employees"
+									],
+									"path": [
+										"63c943ecc60c9b775da78bea"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "Successfuly deleted"
+						}
+					]
+				},
+				{
+					"name": "Update Employee by Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hourlyRate\": 123\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}employees/63cefc1b5f2b353f201f9703",
+							"host": [
+								"{{url}}employees"
+							],
+							"path": [
+								"63cefc1b5f2b353f201f9703"
+							]
+						},
+						"description": "Endpoint umożliwiający aktualizację stawki godzinowej dla pracownika ale również edycję jego imienia, nazwiska, clockifyName czy emaila."
+					},
+					"response": [
+						{
+							"name": "Update Employee by Id",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"hourlyRate\": 123\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}employees/63cefc1b5f2b353f201f9703",
+									"host": [
+										"{{url}}employees"
+									],
+									"path": [
+										"63cefc1b5f2b353f201f9703"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\r\n    \"id\": \"63d31cdd8ac529babccebd51\",\r\n    \"createdAt\": \"2023-01-27T00:37:49.196Z\",\r\n    \"updatedAt\": \"2023-01-27T00:44:45.635Z\",\r\n    \"firstName\": \"Creed\",\r\n    \"lastName\": \"Bratton\",\r\n    \"clockifyName\": null,\r\n    \"email\": \"email2@email.pl\",\r\n    \"hourlyRate\": 55,\r\n    \"hoursWorked\": 0,\r\n    \"salary\": 0,\r\n    \"profilePicture\": null,\r\n    \"clockifyId\": \"63beea4c6e59b4047b6e193d\",\r\n    \"userId\": \"63d30bb2f68d33770cfa29e4\"\r\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Projects",
+			"item": [
+				{
+					"name": "Get All Projects",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}projects",
+							"host": [
+								"{{url}}projects"
+							]
+						},
+						"description": "Pobieranie wszystkich nie przetworzonych projektów z Clockify API"
+					},
+					"response": [
+						{
+							"name": "Get All Projects",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}projects",
+									"host": [
+										"{{url}}projects"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "[\r\n    {\r\n        \"id\": \"63bfe49f0bd863656cf2bcb6\",\r\n        \"name\": \"Buisness App\",\r\n        \"hourlyRate\": {\r\n            \"amount\": 0,\r\n            \"currency\": \"USD\"\r\n        },\r\n        \"clientId\": \"\",\r\n        \"workspaceId\": \"63bdb6b7a938f743f92ac760\",\r\n        \"billable\": true,\r\n        \"memberships\": [\r\n            {\r\n                \"userId\": \"63bdb6b7a938f743f92ac75f\",\r\n                \"hourlyRate\": {\r\n                    \"amount\": 3300,\r\n                    \"currency\": \"USD\"\r\n                },\r\n                \"costRate\": null,\r\n                \"targetId\": \"63bfe49f0bd863656cf2bcb6\",\r\n                \"membershipType\": \"PROJECT\",\r\n                \"membershipStatus\": \"ACTIVE\"\r\n            },\r\n            {\r\n                \"userId\": \"63beea305e398c3868862564\",\r\n                \"hourlyRate\": {\r\n                    \"amount\": 450,\r\n                    \"currency\": \"USD\"\r\n                },\r\n                \"costRate\": null,\r\n                \"targetId\": \"63bfe49f0bd863656cf2bcb6\",\r\n                \"membershipType\": \"PROJECT\",\r\n                \"membershipStatus\": \"ACTIVE\"\r\n            }\r\n        ],\r\n        \"color\": \"#03A9F4\",\r\n        \"estimate\": {\r\n            \"estimate\": \"PT0S\",\r\n            \"type\": \"AUTO\"\r\n        },\r\n        \"archived\": false,\r\n        \"duration\": \"PT56H1M42S\",\r\n        \"clientName\": \"\",\r\n        \"note\": \"\",\r\n        \"costRate\": null,\r\n        \"timeEstimate\": {\r\n            \"estimate\": \"PT0S\",\r\n            \"type\": \"AUTO\",\r\n            \"resetOption\": null,\r\n            \"active\": false,\r\n            \"includeNonBillable\": true\r\n        },\r\n        \"budgetEstimate\": null,\r\n        \"template\": false,\r\n        \"public\": true\r\n    },\r\n    {\r\n        \"id\": \"63bfe4b4a0346a14ee189420\",\r\n        \"name\": \"Strategy Game\",\r\n        \"hourlyRate\": {\r\n            \"amount\": 0,\r\n            \"currency\": \"USD\"\r\n        },\r\n        \"clientId\": \"\",\r\n        \"workspaceId\": \"63bdb6b7a938f743f92ac760\",\r\n        \"billable\": true,\r\n        \"memberships\": [\r\n            {\r\n                \"userId\": \"63bdb6b7a938f743f92ac75f\",\r\n                \"hourlyRate\": {\r\n                    \"amount\": 4400,\r\n                    \"currency\": \"USD\"\r\n                },\r\n                \"costRate\": null,\r\n                \"targetId\": \"63bfe4b4a0346a14ee189420\",\r\n                \"membershipType\": \"PROJECT\",\r\n                \"membershipStatus\": \"ACTIVE\"\r\n            },\r\n            {\r\n                \"userId\": \"63beea4c6e59b4047b6e193d\",\r\n                \"hourlyRate\": {\r\n                    \"amount\": 2200,\r\n                    \"currency\": \"USD\"\r\n                },\r\n                \"costRate\": null,\r\n                \"targetId\": \"63bfe4b4a0346a14ee189420\",\r\n                \"membershipType\": \"PROJECT\",\r\n                \"membershipStatus\": \"ACTIVE\"\r\n            },\r\n            {\r\n                \"userId\": \"63beea305e398c3868862564\",\r\n                \"hourlyRate\": {\r\n                    \"amount\": 1100,\r\n                    \"currency\": \"USD\"\r\n                },\r\n                \"costRate\": null,\r\n                \"targetId\": \"63bfe4b4a0346a14ee189420\",\r\n                \"membershipType\": \"PROJECT\",\r\n                \"membershipStatus\": \"ACTIVE\"\r\n            }\r\n        ],\r\n        \"color\": \"#8BC34A\",\r\n        \"estimate\": {\r\n            \"estimate\": \"PT0S\",\r\n            \"type\": \"AUTO\"\r\n        },\r\n        \"archived\": false,\r\n        \"duration\": \"PT80H26M54S\",\r\n        \"clientName\": \"\",\r\n        \"note\": \"\",\r\n        \"costRate\": null,\r\n        \"timeEstimate\": {\r\n            \"estimate\": \"PT0S\",\r\n            \"type\": \"AUTO\",\r\n            \"resetOption\": null,\r\n            \"active\": false,\r\n            \"includeNonBillable\": true\r\n        },\r\n        \"budgetEstimate\": null,\r\n        \"template\": false,\r\n        \"public\": true\r\n    }\r\n]"
+						}
+					]
+				},
+				{
+					"name": "Get Project By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}projects/63bfe49f0bd863656cf2bcb6",
+							"host": [
+								"{{url}}projects"
+							],
+							"path": [
+								"63bfe49f0bd863656cf2bcb6"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Project By Id",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}projects/63bfe49f0bd863656cf2bcb6",
+									"host": [
+										"{{url}}projects"
+									],
+									"path": [
+										"63bfe49f0bd863656cf2bcb6"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "878"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"36e-dJ/89g2EQaOb9SywfflkX0FBKoU\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 26 Jan 2023 23:46:43 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"63bfe49f0bd863656cf2bcb6\",\n    \"name\": \"Buisness App\",\n    \"hourlyRate\": {\n        \"amount\": 0,\n        \"currency\": \"USD\"\n    },\n    \"clientId\": \"\",\n    \"workspaceId\": \"63bdb6b7a938f743f92ac760\",\n    \"billable\": true,\n    \"memberships\": [\n        {\n            \"userId\": \"63bdb6b7a938f743f92ac75f\",\n            \"hourlyRate\": {\n                \"amount\": 3300,\n                \"currency\": \"USD\"\n            },\n            \"costRate\": null,\n            \"targetId\": \"63bfe49f0bd863656cf2bcb6\",\n            \"membershipType\": \"PROJECT\",\n            \"membershipStatus\": \"ACTIVE\"\n        },\n        {\n            \"userId\": \"63beea305e398c3868862564\",\n            \"hourlyRate\": {\n                \"amount\": 450,\n                \"currency\": \"USD\"\n            },\n            \"costRate\": null,\n            \"targetId\": \"63bfe49f0bd863656cf2bcb6\",\n            \"membershipType\": \"PROJECT\",\n            \"membershipStatus\": \"ACTIVE\"\n        }\n    ],\n    \"color\": \"#03A9F4\",\n    \"estimate\": {\n        \"estimate\": \"PT0S\",\n        \"type\": \"AUTO\"\n    },\n    \"archived\": false,\n    \"duration\": \"PT56H1M42S\",\n    \"clientName\": \"\",\n    \"note\": \"\",\n    \"costRate\": null,\n    \"timeEstimate\": {\n        \"estimate\": \"PT0S\",\n        \"type\": \"AUTO\",\n        \"resetOption\": null,\n        \"active\": false,\n        \"includeNonBillable\": true\n    },\n    \"budgetEstimate\": null,\n    \"template\": false,\n    \"public\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"exmpl name\",\r\n    \"note\": \"example note\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}projects",
+							"host": [
+								"{{url}}projects"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create Project",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"exmpl name\",\r\n    \"note\": \"example note\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}projects",
+									"host": [
+										"{{url}}projects"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "662"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"296-OXBIjvsHr8PjHlQ6XbvlP3ZUx0E\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 27 Jan 2023 00:50:25 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"63d31fd024158e30cecc61e4\",\n    \"name\": \"exmpl name\",\n    \"hourlyRate\": {\n        \"amount\": 0,\n        \"currency\": \"USD\"\n    },\n    \"clientId\": \"\",\n    \"workspaceId\": \"63bdb6b7a938f743f92ac760\",\n    \"billable\": true,\n    \"memberships\": [\n        {\n            \"userId\": \"63bdb6b7a938f743f92ac75f\",\n            \"hourlyRate\": null,\n            \"costRate\": null,\n            \"targetId\": \"63d31fd024158e30cecc61e4\",\n            \"membershipType\": \"PROJECT\",\n            \"membershipStatus\": \"ACTIVE\"\n        }\n    ],\n    \"color\": \"#FF9800\",\n    \"estimate\": {\n        \"estimate\": \"PT0S\",\n        \"type\": \"AUTO\"\n    },\n    \"archived\": false,\n    \"duration\": \"PT0S\",\n    \"clientName\": \"\",\n    \"note\": \"example note\",\n    \"costRate\": null,\n    \"timeEstimate\": {\n        \"estimate\": \"PT0S\",\n        \"type\": \"AUTO\",\n        \"resetOption\": null,\n        \"active\": false,\n        \"includeNonBillable\": true\n    },\n    \"budgetEstimate\": null,\n    \"template\": false,\n    \"public\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"My Example API Project\",\r\n  \"clientId\": \"\",\r\n  \"isPublic\": false,\r\n  \"hourlyRate\": {\r\n      \"amount\": 3600\r\n  },\r\n  \"color\": \"#f44336\",\r\n  \"note\": \"This is project's note (optional)\",\r\n  \"billable\": true,\r\n  \"archived\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}projects/63c90a9f4cbae37e91299186",
+							"host": [
+								"{{url}}projects"
+							],
+							"path": [
+								"63c90a9f4cbae37e91299186"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}projects/63c90a414cbae37e91299154",
+							"host": [
+								"{{url}}projects"
+							],
+							"path": [
+								"63c90a414cbae37e91299154"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Delete Project",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}projects/63c891d26b3eee5a02a735df",
+									"host": [
+										"{{url}}projects"
+									],
+									"path": [
+										"63c891d26b3eee5a02a735df"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "156"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"9c-1028OezbquMULMsrA4BdEoRl7fc\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 27 Jan 2023 00:51:21 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 401,\n    \"message\": \"Response Error[DELETE:400]: Bad Request. Message: Cannot delete an active project. Resource: undefined\",\n    \"error\": \"Unauthorized\"\n}"
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Salaries",
+			"item": [
+				{
+					"name": "Get Employee Salary by Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"project\" : \"61ba18ca13288904d6b77f05\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}salary/63beea4c6e59b4047b6e193d",
+							"host": [
+								"{{url}}salary"
+							],
+							"path": [
+								"63beea4c6e59b4047b6e193d"
+							]
+						},
+						"description": "\"Endpoint Obliczenia Wypłaty dla pracownika \" - oblicza wypłatę dla pracownika na podstawie liczby godzin przepracowanych i stawki godzinowej.\n\nZawiera również opcjonalne parametry takie jak :\n\n\"project\": \"projectId\" ,\n\n// Zawęża wyliczanie wypłaty do danego projektu\n\n\"date\" : \"01.2023\",\n\n// data podana w formacie MM.RRRR zawęża wyliczanie wypłaty do danego miesiąca i roku\n\n\"start\" : \"18.05.2021\"\n\n\"end\" : \"24.12.2022\",\n\n// pozwala na podanie dowolnego zakresu czasu dle którego chcemy obliczyć wynagrodzenia"
+					},
+					"response": [
+						{
+							"name": "Get Employee Salary by Id",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"date\" : \"01.2023\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}salary/63beea4c6e59b4047b6e193d",
+									"host": [
+										"{{url}}salary"
+									],
+									"path": [
+										"63beea4c6e59b4047b6e193d"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "394"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"18a-R2Gb0M7SjWfdb+akaIOi9t9vZHc\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 27 Jan 2023 01:00:38 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"63d321789b45c6ce3664d3b3\",\n    \"createdAt\": \"2023-01-27T00:57:28.876Z\",\n    \"updatedAt\": \"2023-01-27T01:00:38.474Z\",\n    \"firstName\": null,\n    \"lastName\": null,\n    \"clockifyName\": \"Pracownik 1\",\n    \"email\": \"karol.p.zysk@gmail.com\",\n    \"hourlyRate\": 55,\n    \"hoursWorked\": 87.7,\n    \"salary\": 4823.5,\n    \"profilePicture\": \"https://img.clockify.me/no-user-image.png\",\n    \"clockifyId\": \"63beea4c6e59b4047b6e193d\",\n    \"userId\": \"63d321519b45c6ce3664d3b2\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Employees Salaries",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \r\n   \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}salary",
+							"host": [
+								"{{url}}salary"
+							]
+						},
+						"description": "Wyliczanie pensji dla wszystkich pracowników na podstawie przepracowanych godzin i stawki godzinowej.\n\nDostępne opcjonalne parametry :  \nproject : \"projectId\",\n\n// pokazuje przepracowane godziny na projekt.\n\n  \ndate : \"02.2023\" data w formacie MM.RRRR pokazje przepracowane godziny w danym miesiącu.  \n//  \nstart: \"2022-11-21\"  \nend: \"2022-12-21\"\n\n// pokazuje przepracowane godziny dla danego przedziału czasu"
+					},
+					"response": [
+						{
+							"name": "Get Employees Salaries",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"date\" : \"01.2023\"\r\n   \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}salary",
+									"host": [
+										"{{url}}salary"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1498"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"5da-DvOGmDnPSkN2riwDDQNthpAUkUQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 27 Jan 2023 01:07:03 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": \"63d32363d856014b9460be6b\",\n        \"createdAt\": \"2023-01-27T01:05:39.381Z\",\n        \"updatedAt\": \"2023-01-27T01:06:52.789Z\",\n        \"firstName\": null,\n        \"lastName\": null,\n        \"clockifyName\": \"Pracownik 1\",\n        \"email\": \"karol.p.zysk@gmail.com\",\n        \"hourlyRate\": 0,\n        \"hoursWorked\": 87.7,\n        \"salary\": 0,\n        \"profilePicture\": \"https://img.clockify.me/no-user-image.png\",\n        \"clockifyId\": \"63beea4c6e59b4047b6e193d\",\n        \"userId\": \"63d321519b45c6ce3664d3b2\"\n    },\n    {\n        \"id\": \"63d32363d856014b9460be6c\",\n        \"createdAt\": \"2023-01-27T01:05:39.664Z\",\n        \"updatedAt\": \"2023-01-27T01:06:52.794Z\",\n        \"firstName\": null,\n        \"lastName\": null,\n        \"clockifyName\": \"Pracownik 2\",\n        \"email\": \"trener.karolzysk@gmail.com\",\n        \"hourlyRate\": 0,\n        \"hoursWorked\": 63.7,\n        \"salary\": 0,\n        \"profilePicture\": \"https://img.clockify.me/no-user-image.png\",\n        \"clockifyId\": \"63beea305e398c3868862564\",\n        \"userId\": \"63d321519b45c6ce3664d3b2\"\n    },\n    {\n        \"id\": \"63d32363d856014b9460be6d\",\n        \"createdAt\": \"2023-01-27T01:05:39.782Z\",\n        \"updatedAt\": \"2023-01-27T01:06:53.043Z\",\n        \"firstName\": null,\n        \"lastName\": null,\n        \"clockifyName\": \"Karol Zyśk\",\n        \"email\": \"zysk.karol.pawel@gmail.com\",\n        \"hourlyRate\": 0,\n        \"hoursWorked\": 127.3,\n        \"salary\": 0,\n        \"profilePicture\": \"https://img.clockify.me/no-user-image.png\",\n        \"clockifyId\": \"63bdb6b7a938f743f92ac75f\",\n        \"userId\": \"63d321519b45c6ce3664d3b2\"\n    },\n    {\n        \"id\": \"63d32381d856014b9460be6e\",\n        \"createdAt\": \"2023-01-27T01:06:09.300Z\",\n        \"updatedAt\": \"2023-01-27T01:06:09.300Z\",\n        \"firstName\": \"Creed\",\n        \"lastName\": \"Bratton\",\n        \"clockifyName\": null,\n        \"email\": \"email2@email.pl\",\n        \"hourlyRate\": 12,\n        \"hoursWorked\": 19,\n        \"salary\": 228,\n        \"profilePicture\": null,\n        \"clockifyId\": null,\n        \"userId\": \"63d321519b45c6ce3664d3b2\"\n    }\n]"
+						},
+						{
+							"name": "SP Test Employees Salaries",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"start\" : \"01.01.2019\",\r\n     \"end\" : \"12.01.2023\"\r\n   \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}salary",
+									"host": [
+										"{{url}}salary"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "2737"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"ab1-o3Fkv8QANgifDw4jVl/uUQsl22c\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 31 Jan 2023 09:37:34 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": \"63d8e141d49f4f61f3d498b5\",\n        \"createdAt\": \"2023-01-31T09:37:05.093Z\",\n        \"updatedAt\": \"2023-01-31T09:37:13.482Z\",\n        \"firstName\": null,\n        \"lastName\": null,\n        \"clockifyName\": \"Bartosz Lodek\",\n        \"email\": \"b.lodek@ignited.pl\",\n        \"hourlyRate\": 0,\n        \"hoursWorked\": 75.1,\n        \"salary\": 0,\n        \"profilePicture\": \"https://img.clockify.me/no-user-image.png\",\n        \"clockifyId\": \"61d2b1366afbbb60e19e9f76\",\n        \"userId\": \"63d8645e63e5a28635b2f6b3\"\n    },\n    {\n        \"id\": \"63d8e141d49f4f61f3d498b6\",\n        \"createdAt\": \"2023-01-31T09:37:05.593Z\",\n        \"updatedAt\": \"2023-01-31T09:37:13.512Z\",\n        \"firstName\": null,\n        \"lastName\": null,\n        \"clockifyName\": \"Daniel Mielnik\",\n        \"email\": \"d.mielnik@softwarepartner.pl\",\n        \"hourlyRate\": 0,\n        \"hoursWorked\": 58.1,\n        \"salary\": 0,\n        \"profilePicture\": \"https://img.clockify.me/no-user-image.png\",\n        \"clockifyId\": \"619d15c61fe2576feb2f1580\",\n        \"userId\": \"63d8645e63e5a28635b2f6b3\"\n    },\n    {\n        \"id\": \"63d8e141d49f4f61f3d498b7\",\n        \"createdAt\": \"2023-01-31T09:37:05.709Z\",\n        \"updatedAt\": \"2023-01-31T09:37:13.644Z\",\n        \"firstName\": null,\n        \"lastName\": null,\n        \"clockifyName\": \"Filip Dominas\",\n        \"email\": \"filip.dominas@gmail.com\",\n        \"hourlyRate\": 0,\n        \"hoursWorked\": 0,\n        \"salary\": 0,\n        \"profilePicture\": \"https://img.clockify.me/no-user-image.png\",\n        \"clockifyId\": \"61c0520687b13d627f103df2\",\n        \"userId\": \"63d8645e63e5a28635b2f6b3\"\n    },\n    {\n        \"id\": \"63d8e141d49f4f61f3d498b8\",\n        \"createdAt\": \"2023-01-31T09:37:05.839Z\",\n        \"updatedAt\": \"2023-01-31T09:37:13.672Z\",\n        \"firstName\": null,\n        \"lastName\": null,\n        \"clockifyName\": \"Katarzyna Grzeskiewicz\",\n        \"email\": \"k.grzeskiewicz@ignited.pl\",\n        \"hourlyRate\": 0,\n        \"hoursWorked\": 38.5,\n        \"salary\": 0,\n        \"profilePicture\": \"https://img.clockify.me/no-user-image.png\",\n        \"clockifyId\": \"61ba18fdd6684f2a1ab0387d\",\n        \"userId\": \"63d8645e63e5a28635b2f6b3\"\n    },\n    {\n        \"id\": \"63d8e142d49f4f61f3d498b9\",\n        \"createdAt\": \"2023-01-31T09:37:06.219Z\",\n        \"updatedAt\": \"2023-01-31T09:37:13.479Z\",\n        \"firstName\": null,\n        \"lastName\": null,\n        \"clockifyName\": \"Michał Błach\",\n        \"email\": \"mblach@ignited.pl\",\n        \"hourlyRate\": 0,\n        \"hoursWorked\": 47.7,\n        \"salary\": 0,\n        \"profilePicture\": \"https://img.clockify.me/no-user-image.png\",\n        \"clockifyId\": \"61b9f2aa19a3ff78cb87edb3\",\n        \"userId\": \"63d8645e63e5a28635b2f6b3\"\n    },\n    {\n        \"id\": \"63d8e142d49f4f61f3d498ba\",\n        \"createdAt\": \"2023-01-31T09:37:06.343Z\",\n        \"updatedAt\": \"2023-01-31T09:37:13.519Z\",\n        \"firstName\": null,\n        \"lastName\": null,\n        \"clockifyName\": \"Roksana\",\n        \"email\": \"roksana.pod@gmail.com\",\n        \"hourlyRate\": 0,\n        \"hoursWorked\": 53.7,\n        \"salary\": 0,\n        \"profilePicture\": \"https://img.clockify.me/no-user-image.png\",\n        \"clockifyId\": \"60a2806b2535d501a5210ba3\",\n        \"userId\": \"63d8645e63e5a28635b2f6b3\"\n    },\n    {\n        \"id\": \"63d8e142d49f4f61f3d498bb\",\n        \"createdAt\": \"2023-01-31T09:37:06.465Z\",\n        \"updatedAt\": \"2023-01-31T09:37:13.492Z\",\n        \"firstName\": null,\n        \"lastName\": null,\n        \"clockifyName\": \"Tomasz Berus\",\n        \"email\": \"t.berus@signalgroup.pl\",\n        \"hourlyRate\": 0,\n        \"hoursWorked\": 61,\n        \"salary\": 0,\n        \"profilePicture\": \"https://img.clockify.me/no-user-image.png\",\n        \"clockifyId\": \"61ba1920d6684f2a1ab03c19\",\n        \"userId\": \"63d8645e63e5a28635b2f6b3\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Employees Salary Report",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}salary/report",
+							"host": [
+								"{{url}}salary"
+							],
+							"path": [
+								"report"
+							]
+						},
+						"description": "Tworzy raport zarobków za dany miesiąc dla wszystkich pracowników."
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"date\" : \"01.2023\",\r\n    \"project\" : \"63bfe49f0bd863656cf2bcb6\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}salary/report",
+									"host": [
+										"{{url}}salary"
+									],
+									"path": [
+										"report"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "790"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"316-PPl6Q1PkGoK5W4Kpucnzng/Tt0M\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 27 Jan 2023 01:10:15 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"63d32477d856014b9460be70\",\n    \"createdAt\": \"2023-01-27T01:10:15.771Z\",\n    \"updatedAt\": \"2023-01-27T01:10:15.771Z\",\n    \"reportName\": \"Software Partner report 01.2023\",\n    \"employees\": [\n        {\n            \"firstName\": null,\n            \"lastName\": null,\n            \"email\": \"karol.p.zysk@gmail.com\",\n            \"clockifyName\": \"Pracownik 1\",\n            \"hourlyRate\": 55,\n            \"hoursWorked\": 87.7,\n            \"salary\": 4823.5\n        },\n        {\n            \"firstName\": null,\n            \"lastName\": null,\n            \"email\": \"trener.karolzysk@gmail.com\",\n            \"clockifyName\": \"Pracownik 2\",\n            \"hourlyRate\": 22,\n            \"hoursWorked\": 63.7,\n            \"salary\": 1401.4\n        },\n        {\n            \"firstName\": null,\n            \"lastName\": null,\n            \"email\": \"zysk.karol.pawel@gmail.com\",\n            \"clockifyName\": \"Karol Zyśk\",\n            \"hourlyRate\": 0,\n            \"hoursWorked\": 127.3,\n            \"salary\": 0\n        },\n        {\n            \"firstName\": \"Creed\",\n            \"lastName\": \"Bratton\",\n            \"email\": \"email2@email.pl\",\n            \"clockifyName\": null,\n            \"hourlyRate\": 12,\n            \"hoursWorked\": 19,\n            \"salary\": 228\n        }\n    ],\n    \"userId\": \"63d321519b45c6ce3664d3b2\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Project Reports",
+			"item": [
+				{
+					"name": "Create Project Report",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"budgetEstimate\" : 9999,\r\n \"timeEstimate\" : 9999,\r\n \"note\" : \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}projects/report/63bfe4b4a0346a14ee189420",
+							"host": [
+								"{{url}}projects"
+							],
+							"path": [
+								"report",
+								"63bfe4b4a0346a14ee189420"
+							]
+						},
+						"description": "Tworzy raport dla danego projektu.\n\nDo projektu możemy dodać\n\n\"note\" : \"opis projektu\",\n\nStartFragment\n\n\"budgetEstimate\" : 9999,\n\n\"timeEstimate\" : 999,\n\nEndFragment\n\nRaport zwraca policzone już przepracowane przez pracowników godziny nad tym projektem jak i sumę wynagrodzeń które pracownicy otrzymali, porównane zostaje to z estymacjami.\n\nMożliwy jest jeden raport dla jednego projektu. W razie błędów robimy update już istniejącego. lub możemy usunąć istniejący i dodać nowy z nowymi ustawieniami."
+					},
+					"response": [
+						{
+							"name": "Zabka Project Report",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n \"budgetEstimate\" : 9999,\r\n \"timeEstimate\" : 9999,\r\n \"note\" : \"1234\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}projects/report/61ba18ca13288904d6b77f05",
+									"host": [
+										"{{url}}projects"
+									],
+									"path": [
+										"report",
+										"61ba18ca13288904d6b77f05"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1488"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"5d0-/kQwVu8O/4/6mJ01QZtuZ1IyOqY\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 31 Jan 2023 01:17:12 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"63d86c1895723b43431ca93f\",\n    \"createdAt\": \"2023-01-31T01:17:12.391Z\",\n    \"updatedAt\": \"2023-01-31T01:17:12.391Z\",\n    \"clientName\": \"Zabka\",\n    \"clientId\": \"61ba1886e9dbae652a892e35\",\n    \"projectId\": \"61ba18ca13288904d6b77f05\",\n    \"active\": true,\n    \"projectName\": \"NanoMobileMonitor\",\n    \"duration\": 362.5,\n    \"budgetEstimate\": 9999,\n    \"timeEstimate\": 9999,\n    \"expenses\": 0,\n    \"note\": \"1234\",\n    \"memberships\": [\n        {\n            \"clockifyId\": \"61d2b1366afbbb60e19e9f76\",\n            \"clockifyName\": \"Bartosz Lodek\",\n            \"hoursWorked\": 75.1,\n            \"hourlyRate\": 0,\n            \"salary\": 0,\n            \"profilePicture\": \"https://img.clockify.me/no-user-image.png\"\n        },\n        {\n            \"clockifyId\": \"619d15c61fe2576feb2f1580\",\n            \"clockifyName\": \"Daniel Mielnik\",\n            \"hoursWorked\": 58.1,\n            \"hourlyRate\": 0,\n            \"salary\": 0,\n            \"profilePicture\": \"https://img.clockify.me/no-user-image.png\"\n        },\n        {\n            \"clockifyId\": \"61ba18fdd6684f2a1ab0387d\",\n            \"clockifyName\": \"Katarzyna Grzeskiewicz\",\n            \"hoursWorked\": 38.5,\n            \"hourlyRate\": 0,\n            \"salary\": 0,\n            \"profilePicture\": \"https://img.clockify.me/no-user-image.png\"\n        },\n        {\n            \"clockifyId\": \"61b9f2aa19a3ff78cb87edb3\",\n            \"clockifyName\": \"Michał Błach\",\n            \"hoursWorked\": 47.7,\n            \"hourlyRate\": 0,\n            \"salary\": 0,\n            \"profilePicture\": \"https://img.clockify.me/no-user-image.png\"\n        },\n        {\n            \"clockifyId\": \"60a2806b2535d501a5210ba3\",\n            \"clockifyName\": \"Roksana\",\n            \"hoursWorked\": 53.7,\n            \"hourlyRate\": 0,\n            \"salary\": 0,\n            \"profilePicture\": \"https://img.clockify.me/no-user-image.png\"\n        },\n        {\n            \"clockifyId\": \"61ba1920d6684f2a1ab03c19\",\n            \"clockifyName\": \"Tomasz Berus\",\n            \"hoursWorked\": 22.1,\n            \"hourlyRate\": 0,\n            \"salary\": 0,\n            \"profilePicture\": \"https://img.clockify.me/no-user-image.png\"\n        }\n    ],\n    \"summary\": 9999,\n    \"userId\": \"63d8645e63e5a28635b2f6b3\"\n}"
+						},
+						{
+							"name": "DOP Managment Project Report",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n \"budgetEstimate\" : 9999,\r\n \"timeEstimate\" : 9999,\r\n \"note\" : \"1234\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}projects/report/6216d30bb59ba47debbb7bde",
+									"host": [
+										"{{url}}projects"
+									],
+									"path": [
+										"report",
+										"6216d30bb59ba47debbb7bde"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "555"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"22b-08Z1thn/7SL4c1g56kGmqRz6ZI4\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 31 Jan 2023 09:40:29 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"63d8e20dd49f4f61f3d498bc\",\n    \"createdAt\": \"2023-01-31T09:40:29.398Z\",\n    \"updatedAt\": \"2023-01-31T09:40:29.398Z\",\n    \"clientName\": \"\",\n    \"clientId\": \"\",\n    \"projectId\": \"6216d30bb59ba47debbb7bde\",\n    \"active\": true,\n    \"projectName\": \"DOP Management\",\n    \"duration\": 14.5,\n    \"budgetEstimate\": 9999,\n    \"timeEstimate\": 9999,\n    \"expenses\": 0,\n    \"note\": \"1234\",\n    \"memberships\": [\n        {\n            \"clockifyId\": \"61ba1920d6684f2a1ab03c19\",\n            \"clockifyName\": \"Tomasz Berus\",\n            \"hoursWorked\": 14.5,\n            \"hourlyRate\": 0,\n            \"salary\": 0,\n            \"profilePicture\": \"https://img.clockify.me/no-user-image.png\"\n        }\n    ],\n    \"summary\": 9999,\n    \"userId\": \"63d8645e63e5a28635b2f6b3\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Project Report by Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}projects/report/63bfe4b4a0346a14ee189420",
+							"host": [
+								"{{url}}projects"
+							],
+							"path": [
+								"report",
+								"63bfe4b4a0346a14ee189420"
+							]
+						},
+						"description": "Endpoint umożliwia usuwanie raportu projektu."
+					},
+					"response": [
+						{
+							"name": "Delete Report",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}projects/report/63bfe4b4a0346a14ee189420",
+									"host": [
+										"{{url}}projects"
+									],
+									"path": [
+										"report",
+										"63bfe4b4a0346a14ee189420"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "7"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"7-RBvabNhWieR26+EEQPJ5Z/rvYaY\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 27 Jan 2023 08:48:30 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "Deleted"
+						}
+					]
+				},
+				{
+					"name": "Update Project Report by Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \r\n    \"note\" : \"example note\",\r\n   \"budgetEstimate\" : 9999,\r\n \"timeEstimate\" : 999\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}projects/report/63bfe4b4a0346a14ee189420",
+							"host": [
+								"{{url}}projects"
+							],
+							"path": [
+								"report",
+								"63bfe4b4a0346a14ee189420"
+							]
+						},
+						"description": "Umożliwia update raportu projektu."
+					},
+					"response": [
+						{
+							"name": "Update Project Report by Id",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"note\" : \"example note\",\r\n    \"budgetEstimate\" : 1000,\r\n    \"timeEstimate\" : 101\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}projects/report/63bfe4b4a0346a14ee189420",
+									"host": [
+										"{{url}}projects"
+									],
+									"path": [
+										"report",
+										"63bfe4b4a0346a14ee189420"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "768"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"300-5kf8NZgbT3Pcgu8z+z53K0KJCYI\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 27 Jan 2023 08:57:28 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"63d38fe5838dfbce1c692fd6\",\n    \"createdAt\": \"2023-01-27T08:48:37.796Z\",\n    \"updatedAt\": \"2023-01-27T08:57:28.649Z\",\n    \"clientName\": \"\",\n    \"clientId\": \"\",\n    \"projectId\": \"63bfe4b4a0346a14ee189420\",\n    \"active\": true,\n    \"projectName\": \"Strategy Game\",\n    \"duration\": 80.4,\n    \"budgetEstimate\": 1000,\n    \"timeEstimate\": 101,\n    \"expenses\": 1356.6,\n    \"note\": \"example note\",\n    \"memberships\": [\n        {\n            \"firstName\": null,\n            \"lastName\": null,\n            \"email\": \"zysk.karol.pawel@gmail.com\",\n            \"hourlyRate\": 0,\n            \"hoursWorked\": 38.5,\n            \"salary\": 0\n        },\n        {\n            \"firstName\": null,\n            \"lastName\": null,\n            \"email\": \"karol.p.zysk@gmail.com\",\n            \"hourlyRate\": 55,\n            \"hoursWorked\": 6.2,\n            \"salary\": 341\n        },\n        {\n            \"firstName\": null,\n            \"lastName\": null,\n            \"email\": \"trener.karolzysk@gmail.com\",\n            \"hourlyRate\": 22,\n            \"hoursWorked\": 35.8,\n            \"salary\": 787.5999999999999\n        }\n    ],\n    \"summary\": -356.5999999999999,\n    \"userId\": \"63d321519b45c6ce3664d3b2\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}",
+					"host": [
+						"{{url}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

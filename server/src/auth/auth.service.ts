@@ -2,8 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { SignInDto, SignUpDto } from './dto';
 import * as bcrypt from 'bcrypt';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
-import { ForbiddenException } from '@nestjs/common/exceptions';
+import {
+  BadRequestException,
+  ForbiddenException,
+} from '@nestjs/common/exceptions';
 import { JwtService } from '@nestjs/jwt/dist';
 import { ConfigService } from '@nestjs/config/dist';
 
@@ -11,65 +13,105 @@ import { ConfigService } from '@nestjs/config/dist';
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private jwt: JwtService,
+    private jwtService: JwtService,
     private config: ConfigService,
   ) {}
-
-  async signUp(dto: SignUpDto) {
-    const salt = this.config.get('SALT_ROUNDS');
-    const hash = await bcrypt.hash(dto.password, 12);
-    try {
-      const user = await this.prisma.user.create({
-        data: {
-          email: dto.email,
-          name: dto.name,
-          hash,
-        },
-      });
-
-      return this.signToken(user.id, user.email);
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          throw new ForbiddenException(`${error.meta.target} taken`);
-        }
-      }
-      throw error;
+  async signUp(dto: SignUpDto): Promise<any> {
+    // Check if user exists
+    const userExists = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
+    if (userExists) {
+      throw new BadRequestException('User already exists');
     }
+
+    // Hash password
+    const hash = await this.hashData(dto.password);
+    const newUser = await this.prisma.user.create({
+      data: {
+        email: dto.email,
+        name: dto.name,
+        hash,
+      },
+    });
+    const tokens = await this.getTokens(newUser.id, newUser.email);
+    await this.updateRefreshToken(newUser.id, tokens.refreshToken);
+    return tokens;
   }
 
   async signIn(dto: SignInDto) {
+    // Check if user exists
     const user = await this.prisma.user.findUnique({
-      where: {
-        email: dto.email,
-      },
+      where: { email: dto.email },
     });
-    if (!user) throw new ForbiddenException('Credentials incorrect');
-
-    const pwMatches = await bcrypt.compare(dto.password, user.hash);
-
-    if (!pwMatches) throw new ForbiddenException('Credentials incorrect');
-
-    return this.signToken(user.id, user.email);
+    if (!user) throw new BadRequestException('User does not exist');
+    const passwordMatches = await bcrypt.compare(dto.password, user.hash);
+    if (!passwordMatches)
+      throw new BadRequestException('Password is incorrect');
+    const tokens = await this.getTokens(user.id, user.email);
+    await this.updateRefreshToken(user.id, tokens.refreshToken);
+    return tokens;
   }
 
-  async signToken(
-    userId: string,
-    email: string,
-  ): Promise<{ access_token: string }> {
-    const secret = this.config.get('JWT_SECRET');
-    const payload = {
-      sub: userId,
-      email,
-    };
-
-    const token = await this.jwt.signAsync(payload, {
-      expiresIn: '50m',
-      secret,
+  async logout(userId: string) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: { refreshToken: null },
     });
+  }
+
+  hashData(data: string) {
+    return bcrypt.hash(data, 10);
+  }
+
+  async updateRefreshToken(userId: string, refreshToken: string) {
+    const hashedRefreshToken = await this.hashData(refreshToken);
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { refreshToken: hashedRefreshToken },
+    });
+  }
+
+  async getTokens(userId: string, username: string) {
+    const [access_token, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(
+        {
+          sub: userId,
+          username,
+        },
+        {
+          secret: this.config.get('JWT_SECRET'),
+          expiresIn: '30m',
+        },
+      ),
+      this.jwtService.signAsync(
+        {
+          sub: userId,
+          username,
+        },
+        {
+          secret: this.config.get('JWT_REFRESH_SECRET'),
+          expiresIn: '30d',
+        },
+      ),
+    ]);
 
     return {
-      access_token: token,
+      access_token,
+      refreshToken,
     };
+  }
+  async refreshTokens(userId: string, refreshToken: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user || !user.refreshToken)
+      throw new ForbiddenException('Access Denied');
+    const refreshTokenMatches = await bcrypt.compare(
+      refreshToken,
+      user.refreshToken,
+    );
+    if (!refreshTokenMatches) throw new ForbiddenException('Access Denied');
+    const tokens = await this.getTokens(user.id, user.email);
+    await this.updateRefreshToken(user.id, tokens.refreshToken);
+    return tokens;
   }
 }

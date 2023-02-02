@@ -34,40 +34,40 @@ export class ClockifyService {
       throw new ForbiddenException('Set up clockify apiKey first');
     const apiKey = this.cryptoService.decrypt(user.hash_api_key);
     this.clockify = new Clockify(apiKey);
+    const workspaces = await this.clockify.workspaces.get();
+    const workspaceId = workspaces[0].id;
+    return { workspaceId };
   }
 
   async getEmployees(user: User) {
     try {
-      await this.initClockify(user);
-      const workspaces = await this.clockify.workspaces.get();
+      const { workspaceId } = await this.initClockify(user);
 
       const employees = await this.clockify.workspaces
-        .withId(workspaces[0].id)
+        .withId(workspaceId)
         .users.get({});
 
-      return employees;
+      return { employees, workspaceId };
     } catch (error) {
       throw new UnauthorizedException('Invalid Api key');
     }
   }
 
   async getAllProjects(user: User) {
-    await this.initClockify(user);
-    const workspaces = await this.clockify.workspaces.get();
+    const { workspaceId } = await this.initClockify(user);
 
     const projects = await this.clockify.workspace
-      .withId(workspaces[0].id)
+      .withId(workspaceId)
       .projects.get();
 
     return projects;
   }
 
   async getProjectById(user: User, projectId: string) {
-    await this.initClockify(user);
-    const workspaces = await this.clockify.workspaces.get();
+    const { workspaceId } = await this.initClockify(user);
 
     const project = await this.clockify.workspace
-      .withId(workspaces[0].id)
+      .withId(workspaceId)
       .projects.withId(projectId)
       .get();
 
@@ -75,11 +75,10 @@ export class ClockifyService {
   }
 
   async createProject(user: User, dto: CreateProjectDto) {
-    await this.initClockify(user);
-    const workspaces = await this.clockify.workspaces.get();
+    const { workspaceId } = await this.initClockify(user);
 
     const project = await this.clockify.workspace
-      .withId(workspaces[0].id)
+      .withId(workspaceId)
       .projects.post({
         name: dto.name,
         note: dto.note,
@@ -89,11 +88,10 @@ export class ClockifyService {
   }
 
   async updateProject(user: User, dto: UpdateProjectDto, projectId: string) {
-    await this.initClockify(user);
-    const workspaces = await this.clockify.workspaces.get();
+    const { workspaceId } = await this.initClockify(user);
 
     const updatedProject = await this.clockify.workspace
-      .withId(workspaces[0].id)
+      .withId(workspaceId)
       .projects.withId(projectId)
       .put({ ...dto });
 
@@ -101,11 +99,10 @@ export class ClockifyService {
   }
 
   async deleteProject(user: User, projectId: string) {
-    await this.initClockify(user);
-    const workspaces = await this.clockify.workspaces.get();
+    const { workspaceId } = await this.initClockify(user);
 
     await this.clockify.workspace
-      .withId(workspaces[0].id)
+      .withId(workspaceId)
       .projects.withId(projectId)
       .delete();
     return;
@@ -120,6 +117,7 @@ export class ClockifyService {
     await this.initClockify(user);
 
     const options = { clockifyId, dto, date };
+
     const hours = await getHoursWorked.bind(this)(options);
 
     const { hourlyRate } = await this.prisma.employee.findFirst({
@@ -140,25 +138,27 @@ export class ClockifyService {
 
   async geEmployeesSalary(user: User, dto: SalaryParamsDto) {
     try {
+      const { workspaceId } = await this.initClockify(user);
       const employees = await this.prisma.employee.findMany({
-        where: { userId: user.id },
-        select: { id: true, clockifyId: true },
+        where: { userId: user.id, workspaceId },
+        select: { id: true, clockifyId: true, email: true },
       });
+
       const clockifyIds = employees.map((employee) => employee.clockifyId);
+      console.log(clockifyIds);
 
       let date: { start: Date; end: Date };
       if (dto.date) date = getDatesForMonth(dto.date);
 
       const promises = [];
       for (const clockifyId of clockifyIds) {
-        if (!clockifyId) continue;
         promises.push(this.calculateSalary(clockifyId, user, dto, date));
       }
 
       await Promise.all(promises);
 
       return this.prisma.employee.findMany({
-        where: { userId: user.id },
+        where: { userId: user.id, workspaceId },
       });
     } catch (error) {
       throw new ForbiddenException(error.message);
@@ -181,20 +181,20 @@ export class ClockifyService {
 
   async projectReport(user: User, projectId: string, dto: ReportParamsDto) {
     try {
-      await this.initClockify(user);
+      const { workspaceId } = await this.initClockify(user);
 
       const employees = await this.prisma.employee.findMany({
-        where: { userId: user.id },
+        where: { userId: user.id, workspaceId },
         select: { id: true, clockifyId: true },
       });
       const clockifyIds = employees.map((employee) => employee.clockifyId);
 
       for (const clockifyId of clockifyIds) {
         const options = { clockifyId, dto, projectId };
-        if (clockifyId === null) continue;
 
         //CALCULATING ALL CLOCKIFY USERS WORKING HOURS
         const hours = await getHoursWorked.bind(this)(options);
+        console.log('elo');
         const { hourlyRate } = await this.prisma.employee.findFirst({
           where: { clockifyId: clockifyId, userId: user.id },
         });
@@ -218,6 +218,7 @@ export class ClockifyService {
         projectId,
         dto,
         salary,
+        workspaceId,
       });
 
       return { ...reportParams, salary };
@@ -252,9 +253,7 @@ export class ClockifyService {
     try {
       const report = await this.prisma.report.create({
         data: {
-          reportName: `Software Partner report ${
-            dto.date ? dto.date : dto.start + ' ' + dto.end
-          }`,
+          reportName: `Software Partner report ${dto.date ? dto.date : null}`,
           userId: user.id,
           employees: employeesSalary,
         },

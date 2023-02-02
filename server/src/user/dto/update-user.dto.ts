@@ -10,6 +10,5 @@ export class UpdateUserDto {
   email?: string;
 
   @IsString()
-  @IsOptional()
   clockify_api_key: string;
 }

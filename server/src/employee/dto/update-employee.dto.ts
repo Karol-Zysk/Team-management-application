@@ -1,6 +1,6 @@
 import {
-  IsDate,
   IsEmail,
+  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
@@ -9,29 +9,30 @@ import {
 export class UpdateEmployeeDto {
   @IsString()
   @IsOptional()
-  name: string;
+  firstName: string;
+
+  @IsString()
+  @IsOptional()
+  lastName: string;
+
   @IsString()
   @IsEmail()
   @IsOptional()
   email: string;
-  @IsNumber()
-  @IsOptional()
-  hoursWorked: number;
-  @IsNumber()
-  @IsOptional()
-  project_hours: number;
+
   @IsNumber()
   @IsOptional()
   hourlyRate: number;
-  @IsDate()
-  @IsOptional()
-  contractEnds: Date;
+
   @IsString()
   @IsOptional()
   profilePicture: string;
+
   @IsString()
   @IsOptional()
+  @IsNotEmpty()
   clockifyId: string;
+
   @IsNumber()
   @IsOptional()
   salary?: number;

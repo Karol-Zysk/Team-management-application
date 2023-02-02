@@ -1,4 +1,10 @@
-import { IsEmail, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateEmployeeDto {
   @IsOptional()
@@ -17,12 +23,9 @@ export class CreateEmployeeDto {
   @IsNumber()
   hourlyRate: number;
   @IsOptional()
-  @IsNumber()
-  hoursWorked: number;
-  @IsOptional()
   @IsString()
   profilePicture: string;
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   clockifyId: string;
   @IsOptional()
