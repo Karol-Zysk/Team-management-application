@@ -12,7 +12,11 @@ import { GetUser } from '../auth/decorators';
 import { JwtGuard } from '../auth/guard';
 import { PrismaService } from '../prisma/prisma.service';
 import { EmployeeService } from './employee.service';
-import { CreateEmployeeDto, UpdateEmployeeDto } from './dto';
+import {
+  CreateEmployeeDto,
+  SalaryHistoryInput,
+  UpdateEmployeeDto,
+} from './dto';
 import { Delete, Patch } from '@nestjs/common/decorators';
 import { HttpStatus } from '@nestjs/common/enums';
 
@@ -55,5 +59,10 @@ export class EmployeeController {
   @Delete(':id')
   deleteEmployeeById(@GetUser() user: User, @Param('id') id: string) {
     return this.employeeService.deleteEmployeeById(user, id);
+  }
+
+  @Post('salaryhistory/:id')
+  addSalaryHistory(@Param('id') id: string, @Body() dto: SalaryHistoryInput) {
+    return this.employeeService.addSalaryHistory(id, dto);
   }
 }

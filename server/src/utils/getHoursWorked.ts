@@ -8,6 +8,7 @@ export async function getHoursWorked({
 }) {
   const workspaces = await this.clockify.workspaces.get();
   const project = projectId || dto.projectId;
+
   const timeEntries = await this.clockify.workspace
     .withId(workspaces[0].id)
     .users.withId(clockifyId)

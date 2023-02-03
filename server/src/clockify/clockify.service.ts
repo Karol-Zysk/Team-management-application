@@ -4,7 +4,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { Employee, User } from '@prisma/client';
 import Clockify from 'clockify-ts';
 import { CryptoService } from '../cryptography/crypto.service';
 import { EmployeesSalaryReporDto } from '../employee/dto';
@@ -116,20 +116,34 @@ export class ClockifyService {
     date?: { start: Date; end: Date },
   ) {
     await this.initClockify(user);
-
     const options = { clockifyId, dto, date };
-
     const hours = await getHoursWorked.bind(this)(options);
 
-    const { hourlyRate } = await this.prisma.employee.findFirst({
+    let hourlyRate;
+    const employee = await this.prisma.employee.findFirst({
       where: { clockifyId: clockifyId, userId: user.id },
+      select: {
+        salaryHistory: true,
+        hourlyRate: true,
+      },
     });
+
+    if (date) {
+      const salaryHistory = employee.salaryHistory.find(
+        (salary) => date.start >= salary.start && date.start < salary.end,
+      );
+      hourlyRate = salaryHistory
+        ? salaryHistory.hourlyRate
+        : employee.hourlyRate;
+    } else {
+      hourlyRate = employee.hourlyRate;
+    }
 
     const salary = hours * hourlyRate;
 
     await this.prisma.employee.updateMany({
       where: { clockifyId: clockifyId, userId: user.id },
-      data: { hoursWorked: hours, salary },
+      data: { hoursWorked: hours, hourlyRate, salary },
     });
 
     return await this.prisma.employee.findFirst({
@@ -146,10 +160,16 @@ export class ClockifyService {
       });
 
       const clockifyIds = employees.map((employee) => employee.clockifyId);
-      console.log(clockifyIds);
 
       let date: { start: Date; end: Date };
-      if (dto.date) date = getDatesForMonth(dto.date);
+      if (dto.date) {
+        date = getDatesForMonth(dto.date);
+      } else {
+        date = {
+          start: new Date(Date.parse(dto.start)),
+          end: new Date(Date.parse(dto.end)),
+        };
+      }
 
       const promises = [];
       for (const clockifyId of clockifyIds) {
@@ -195,7 +215,6 @@ export class ClockifyService {
 
         //CALCULATING ALL CLOCKIFY USERS WORKING HOURS
         const hours = await getHoursWorked.bind(this)(options);
-        console.log('elo');
         const { hourlyRate } = await this.prisma.employee.findFirst({
           where: { clockifyId: clockifyId, userId: user.id },
         });

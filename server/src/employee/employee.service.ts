@@ -7,7 +7,11 @@ import {
 import { User } from '@prisma/client';
 import { ClockifyService } from '../clockify/clockify.service';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateEmployeeDto, UpdateEmployeeDto } from './dto';
+import {
+  CreateEmployeeDto,
+  SalaryHistoryInput,
+  UpdateEmployeeDto,
+} from './dto';
 
 @Injectable()
 export class EmployeeService {
@@ -173,6 +177,32 @@ export class EmployeeService {
         throw new BadRequestException('Invalid User Id');
       }
       return;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async addSalaryHistory(employeeId: string, dto: SalaryHistoryInput) {
+    try {
+      const employee = await this.prisma.employee.findUnique({
+        where: { id: employeeId },
+      });
+
+      if (!employee) {
+        throw new Error('Employee not found');
+      }
+      const newSalaryHistory = await this.prisma.salaryHistory.create({
+        data: {
+          start: new Date(dto.start),
+          end: new Date(dto.end),
+          hourlyRate: dto.hourlyRate,
+          employee: {
+            connect: { id: employeeId },
+          },
+        },
+      });
+
+      return newSalaryHistory;
     } catch (error) {
       throw new BadRequestException(error.message);
     }
