@@ -20,14 +20,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
           id,
         },
       });
-      if (!user) throw new UnauthorizedException(`user doesen't exist`);
 
       delete user.hash;
       delete user.refreshToken;
 
       return user;
     } catch (error) {
-      throw new UnauthorizedException(error.message);
+      throw new UnauthorizedException(`Unauthorized`);
     }
   }
 }
