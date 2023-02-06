@@ -80,6 +80,7 @@ export class ProjectsService {
         summary,
         budgetEstimate,
         salary,
+        date,
       } = await this.clockify.projectReport(user, projectId, dto);
 
       const projectMembers = await this.prisma.employee.findMany({
@@ -124,6 +125,7 @@ export class ProjectsService {
           clientName: project.clientName,
           clientId: project.clientId,
           userId: user.id,
+          projectStartDate: date.start,
         },
       });
 

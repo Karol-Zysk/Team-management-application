@@ -4,7 +4,7 @@ import { UpdateUserDto } from './dto';
 import { User } from '@prisma/client';
 import { CryptoService } from '../cryptography/crypto.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
-import { ClockifyService } from 'src/clockify/clockify.service';
+import { ClockifyService } from '../clockify/clockify.service';
 
 @Injectable()
 export class UserService {

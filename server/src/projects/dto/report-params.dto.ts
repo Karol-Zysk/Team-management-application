@@ -1,6 +1,20 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsDateString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class ReportParamsDto {
+  @IsNotEmpty()
+  @IsDateString()
+  start: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsDateString()
+  end: string;
   @IsString()
   @IsOptional()
   projectName: string;

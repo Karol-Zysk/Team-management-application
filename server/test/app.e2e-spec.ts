@@ -36,8 +36,8 @@ describe('App e2e', () => {
   describe('Auth', () => {
     const dto: SignUpDto = {
       email: 'Karol@gmail.com',
-      name: 'Karol',
-      password: '123',
+      name: 'Karollo',
+      password: '12345678',
     };
     describe('SignUp', () => {
       it('should throw error if input invalid', () => {
@@ -62,7 +62,7 @@ describe('App e2e', () => {
           .spec()
           .post('/auth/signup')
           .withBody(dto)
-          .expectStatus(403);
+          .expectStatus(409);
       });
     });
     describe('SignIn', () => {
@@ -107,7 +107,7 @@ describe('App e2e', () => {
       it('should edit user', () => {
         const dto: UpdateUserDto = {
           clockify_api_key: ``,
-          name: 'Elon',
+          name: 'ElonMusk',
         };
         return pactum
           .spec()
@@ -158,11 +158,11 @@ describe('App e2e', () => {
       it('should return employees salaries if clockify_api_key provided', () => {
         return pactum
           .spec()
-          .post('/salary')
+          .get('/salary')
           .withHeaders({
             Authorization: 'Bearer $S{userAt}',
           })
-          .expectStatus(201);
+          .expectStatus(200);
       });
       it('should throw if clockify_api_key not provided', async () => {
         const dto: UpdateUserDto = {
@@ -205,6 +205,7 @@ describe('App e2e', () => {
           .withHeaders({
             Authorization: 'Bearer $S{userAt}',
           })
+          .withBody({ start: '2023-01-01' })
           .expectStatus(201);
       });
       it('should throw if clockify_api_key not provided', async () => {

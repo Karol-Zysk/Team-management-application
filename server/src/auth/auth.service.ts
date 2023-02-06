@@ -55,10 +55,11 @@ export class AuthService {
   }
 
   async logout(userId: string) {
-    return this.prisma.user.update({
+    this.prisma.user.update({
       where: { id: userId },
       data: { refreshToken: null },
     });
+    return 'Logged Out';
   }
 
   hashData(data: string) {

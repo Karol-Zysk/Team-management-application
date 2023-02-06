@@ -4,7 +4,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Employee, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import Clockify from 'clockify-ts';
 import { CryptoService } from '../cryptography/crypto.service';
 import { EmployeesSalaryReporDto } from '../employee/dto';
@@ -164,10 +164,18 @@ export class ClockifyService {
       let date: { start: Date; end: Date };
       if (dto.date) {
         date = getDatesForMonth(dto.date);
+      }
+      if (dto.start && dto.end) {
+        date = {
+          start:
+            new Date(Date.parse(dto.start)) ||
+            new Date(Date.parse('01.01.2015')),
+          end: new Date(Date.parse(dto.end)) || new Date(Date.now()),
+        };
       } else {
         date = {
-          start: new Date(Date.parse(dto.start)),
-          end: new Date(Date.parse(dto.end)),
+          start: new Date(Date.parse('01.01.2015')),
+          end: new Date(Date.now()),
         };
       }
 
@@ -203,7 +211,18 @@ export class ClockifyService {
   async projectReport(user: User, projectId: string, dto: ReportParamsDto) {
     try {
       const { workspaceId } = await this.initClockify(user);
-
+      let date: { start: Date; end: Date };
+      if (!dto.end) {
+        date = {
+          start: new Date(Date.parse(dto.start)),
+          end: new Date(Date.now()),
+        };
+      } else {
+        date = {
+          start: new Date(Date.parse(dto.start)),
+          end: new Date(Date.parse(dto.end)),
+        };
+      }
       const employees = await this.prisma.employee.findMany({
         where: { userId: user.id, workspaceId },
         select: { id: true, clockifyId: true },
@@ -215,9 +234,25 @@ export class ClockifyService {
 
         //CALCULATING ALL CLOCKIFY USERS WORKING HOURS
         const hours = await getHoursWorked.bind(this)(options);
-        const { hourlyRate } = await this.prisma.employee.findFirst({
+        let hourlyRate;
+        const employee = await this.prisma.employee.findFirst({
           where: { clockifyId: clockifyId, userId: user.id },
+          select: {
+            salaryHistory: true,
+            hourlyRate: true,
+          },
         });
+
+        if (date) {
+          const salaryHistory = employee.salaryHistory.find(
+            (salary) => date.start >= salary.start && date.start < salary.end,
+          );
+          hourlyRate = salaryHistory
+            ? salaryHistory.hourlyRate
+            : employee.hourlyRate;
+        } else {
+          hourlyRate = employee.hourlyRate;
+        }
 
         const salary = hours * hourlyRate;
 
@@ -241,7 +276,7 @@ export class ClockifyService {
         workspaceId,
       });
 
-      return { ...reportParams, salary };
+      return { ...reportParams, salary, date };
     } catch (error) {
       throw new UnauthorizedException(error.message);
     }

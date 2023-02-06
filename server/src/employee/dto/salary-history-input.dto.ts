@@ -1,9 +1,6 @@
-import { IsDateString, IsNotEmpty, IsString } from 'class-validator';
+import { IsDateString, IsNotEmpty } from 'class-validator';
 
 export class SalaryHistoryInput {
-  @IsString()
-  clockifyId: string;
-
   @IsNotEmpty()
   @IsDateString()
   start: string;

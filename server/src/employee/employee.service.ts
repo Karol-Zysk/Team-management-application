@@ -196,8 +196,8 @@ export class EmployeeService {
           start: new Date(dto.start),
           end: new Date(dto.end),
           hourlyRate: dto.hourlyRate,
-          employee: {
-            connect: { id: employeeId },
+          Employee: {
+            connect: { id: employee.id },
           },
         },
       });

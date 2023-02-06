@@ -23,15 +23,17 @@ export class AuthController {
     return this.authService.signIn(dto);
   }
 
-  @Get('clean')
-  Clean() {
-    return this.prisma.cleanDB();
-  }
   @UseGuards(RefreshTokenGuard)
   @Get('refresh')
   refreshTokens(@GetUser() user: User) {
     const userId = user['sub'];
     const refreshToken = user.refreshToken;
     return this.authService.refreshTokens(userId, refreshToken);
+  }
+  @UseGuards(RefreshTokenGuard)
+  @Get('logout')
+  logout(@GetUser() user: User) {
+    const userId = user['sub'];
+    return this.authService.logout(userId);
   }
 }
