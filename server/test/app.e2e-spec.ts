@@ -7,6 +7,9 @@ import * as pactum from 'pactum';
 import { SignUpDto } from '../src/auth/dto';
 import { UpdateUserDto } from 'src/user/dto';
 
+process.env.DATABASE_URL =
+  'mongodb+srv://zyskkarolpawel:O9cKBMriZSfkUjHU@tours.vybfkkw.mongodb.net/test?retryWrites=true';
+
 describe('App e2e', () => {
   let app: INestApplication;
   let prisma: PrismaService;
@@ -26,6 +29,7 @@ describe('App e2e', () => {
     prisma = app.get(PrismaService);
 
     await prisma.cleanDB();
+
     pactum.request.setBaseUrl('http://localhost:4000');
   });
 
