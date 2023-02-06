@@ -8,20 +8,20 @@ stages:
 build_app:
   stage: build
   script:
-    - npm install
-    - npm run build
+    - npm install --prefix server
+    - npm run build --prefix server
 
 run_tests:
   stage: test
   script:
-    - npm run test
+    - npm run test:e2e --prefix server
   only:
     - branches
 
 deploy_prod:
   stage: deploy
   script:
-    - npm run start:prod
+    - npm run start:prod --prefix server
   environment:
     name: Production
   only:
