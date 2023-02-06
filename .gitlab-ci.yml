@@ -15,7 +15,9 @@ run_tests:
   stage: test
   script:
     - npm install jest --prefix server
+
     - npm run test:e2e  --prefix server
+
   only:
     - branches
 
