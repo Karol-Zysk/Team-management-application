@@ -37,4 +37,4 @@ deploy_prod:
 
 variables:
   DATABASE_URL: "$DATABASE_URL"
-  PATH: "$PATH:/server/node_modules/.bin"
+  PATH: "$PATH:/node_modules/.bin"
