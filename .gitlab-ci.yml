@@ -11,14 +11,10 @@ build_app:
     - npm install --prefix server
     - npm run build --prefix server
 
-install_tests_dependencies:
-  stage: test
-  script:
-    - npm install -g jest --prefix server
-
 run_tests:
   stage: test
   script:
+    - npm install jest --prefix server
     - npm run test:e2e --prefix server
   only:
     - branches
@@ -37,4 +33,3 @@ deploy_prod:
 
 variables:
   DATABASE_URL: "$DATABASE_URL"
-  PATH: "$PATH:/node_modules/.bin"
