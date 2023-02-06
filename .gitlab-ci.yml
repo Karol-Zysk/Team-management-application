@@ -11,15 +11,11 @@ build_app:
     - npm install --prefix server
     - npm run build --prefix server
 
-install_tests_dependencies:
-  stage: test
-  script:
-    - npm install -g jest --prefix server
-
 run_tests:
   stage: test
   script:
-    - npm run test:e2e --prefix server
+    - npm install jest --prefix server
+    - npm run test:e2e  --prefix server
   only:
     - branches
 
