@@ -11,6 +11,11 @@ build_app:
     - npm install --prefix server
     - npm run build --prefix server
 
+install_tests_dependencies:
+  stage: test
+  script:
+    - npm install -g jest --prefix server
+
 run_tests:
   stage: test
   script:
@@ -31,4 +36,4 @@ deploy_prod:
     - run_tests
 
 variables:
-  MONGO_URI: "$MONGO_URI"
+  DATABASE_URL: "$DATABASE_URL"
