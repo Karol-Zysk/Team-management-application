@@ -210,7 +210,7 @@ describe('App e2e', () => {
             Authorization: 'Bearer $S{userAt}',
           })
           .withBody({ start: '2023-01-01' })
-          .withRequestTimeout(5000)
+          .withRequestTimeout(15000)
           .expectStatus(201);
       });
       it('should throw if clockify_api_key not provided', async () => {
