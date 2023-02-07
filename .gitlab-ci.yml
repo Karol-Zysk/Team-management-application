@@ -24,7 +24,7 @@ run_tests:
 deploy_prod:
   stage: deploy
   script:
-    - npm run start:prod --prefix server
+    cd server && node dist/main --server
   environment:
     name: Production
   only:
