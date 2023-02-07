@@ -1,3 +1,10 @@
+import {
+  Button,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Input,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
 
 interface FormData {
@@ -10,7 +17,7 @@ interface Error {
   message: string;
 }
 
-const SignUpForm: React.FC = () => {
+const SignUp: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -52,10 +59,9 @@ const SignUpForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <div>
-        <label htmlFor="name">Name:</label>
-        <input
+      <FormControl isInvalid={Boolean(error)}>
+        <FormLabel htmlFor="name">Name:</FormLabel>
+        <Input
           type="text"
           id="name"
           name="name"
@@ -63,10 +69,8 @@ const SignUpForm: React.FC = () => {
           onChange={handleChange}
           required
         />
-      </div>
-      <div>
-        <label htmlFor="email">Email:</label>
-        <input
+        <FormLabel htmlFor="email">Email:</FormLabel>
+        <Input
           type="email"
           id="email"
           name="email"
@@ -74,10 +78,8 @@ const SignUpForm: React.FC = () => {
           onChange={handleChange}
           required
         />
-      </div>
-      <div>
-        <label htmlFor="password">Password:</label>
-        <input
+        <FormLabel htmlFor="password">Password:</FormLabel>
+        <Input
           type="password"
           id="password"
           name="password"
@@ -85,10 +87,13 @@ const SignUpForm: React.FC = () => {
           onChange={handleChange}
           required
         />
-      </div>
-      <button type="submit">Sign Up</button>
+        <FormErrorMessage>{error}</FormErrorMessage>
+        <Button mt={4} type="submit">
+          Sign Up
+        </Button>
+      </FormControl>
     </form>
   );
 };
 
-export default SignUpForm;
+export default SignUp;
