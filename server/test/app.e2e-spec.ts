@@ -7,7 +7,7 @@ import * as pactum from 'pactum';
 import { SignUpDto } from '../src/auth/dto';
 import { UpdateUserDto } from 'src/user/dto';
 
-jest.setTimeout(10000);
+jest.setTimeout(40000);
 process.env.DATABASE_URL =
   'mongodb+srv://zyskkarolpawel:O9cKBMriZSfkUjHU@tours.vybfkkw.mongodb.net/test?retryWrites=true';
 

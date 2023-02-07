@@ -1,6 +1,4 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import "./App.css";
 import SignUpForm from "./pages/Login/SignUp";
 
 function App() {
