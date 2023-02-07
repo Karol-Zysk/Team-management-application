@@ -24,7 +24,13 @@ run_tests:
 deploy_prod:
   stage: deploy
   script:
-    - npm run start:prod --prefix server
+    - ssh user@prod-server "cd
+      /builds/software-partner/dashboardsp/dashboardmain && git pull"
+    - ssh user@prod-server "cd
+      /software-partner/dashboardsp/dashboardmain/server && npm install
+      --production"
+    - ssh user@prod-server "cd
+      /software-partner/dashboardsp/dashboardmain/server && npm run start:prod"
   environment:
     name: Production
   only:
