@@ -24,7 +24,7 @@ run_tests:
 deploy_prod:
   stage: deploy
   script:
-    cd server && node dist/main
+    node server/dist/main
   environment:
     name: Production
   only:
