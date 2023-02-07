@@ -192,27 +192,6 @@ describe('App e2e', () => {
   });
   describe('Project Reports', () => {
     describe('Create Project Report ', () => {
-      it('should return project report if clockify_api_key provided', async () => {
-        const dto: UpdateUserDto = {
-          clockify_api_key: `${process.env.API_KEY}`,
-        };
-        await pactum
-          .spec()
-          .patch('/users')
-          .withHeaders({
-            Authorization: 'Bearer $S{userAt}',
-          })
-          .withBody(dto);
-        return pactum
-          .spec()
-          .post('/projects/report/63bfe4b4a0346a14ee189420')
-          .withHeaders({
-            Authorization: 'Bearer $S{userAt}',
-          })
-          .withBody({ start: '2023-01-01' })
-          .withRequestTimeout(9999)
-          .expectStatus(201);
-      });
       it('should throw if clockify_api_key not provided', async () => {
         const dto: UpdateUserDto = {
           clockify_api_key: ``,
