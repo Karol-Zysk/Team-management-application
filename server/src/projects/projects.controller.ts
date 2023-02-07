@@ -22,11 +22,11 @@ import { HttpStatus } from '@nestjs/common/enums';
 @UseGuards(JwtGuard)
 @Controller('projects')
 export class ProjectsController {
-  constructor(private projectsservice: ProjectsService) {}
+  constructor(private projectsService: ProjectsService) {}
 
   @Get()
   async getProjects(@GetUser() user: User) {
-    return this.projectsservice.getProjects(user);
+    return this.projectsService.getProjects(user);
   }
 
   @Get(':projectId')
@@ -34,7 +34,7 @@ export class ProjectsController {
     @GetUser() user: User,
     @Param('projectId') projectId: string,
   ) {
-    return this.projectsservice.getProjectsById(user, projectId);
+    return this.projectsService.getProjectsById(user, projectId);
   }
 
   @Post('')
@@ -42,7 +42,7 @@ export class ProjectsController {
     @GetUser() user: User,
     @Body() payload: CreateProjectDto,
   ) {
-    return this.projectsservice.createProject(user, payload);
+    return this.projectsService.createProject(user, payload);
   }
 
   @Patch(':id')
@@ -51,13 +51,13 @@ export class ProjectsController {
     @Body() payload: UpdateProjectDto,
     @Param('id') projectId: string,
   ) {
-    return this.projectsservice.updateProject(user, payload, projectId);
+    return this.projectsService.updateProject(user, payload, projectId);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   async deleteProject(@GetUser() user: User, @Param('id') projectId: string) {
-    return this.projectsservice.deleteProject(user, projectId);
+    return this.projectsService.deleteProject(user, projectId);
   }
 
   @Post('report/:id')
@@ -66,12 +66,12 @@ export class ProjectsController {
     @Param('id') projectId: string,
     @Body() dto: ReportParamsDto,
   ) {
-    return this.projectsservice.createProjectReport(user, projectId, dto);
+    return this.projectsService.createProjectReport(user, projectId, dto);
   }
 
   @Delete('report/:id')
   async deleteProjectReport(@Param('id') projectId: string) {
-    return this.projectsservice.deleteProjectReport(projectId);
+    return this.projectsService.deleteProjectReport(projectId);
   }
 
   @Patch('report/:id')
@@ -80,6 +80,6 @@ export class ProjectsController {
     @Body() dto: UpdateReportDto,
     @GetUser() user: User,
   ) {
-    return this.projectsservice.updateProjectReport(projectId, dto, user);
+    return this.projectsService.updateProjectReport(projectId, dto, user);
   }
 }
