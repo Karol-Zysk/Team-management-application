@@ -18,20 +18,7 @@ run_tests:
 
     - npm run test:e2e  --prefix server
 
-  only:
-    - branches
 
-deploy_prod:
-  stage: deploy
-  script:
-    node server/dist/main
-  environment:
-    name: Production
-  only:
-    - main
-  dependencies:
-    - build_app
-    - run_tests
 
 variables:
   DATABASE_URL: "$DATABASE_URL"
