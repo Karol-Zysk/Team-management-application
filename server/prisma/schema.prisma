@@ -14,7 +14,7 @@ model User {
   name         String     @unique
   email        String     @unique
   hash         String
-  hash_api_key String?    @unique
+  hash_api_key String?
   refreshToken String?
   employees    Employee[]
   Report       Report[]

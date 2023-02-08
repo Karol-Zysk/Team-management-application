@@ -23,23 +23,30 @@ let AuthService = class AuthService {
         this.config = config;
     }
     async signUp(dto) {
-        const userExists = await this.prisma.user.findUnique({
-            where: { email: dto.email },
-        });
-        if (userExists) {
-            throw new exceptions_1.ConflictException('User already exists');
+        try {
+            const userExists = await this.prisma.user.findFirst({
+                where: {
+                    OR: [{ email: dto.email }, { name: dto.name }],
+                },
+            });
+            if (userExists) {
+                throw new exceptions_1.ConflictException('User already exists');
+            }
+            const hash = await this.hashData(dto.password);
+            const newUser = await this.prisma.user.create({
+                data: {
+                    email: dto.email,
+                    name: dto.name,
+                    hash,
+                },
+            });
+            const tokens = await this.getTokens(newUser.id, newUser.email);
+            await this.updateRefreshToken(newUser.id, tokens.refreshToken);
+            return tokens;
         }
-        const hash = await this.hashData(dto.password);
-        const newUser = await this.prisma.user.create({
-            data: {
-                email: dto.email,
-                name: dto.name,
-                hash,
-            },
-        });
-        const tokens = await this.getTokens(newUser.id, newUser.email);
-        await this.updateRefreshToken(newUser.id, tokens.refreshToken);
-        return tokens;
+        catch (error) {
+            throw new exceptions_1.BadRequestException(error.message);
+        }
     }
     async signIn(dto) {
         const user = await this.prisma.user.findUnique({

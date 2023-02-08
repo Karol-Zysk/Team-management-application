@@ -21,32 +21,32 @@ const decorators_2 = require("@nestjs/common/decorators");
 const dto_1 = require("./dto");
 const enums_1 = require("@nestjs/common/enums");
 let ProjectsController = class ProjectsController {
-    constructor(projectsservice) {
-        this.projectsservice = projectsservice;
+    constructor(projectsService) {
+        this.projectsService = projectsService;
     }
     async getProjects(user) {
-        return this.projectsservice.getProjects(user);
+        return this.projectsService.getProjects(user);
     }
     async getProjectsById(user, projectId) {
-        return this.projectsservice.getProjectsById(user, projectId);
+        return this.projectsService.getProjectsById(user, projectId);
     }
     async createProject(user, payload) {
-        return this.projectsservice.createProject(user, payload);
+        return this.projectsService.createProject(user, payload);
     }
     async updateProject(user, payload, projectId) {
-        return this.projectsservice.updateProject(user, payload, projectId);
+        return this.projectsService.updateProject(user, payload, projectId);
     }
     async deleteProject(user, projectId) {
-        return this.projectsservice.deleteProject(user, projectId);
+        return this.projectsService.deleteProject(user, projectId);
     }
     async projectReport(user, projectId, dto) {
-        return this.projectsservice.createProjectReport(user, projectId, dto);
+        return this.projectsService.createProjectReport(user, projectId, dto);
     }
     async deleteProjectReport(projectId) {
-        return this.projectsservice.deleteProjectReport(projectId);
+        return this.projectsService.deleteProjectReport(projectId);
     }
     async updateProjectReport(projectId, dto, user) {
-        return this.projectsservice.updateProjectReport(projectId, dto, user);
+        return this.projectsService.updateProjectReport(projectId, dto, user);
     }
 };
 __decorate([
