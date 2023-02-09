@@ -13,8 +13,8 @@ exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const crypto_service_1 = require("../cryptography/crypto.service");
-const runtime_1 = require("@prisma/client/runtime");
 const clockify_service_1 = require("../clockify/clockify.service");
+const clockify_ts_1 = require("clockify-ts");
 let UserService = class UserService {
     constructor(prisma, cryptoService, clockify) {
         this.prisma = prisma;
@@ -22,11 +22,21 @@ let UserService = class UserService {
         this.clockify = clockify;
     }
     async updateUser(userId, dto) {
-        const hash_api_key = this.cryptoService.encrypt(dto.clockify_api_key);
         try {
+            const clockify = new clockify_ts_1.default(dto.clockify_api_key);
+            await clockify.workspaces.get();
+        }
+        catch (error) {
+            throw new common_1.BadRequestException('Invalid Api Key');
+        }
+        try {
+            const hash_api_key = this.cryptoService.encrypt(dto.clockify_api_key);
+            let active;
+            if (dto.clockify_api_key)
+                active = true;
             const updatedUser = await this.prisma.user.update({
                 where: { id: userId },
-                data: { email: dto.email, name: dto.name, hash_api_key },
+                data: { hash_api_key, active },
             });
             delete updatedUser.hash_api_key;
             delete updatedUser.hash;
@@ -34,9 +44,7 @@ let UserService = class UserService {
             return updatedUser;
         }
         catch (error) {
-            if (error instanceof runtime_1.PrismaClientKnownRequestError) {
-                throw new common_1.BadRequestException('Invalid user id');
-            }
+            throw new common_1.BadRequestException(error.message);
         }
     }
     getMe(user) {

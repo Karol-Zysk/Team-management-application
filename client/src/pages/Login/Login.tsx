@@ -1,4 +1,3 @@
-import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   Button,
   ButtonGroup,
@@ -14,7 +13,6 @@ import { useNavigate } from "react-router";
 import { AccountContext } from "../../context/AccountContext";
 
 interface FormData {
-  name: string;
   email: string;
   password: string;
 }
@@ -23,10 +21,9 @@ interface Error {
   message: string;
 }
 
-const SignUp: React.FC = () => {
+const Login: React.FC = () => {
   const { setIsLoggedIn } = useContext(AccountContext);
   const [formData, setFormData] = useState<FormData>({
-    name: "",
     email: "",
     password: "",
   });
@@ -46,7 +43,7 @@ const SignUp: React.FC = () => {
       headers.append("Content-Type", "application/json");
       headers.append("Accept", "application/json");
       headers.append("Origin", "http://localhost:5173");
-      const response = await fetch("http://127.0.0.1:4000/auth/signup", {
+      const response = await fetch("http://127.0.0.1:4000/auth/signin", {
         method: "POST",
         headers: headers,
         credentials: "include",
@@ -78,18 +75,9 @@ const SignUp: React.FC = () => {
       h="100vh"
       spacing="1rem"
     >
-      <Heading>Sign Up</Heading>
+      <Heading>Login</Heading>
       <form onSubmit={handleSubmit}>
         <FormControl isInvalid={Boolean(error)}>
-          <FormLabel htmlFor="name">Name:</FormLabel>
-          <Input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
           <FormLabel htmlFor="email">Email:</FormLabel>
           <Input
             type="email"
@@ -111,10 +99,10 @@ const SignUp: React.FC = () => {
           <FormErrorMessage>{error}</FormErrorMessage>
           <ButtonGroup pt="1rem">
             <Button colorScheme="blue" type="submit">
-              Create Account
+              Log In
             </Button>
-            <Button onClick={() => navigate("/")} leftIcon={<ArrowBackIcon />}>
-              Back
+            <Button onClick={() => navigate("/register")}>
+              Create Account
             </Button>
           </ButtonGroup>
         </FormControl>
@@ -123,4 +111,4 @@ const SignUp: React.FC = () => {
   );
 };
 
-export default SignUp;
+export default Login;

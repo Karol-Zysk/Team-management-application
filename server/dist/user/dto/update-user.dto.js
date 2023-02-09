@@ -15,20 +15,6 @@ class UpdateUserDto {
 }
 __decorate([
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.MinLength)(6),
-    (0, class_validator_1.MaxLength)(16),
-    (0, class_validator_1.IsAlphanumeric)(),
-    __metadata("design:type", String)
-], UpdateUserDto.prototype, "name", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsEmail)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", String)
-], UpdateUserDto.prototype, "email", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UpdateUserDto.prototype, "clockify_api_key", void 0);
 exports.UpdateUserDto = UpdateUserDto;

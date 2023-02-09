@@ -1,14 +1,16 @@
-import { useState } from "react";
-import SignUpForm from "./pages/Login/SignUp";
 import ToggleColorMode from "./components/ToggleColorMode";
 import { Box } from "@chakra-ui/react";
+import Views from "./components/Views";
+import { AccountContextProvider } from "./context/AccountContext";
 
 function App() {
   return (
-    <Box paddingX="16" paddingY="10">
-      <ToggleColorMode />
-      <SignUpForm />
-    </Box>
+    <AccountContextProvider>
+      <Box paddingX="20" paddingY="20">
+        <ToggleColorMode />
+        <Views />
+      </Box>
+    </AccountContextProvider>
   );
 }
 

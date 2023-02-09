@@ -16,6 +16,8 @@ model User {
   hash         String
   hash_api_key String?
   refreshToken String?
+  active       Boolean    @default(false)
+  sync         Boolean    @default(false)
   employees    Employee[]
   Report       Report[]
   Project      Project[]

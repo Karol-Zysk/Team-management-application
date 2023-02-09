@@ -5,6 +5,7 @@ import { User } from '@prisma/client';
 import { CryptoService } from '../cryptography/crypto.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { ClockifyService } from '../clockify/clockify.service';
+import Clockify from 'clockify-ts';
 
 @Injectable()
 export class UserService {
@@ -15,12 +16,20 @@ export class UserService {
   ) {}
 
   async updateUser(userId: string, dto: UpdateUserDto) {
-    const hash_api_key = this.cryptoService.encrypt(dto.clockify_api_key);
-
     try {
+      const clockify = new Clockify(dto.clockify_api_key);
+      await clockify.workspaces.get();
+    } catch (error) {
+      throw new BadRequestException('Invalid Api Key');
+    }
+    try {
+      const hash_api_key = this.cryptoService.encrypt(dto.clockify_api_key);
+      let active: boolean;
+      if (dto.clockify_api_key) active = true;
+
       const updatedUser = await this.prisma.user.update({
         where: { id: userId },
-        data: { email: dto.email, name: dto.name, hash_api_key },
+        data: { hash_api_key, active },
       });
 
       delete updatedUser.hash_api_key;
@@ -28,9 +37,7 @@ export class UserService {
       delete updatedUser.refreshToken;
       return updatedUser;
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        throw new BadRequestException('Invalid user id');
-      }
+      throw new BadRequestException(error.message);
     }
   }
 

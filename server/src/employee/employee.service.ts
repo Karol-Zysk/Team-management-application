@@ -42,10 +42,21 @@ export class EmployeeService {
         } else {
           continue;
         }
+        await this.prisma.user.update({
+          where: { id: user.id },
+          data: { sync: true },
+        });
+        return;
       } catch (error) {
         throw error;
       }
     }
+    return await this.prisma.employee.findMany({
+      where: {
+        userId: user.id,
+        workspaceId,
+      },
+    });
   }
 
   async createEmployee(dto: CreateEmployeeDto, user: User) {
