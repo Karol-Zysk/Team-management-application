@@ -28,7 +28,7 @@ const Login: React.FC = () => {
     password: "",
   });
 
-  const [error, setError] = useState<string | Error>("");
+  const [error, setError] = useState<string | any>("");
   const navigate = useNavigate();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,7 +62,7 @@ const Login: React.FC = () => {
           navigate("/main");
         }, 500);
       }
-    } catch (error) {
+    } catch (error: any) {
       setError(error);
     }
   };
@@ -72,7 +72,7 @@ const Login: React.FC = () => {
       w={{ base: "90%", md: "500px" }}
       m="auto"
       justify="center"
-      h="100vh"
+      h="70vh"
       spacing="1rem"
     >
       <Heading>Login</Heading>

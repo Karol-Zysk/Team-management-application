@@ -21,10 +21,10 @@ export class EmployeeService {
   ) {}
 
   async syncClockifyEmployees(user: User): Promise<any> {
-    const { employees, workspaceId } = await this.clockify.getEmployees(user);
+    try {
+      const { employees, workspaceId } = await this.clockify.getEmployees(user);
 
-    for (const employee of employees) {
-      try {
+      for (const employee of employees) {
         const existingEmployees = await this.prisma.employee.findMany({
           where: { clockifyId: employee.id, userId: user.id },
         });
@@ -46,17 +46,16 @@ export class EmployeeService {
           where: { id: user.id },
           data: { sync: true },
         });
-        return;
-      } catch (error) {
-        throw error;
       }
+      return await this.prisma.employee.findMany({
+        where: {
+          userId: user.id,
+          workspaceId,
+        },
+      });
+    } catch (error) {
+      throw error;
     }
-    return await this.prisma.employee.findMany({
-      where: {
-        userId: user.id,
-        workspaceId,
-      },
-    });
   }
 
   async createEmployee(dto: CreateEmployeeDto, user: User) {

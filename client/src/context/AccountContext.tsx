@@ -1,22 +1,55 @@
-import React, { createContext, useState, useEffect, ReactNode } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 
-interface User {
+export interface UserData {
   id: string;
   email: string;
   name: string;
   active: boolean;
+  sync: boolean;
 }
 
-interface AccountContextData {
-  user: User | { active: boolean; name: string; id: string };
+interface AccountContextValue {
+  user: UserData | {} | null;
   isLoggedIn: boolean;
+  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  isApiKeyValid: boolean;
+  setIsApiKeyValid: React.Dispatch<React.SetStateAction<boolean>>;
+  apiKey: string;
+  setApiKey: React.Dispatch<React.SetStateAction<string>>;
+  isActive: boolean | undefined;
+  setIsActive: React.Dispatch<React.SetStateAction<boolean | undefined>>;
+  error: null | string;
+  setError: React.Dispatch<React.SetStateAction<string | null>>;
+  setIsSync: React.Dispatch<React.SetStateAction<boolean>>;
+  isSync: boolean;
 }
 
-const AccountContext = createContext({}) as any;
+const initialState: AccountContextValue = {
+  user: null,
+  isLoggedIn: false,
+  setIsLoggedIn: () => false,
+  isApiKeyValid: false,
+  setIsApiKeyValid: () => false,
+  apiKey: "",
+  setApiKey: () => "",
+  isActive: undefined,
+  setIsActive: () => undefined,
+  error: null,
+  setError: () => null,
+  setIsSync: () => false,
+  isSync: false,
+};
+
+const AccountContext = createContext<AccountContextValue>(initialState);
 
 const AccountContextProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | {} | null>(null);
+  const [user, setUser] = useState<UserData | {} | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isApiKeyValid, setIsApiKeyValid] = useState<boolean>(false);
+  const [apiKey, setApiKey] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
+  const [isActive, setIsActive] = useState<boolean | undefined>(undefined);
+  const [isSync, setIsSync] = useState<boolean>(false);
 
   useEffect(() => {
     const accessToken = localStorage.getItem("access_token");
@@ -33,24 +66,42 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
       },
     })
       .then((res) => res.json())
-      .then((data) => {
+      .then((data: UserData | any) => {
         if (data.statusCode >= 400) {
           setUser({});
           setIsLoggedIn(false);
           return;
         }
         setUser(data);
+        setIsActive(data.active);
+        setIsSync(data.sync);
+
         setIsLoggedIn(true);
       })
       .catch(() => {
         setIsLoggedIn(false);
         setUser({});
       });
-    console.log(user);
   }, [isLoggedIn]);
 
   return (
-    <AccountContext.Provider value={{ user, isLoggedIn, setIsLoggedIn }}>
+    <AccountContext.Provider
+      value={{
+        user,
+        isLoggedIn,
+        setIsLoggedIn,
+        isApiKeyValid,
+        setIsApiKeyValid,
+        apiKey,
+        setApiKey,
+        isActive,
+        setIsActive,
+        error,
+        setError,
+        isSync,
+        setIsSync,
+      }}
+    >
       {children}
     </AccountContext.Provider>
   );
