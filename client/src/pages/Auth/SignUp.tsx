@@ -59,6 +59,7 @@ const SignUp: React.FC = () => {
         console.log(result.message);
       } else {
         localStorage.setItem("access_token", result.access_token);
+        localStorage.setItem("refresh_token", result.refresh_token);
         setIsLoggedIn(true);
 
         setTimeout(() => {

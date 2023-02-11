@@ -11,6 +11,7 @@ export interface UserData {
 interface AccountContextValue {
   user: UserData | {} | null;
   isLoggedIn: boolean;
+  setUser: React.Dispatch<React.SetStateAction<UserData | {} | null>>;
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   isApiKeyValid: boolean;
   setIsApiKeyValid: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,6 +29,7 @@ const initialState: AccountContextValue = {
   user: null,
   isLoggedIn: false,
   setIsLoggedIn: () => false,
+  setUser: () => {},
   isApiKeyValid: false,
   setIsApiKeyValid: () => false,
   apiKey: "",
@@ -50,6 +52,30 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   const [error, setError] = useState<string | null>(null);
   const [isActive, setIsActive] = useState<boolean | undefined>(undefined);
   const [isSync, setIsSync] = useState<boolean>(false);
+
+  const refreshAccessToken = async () => {
+    const refreshToken = localStorage.getItem("refresh_token");
+    if (!refreshToken) return;
+
+    try {
+      const res = await fetch(`http://127.0.0.1:4000/auth/refresh`, {
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${refreshToken}`,
+        },
+      });
+      const data = await res.json();
+      if (data.access_token) {
+        localStorage.setItem("access_token", data.access_token);
+        localStorage.setItem("refresh_token", data.refreshToken);
+        setUser(data);
+        setIsLoggedIn(true);
+      }
+    } catch (error) {
+      console.error(error);
+      setIsLoggedIn(false);
+    }
+  };
 
   useEffect(() => {
     const accessToken = localStorage.getItem("access_token");
@@ -84,10 +110,18 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
       });
   }, [isLoggedIn]);
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      refreshAccessToken();
+    }, 10 * 60 * 1000);
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <AccountContext.Provider
       value={{
         user,
+        setUser,
         isLoggedIn,
         setIsLoggedIn,
         isApiKeyValid,

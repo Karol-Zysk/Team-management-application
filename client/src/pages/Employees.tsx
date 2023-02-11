@@ -58,7 +58,12 @@ const Employees = () => {
   }
 
   if (error) return <Box>{error}</Box>;
-  if (!employees) return <Spinner />;
+  if (employees.length === 0)
+    return (
+      <Box>
+        <Spinner />
+      </Box>
+    );
   return (
     <Table>
       <Thead>

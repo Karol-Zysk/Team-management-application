@@ -15,6 +15,7 @@ import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { useContext } from "react";
 import { AccountContext } from "../context/AccountContext";
 import { motion } from "framer-motion";
+import LogoutButton from "./LogoutButton";
 
 type LinkType = {
   children: {
@@ -86,9 +87,9 @@ export default function Nav({}) {
               {isSync &&
                 Links.map((links) => (
                   <motion.div
-                    initial={{ y: -50, opacity: 0 }}
+                    initial={{ y: -10, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.5 }}
+                    transition={{ duration: 0.2 }}
                   >
                     <NavLink key={links.link}>{links}</NavLink>
                   </motion.div>
@@ -96,9 +97,10 @@ export default function Nav({}) {
             </HStack>
           </HStack>
           <Flex alignItems={"center"} marginRight="2">
-            <Button onClick={toggleColorMode}>
+            <Button mr="3" onClick={toggleColorMode}>
               {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
             </Button>
+            <LogoutButton />
           </Flex>
         </Flex>
 

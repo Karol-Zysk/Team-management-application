@@ -56,6 +56,7 @@ const Login: React.FC = () => {
         console.log(result.message);
       } else {
         localStorage.setItem("access_token", result.access_token);
+        localStorage.setItem("refresh_token", result.refreshToken);
         setIsLoggedIn(true);
 
         setTimeout(() => {
