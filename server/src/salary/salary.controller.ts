@@ -33,12 +33,12 @@ export class SalaryController {
     return this.salaryService.employeesSalaryReport(user, dto);
   }
 
-  @Get(':id')
+  @Post(':id')
   geEmployeeSalaryById(
     @GetUser() user: User,
     @Param('id') employeeId: string,
     @Body() dto: SalaryParamsDto,
   ) {
-    return this.salaryService.geEmployeeSalaryById(user, dto, employeeId);
+    return this.salaryService.createEmployeeSalaryById(user, dto, employeeId);
   }
 }

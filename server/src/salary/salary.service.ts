@@ -18,7 +18,7 @@ export class SalaryService {
     return this.clockify.employeesSalaryReport(user, dto);
   }
 
-  async geEmployeeSalaryById(
+  async createEmployeeSalaryById(
     user: User,
     dto: SalaryParamsDto,
     employeeId: string,

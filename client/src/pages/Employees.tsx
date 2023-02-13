@@ -1,4 +1,4 @@
-import { EditIcon } from "@chakra-ui/icons";
+import { EditIcon, InfoIcon } from "@chakra-ui/icons";
 import {
   Box,
   Image,
@@ -12,6 +12,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import EditModal from "../components/EditEmployeeModal";
 import { AccountContext } from "../context/AccountContext";
 import { Employee } from "../interfaces/EmployeeInterface";
@@ -93,6 +94,7 @@ const Employees = () => {
           <Th>hourly rate</Th>
           <Th>Avatar</Th>
           <Th>Edit</Th>
+          <Th>Info</Th>
         </Tr>
       </Thead>
       <Tbody>
@@ -112,13 +114,18 @@ const Employees = () => {
                   fontSize={["md", "md", "xl"]}
                   onClick={() => handleOpenModal(employee.id)}
                 />
-                <EditModal
-                  handleCloseModal={handleCloseModal}
-                  employeeId={id}
-                  isOpen={isOpen}
-                  setIsOpen={setIsOpen}
-                />
               </Td>
+              <Td>
+                <Link to={`/employees/${employee.id}`}>
+                  <InfoIcon />
+                </Link>
+              </Td>
+              <EditModal
+                handleCloseModal={handleCloseModal}
+                employeeId={id}
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+              />
             </Tr>
           );
         })}

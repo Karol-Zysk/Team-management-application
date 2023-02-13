@@ -27,19 +27,19 @@ type LinkType = {
 const Links = [
   {
     link: "Main",
-    href: "main",
+    href: "/main",
   },
   {
     link: "Employees",
-    href: "employees",
+    href: "/employees",
   },
   {
     link: "Projects",
-    href: "projects",
+    href: "/projects",
   },
   {
     link: "Salaries",
-    href: "salaries",
+    href: "/salaries",
   },
 ];
 
@@ -59,7 +59,7 @@ const NavLink: React.FC<LinkType> = ({ children }) => (
 );
 
 export default function Nav({}) {
-  const { isSync } = useContext(AccountContext);
+  const { isSync, isLoggedIn } = useContext(AccountContext);
 
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -101,7 +101,7 @@ export default function Nav({}) {
             <Button size={["sm", "md", "lg"]} mr="3" onClick={toggleColorMode}>
               {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
             </Button>
-            <LogoutButton />
+            {isLoggedIn && <LogoutButton />}
           </Flex>
         </Flex>
 

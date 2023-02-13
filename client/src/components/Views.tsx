@@ -1,7 +1,6 @@
 import { Box, Flex, Spinner, Text } from "@chakra-ui/react";
 import { useContext } from "react";
 import { Route, Routes } from "react-router";
-import { BrowserRouter as Router } from "react-router-dom";
 import { AccountContext } from "../context/AccountContext";
 import Main from "../pages/Main";
 import Login from "../pages/Auth/Login";
@@ -10,6 +9,7 @@ import AuthRoutes from "../utils/AuthRoutes";
 import PrivateRoutes from "../utils/PrivateRoutes";
 import Nav from "./Navbar";
 import Employees from "../pages/Employees";
+import EmployeeDetails from "../pages/EmployeeDetails";
 
 const Views = () => {
   const { user } = useContext(AccountContext);
@@ -39,6 +39,7 @@ const Views = () => {
             <Route element={<PrivateRoutes />}>
               <Route path="/main" element={<Main />} />
               <Route path="/employees" element={<Employees />} />
+              <Route path="/employees/:id" element={<EmployeeDetails />} />
             </Route>
             <Route element={<AuthRoutes />} path="/">
               <Route path="/" element={<Login />} />

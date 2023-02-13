@@ -30,59 +30,15 @@ const EditModal: React.FC<ModalProps> = ({
   isOpen,
   setIsOpen,
 }) => {
+
   const { setError, error } = useContext(AccountContext);
-  const [editEmployee, setEditEmployee] = useState<Employee | undefined>(
-    undefined
-  );
   const toast = useToast();
+
   const [hourlyRate, setHourlyRate] = useState<number | string>("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [employee, setEmployee] = useState<Employee>();
-
-  async function handleGetEmployee(event: any) {
-    event.preventDefault();
-    const accessToken = localStorage.getItem("access_token");
-    if (!accessToken) {
-      setError("You're not logged in!");
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `http://127.0.0.1:4000/employees/${employeeId}`,
-        {
-          method: "GET",
-          headers: {
-            authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message);
-      }
-
-      const employeeData: Employee = data;
-
-      setEmployee(employeeData);
-
-      setError(null);
-    } catch (err: any) {
-      setError(err.message);
-      toast({
-        title: "Error",
-        description: `${error}`,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    }
-  }
 
   async function handleEditEmployee(event: any) {
     setIsLoading(true);
@@ -116,7 +72,6 @@ const EditModal: React.FC<ModalProps> = ({
 
       setIsLoading(false);
       setIsOpen(false);
-      handleGetEmployee(event);
       setError(null);
     } catch (err: any) {
       setIsLoading(false);

@@ -7,5 +7,5 @@ export declare class SalaryService {
     constructor(clockify: ClockifyService);
     geEmployeesSalary(user: User, dto: SalaryParamsDto): Promise<import(".prisma/client").Employee[]>;
     employeesSalaryReport(user: User, dto: EmployeesSalaryReporDto): Promise<import(".prisma/client").Report>;
-    geEmployeeSalaryById(user: User, dto: SalaryParamsDto, employeeId: string): Promise<import(".prisma/client").Employee>;
+    createEmployeeSalaryById(user: User, dto: SalaryParamsDto, employeeId: string): Promise<import(".prisma/client").Employee>;
 }

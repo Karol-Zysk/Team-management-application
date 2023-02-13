@@ -33,7 +33,7 @@ let SalaryController = class SalaryController {
         return this.salaryService.employeesSalaryReport(user, dto);
     }
     geEmployeeSalaryById(user, employeeId, dto) {
-        return this.salaryService.geEmployeeSalaryById(user, dto, employeeId);
+        return this.salaryService.createEmployeeSalaryById(user, dto, employeeId);
     }
 };
 __decorate([
@@ -53,7 +53,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], SalaryController.prototype, "employeesSalaryReport", null);
 __decorate([
-    (0, request_mapping_decorator_1.Get)(':id'),
+    (0, request_mapping_decorator_1.Post)(':id'),
     __param(0, (0, decorators_1.GetUser)()),
     __param(1, (0, route_params_decorator_1.Param)('id')),
     __param(2, (0, route_params_decorator_1.Body)()),
