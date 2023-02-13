@@ -14,11 +14,16 @@ import Employees from "../pages/Employees";
 const Views = () => {
   const { user } = useContext(AccountContext);
 
-  console.log(user);
   return (
     <Box minH="full" minW="full">
       <Nav />
-      <Box w="100%" h="full" paddingX="20" paddingY="20" borderColor="gray.200">
+      <Box
+        w="100%"
+        h="full"
+        paddingX={[6, 8, 12]}
+        paddingY={[12, 16, 18]}
+        borderColor="gray.200"
+      >
         {user === null ? (
           <Flex
             w="100%"

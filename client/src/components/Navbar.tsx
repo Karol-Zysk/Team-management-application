@@ -87,6 +87,7 @@ export default function Nav({}) {
               {isSync &&
                 Links.map((links) => (
                   <motion.div
+                    key={links.link}
                     initial={{ y: -10, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.2 }}
@@ -97,7 +98,7 @@ export default function Nav({}) {
             </HStack>
           </HStack>
           <Flex alignItems={"center"} marginRight="2">
-            <Button mr="3" onClick={toggleColorMode}>
+            <Button size={["sm", "md", "lg"]} mr="3" onClick={toggleColorMode}>
               {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
             </Button>
             <LogoutButton />

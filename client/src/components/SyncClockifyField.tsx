@@ -8,7 +8,6 @@ const SyncClockifyField = () => {
   const { isActive, setError, setIsSync } = useContext(AccountContext);
 
   const handleSyncronize = async (event: any) => {
-    event.preventDefault();
     const accessToken = localStorage.getItem("access_token");
     if (!accessToken) {
       setError("You're not logged in!");
@@ -29,7 +28,6 @@ const SyncClockifyField = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        console.error(`Error: ${data.message}`);
         throw new Error(data.message);
       }
 
@@ -47,17 +45,21 @@ const SyncClockifyField = () => {
 
   return (
     <Box mt="12">
-      <Text fontSize="xl" mb="5">
-        Posiadając ważny klucz API możesz zsynchronizować swoją bazę z
-        ClockifyAPI i korzystać z większości funkcji aplikacji
+      <Text fontSize={["md", "md", "xl"]} mb="5">
+        With a valid API key, you can synchronize your database with Clockify
+        API and use most of the application's features.
       </Text>
       <ButtonGroup w="70%" justifyContent="left" alignContent="right" mt="4">
-        <Button onClick={handleSyncronize} isDisabled={!isActive}>
-          Synchronicuj Bazę
+        <Button
+          size={["sm", "md", "lg"]}
+          onClick={handleSyncronize}
+          isDisabled={!isActive}
+        >
+          Synchronize
         </Button>
       </ButtonGroup>
       {employee.length !== 0 && (
-        <Text mt="3" fontSize="xl" color="lightgreen" mb="5">
+        <Text mt="3" fontSize={["md", "md", "xl"]} color="lightgreen" mb="5">
           Udało się zsynchronizować {employee.length} pracowników
         </Text>
       )}

@@ -6,6 +6,7 @@ import {
   FormLabel,
   Heading,
   Input,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
@@ -22,13 +23,12 @@ interface Error {
 }
 
 const Login: React.FC = () => {
-  const { setIsLoggedIn } = useContext(AccountContext);
+  const { setIsLoggedIn, error, setError } = useContext(AccountContext);
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
   });
-
-  const [error, setError] = useState<string | any>("");
+  const toast = useToast();
   const navigate = useNavigate();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +53,6 @@ const Login: React.FC = () => {
       const result = await response.json();
       if (result.error) {
         setError(result.message);
-        console.log(result.message);
       } else {
         localStorage.setItem("access_token", result.access_token);
         localStorage.setItem("refresh_token", result.refreshToken);
@@ -65,6 +64,13 @@ const Login: React.FC = () => {
       }
     } catch (error: any) {
       setError(error);
+      toast({
+        title: "Error",
+        description: `${error}`,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 
@@ -97,12 +103,14 @@ const Login: React.FC = () => {
             onChange={handleChange}
             required
           />
-          <FormErrorMessage>{error}</FormErrorMessage>
           <ButtonGroup pt="1rem">
-            <Button colorScheme="blue" type="submit">
+            <Button size={["sm", "md", "lg"]} colorScheme="blue" type="submit">
               Log In
             </Button>
-            <Button onClick={() => navigate("/register")}>
+            <Button
+              size={["sm", "md", "lg"]}
+              onClick={() => navigate("/register")}
+            >
               Create Account
             </Button>
           </ButtonGroup>

@@ -5,6 +5,7 @@ import {
   FormLabel,
   Input,
   Text,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { useContext } from "react";
@@ -16,6 +17,7 @@ interface InputProps {
 }
 
 const ApiKeyInput: React.FC<InputProps> = ({}) => {
+  const toast = useToast();
   const {
     isApiKeyValid,
     setIsApiKeyValid,
@@ -38,6 +40,13 @@ const ApiKeyInput: React.FC<InputProps> = ({}) => {
 
     if (!accessToken) {
       setError("You're not logged in");
+      toast({
+        title: "Error",
+        description: `${error}`,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
       return;
     }
 
@@ -55,7 +64,6 @@ const ApiKeyInput: React.FC<InputProps> = ({}) => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error(`Error: ${errorData.message}`);
         throw new Error(errorData.message);
       }
 
@@ -65,13 +73,20 @@ const ApiKeyInput: React.FC<InputProps> = ({}) => {
     } catch (err: any) {
       console.error(err.message);
       setError(err.message);
+      toast({
+        title: "Error",
+        description: `${error}`,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 
   return (
     <>
       {!isActive && (
-        <Text fontSize="2xl" mb="12">
+        <Text fontSize={["lg", "xl", "2xl"]} mb="12">
           To fully use our application, please enter your Clockify API key.
         </Text>
       )}
@@ -90,14 +105,20 @@ const ApiKeyInput: React.FC<InputProps> = ({}) => {
             onChange={(e) => setApiKey(e.target.value)}
             isDisabled={isApiKeyValid || isActive}
           />
-          {error && <Text color="red">{error}</Text>}
+
           {isActive || isApiKeyValid ? <CheckIcon color="green" /> : null}
         </VStack>
         <ButtonGroup w="70%" justifyContent="left" alignContent="right" mt="4">
-          <Button isDisabled={isApiKeyValid || isActive} type="submit">
-            Submit Api Key
+          <Button
+            size={["sm", "md", "lg"]}
+            isDisabled={isApiKeyValid || isActive}
+            type="submit"
+          >
+            Submit
           </Button>
-          <Button onClick={editInputKeyHandler}>Edit</Button>
+          <Button size={["sm", "md", "lg"]} onClick={editInputKeyHandler}>
+            Edit
+          </Button>
         </ButtonGroup>
       </form>
     </>

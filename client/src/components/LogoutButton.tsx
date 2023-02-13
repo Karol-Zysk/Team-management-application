@@ -13,15 +13,12 @@ const LogoutButton = () => {
 
   const handleLogout = async () => {
     try {
-      console.log("elo");
-      const response = await fetch(`http://127.0.0.1:4000/auth/logout`, {
+      await fetch(`http://127.0.0.1:4000/auth/logout`, {
         method: "GET",
         headers: {
           authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
       });
-
-      console.log();
 
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
@@ -50,7 +47,11 @@ const LogoutButton = () => {
   };
 
   return (
-    <Button onClick={handleLogout} background="grey.200">
+    <Button
+      size={["sm", "md", "lg"]}
+      onClick={handleLogout}
+      background="grey.200"
+    >
       Logout
     </Button>
   );

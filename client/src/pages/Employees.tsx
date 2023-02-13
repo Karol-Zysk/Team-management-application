@@ -9,14 +9,27 @@ import {
   Th,
   Thead,
   Tr,
+  useToast,
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
+import EditModal from "../components/EditEmployeeModal";
 import { AccountContext } from "../context/AccountContext";
 import { Employee } from "../interfaces/EmployeeInterface";
 
 const Employees = () => {
   const [employees, setEmployee] = useState<Employee[]>([]);
+  const toast = useToast();
   const { setError, error } = useContext(AccountContext);
+  const [isOpen, setIsOpen] = useState(false);
+  const [id, setId] = useState("");
+
+  function handleCloseModal() {
+    setIsOpen(false);
+  }
+  function handleOpenModal(employeeId: string) {
+    setIsOpen(true);
+    setId(employeeId);
+  }
 
   useEffect(() => {
     return () => {
@@ -52,8 +65,13 @@ const Employees = () => {
 
       setError(null);
     } catch (err: any) {
-      console.error(err.message);
-      setError(err.message);
+      toast({
+        title: "Error",
+        description: `${error}`,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   }
 
@@ -78,21 +96,32 @@ const Employees = () => {
         </Tr>
       </Thead>
       <Tbody>
-        {employees.map((employee: Employee) => (
-          <Tr key={employee.id}>
-            <Td>{employee.clockifyName}</Td>
-            <Td>{employee.firstName}</Td>
-            <Td>{employee.lastName}</Td>
-            <Td>{employee.email}</Td>
-            <Td>{employee.hourlyRate}</Td>
-            <Td>
-              <Image h="12" src={`${employee.profilePicture}`} />
-            </Td>
-            <Td>
-              <EditIcon fontSize="xl" />
-            </Td>
-          </Tr>
-        ))}
+        {employees.map((employee: Employee) => {
+          return (
+            <Tr key={employee.id}>
+              <Td>{employee.clockifyName}</Td>
+              <Td>{employee.firstName}</Td>
+              <Td>{employee.lastName}</Td>
+              <Td>{employee.email}</Td>
+              <Td>{employee.hourlyRate}</Td>
+              <Td>
+                <Image h="12" src={`${employee.profilePicture}`} />
+              </Td>
+              <Td>
+                <EditIcon
+                  fontSize={["md", "md", "xl"]}
+                  onClick={() => handleOpenModal(employee.id)}
+                />
+                <EditModal
+                  handleCloseModal={handleCloseModal}
+                  employeeId={id}
+                  isOpen={isOpen}
+                  setIsOpen={setIsOpen}
+                />
+              </Td>
+            </Tr>
+          );
+        })}
       </Tbody>
     </Table>
   );

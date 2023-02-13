@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import { createContext, ReactNode, useEffect, useState } from "react";
 
 export interface UserData {
@@ -45,6 +46,7 @@ const initialState: AccountContextValue = {
 const AccountContext = createContext<AccountContextValue>(initialState);
 
 const AccountContextProvider = ({ children }: { children: ReactNode }) => {
+  const toast = useToast();
   const [user, setUser] = useState<UserData | {} | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isApiKeyValid, setIsApiKeyValid] = useState<boolean>(false);
@@ -71,9 +73,17 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
         setUser(data);
         setIsLoggedIn(true);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       setIsLoggedIn(false);
+      setError(error);
+      toast({
+        title: "Error",
+        description: `${error}`,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 
@@ -104,9 +114,17 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
 
         setIsLoggedIn(true);
       })
-      .catch(() => {
+      .catch((error) => {
         setIsLoggedIn(false);
         setUser({});
+        setError(error);
+        toast({
+          title: "Error",
+          description: `${error}`,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
       });
   }, [isLoggedIn]);
 

@@ -9,13 +9,19 @@ const Main = () => {
   const activeUser = user as UserData;
 
   return (
-    <Box display="flex" w="90%" paddingX="16" paddingY="16" height="100%">
+    <Box
+      display="flex"
+      w="90%"
+      paddingX={[0, 6, 12]}
+      paddingY={[0, 6, 12]}
+      height="100%"
+    >
       <Box w="100%">
         <ApiKeyInput error={error} setError={setError} />
         <SyncClockifyField />
       </Box>
       <Box
-        display="flex"
+        display={["none", "flex"]}
         alignItems="flex-start"
         justifyContent="flex-end"
         width="100%"

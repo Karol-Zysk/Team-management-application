@@ -56,7 +56,6 @@ const SignUp: React.FC = () => {
       const result = await response.json();
       if (result.error) {
         setError(result.message);
-        console.log(result.message);
       } else {
         localStorage.setItem("access_token", result.access_token);
         localStorage.setItem("refresh_token", result.refresh_token);
@@ -111,10 +110,14 @@ const SignUp: React.FC = () => {
           />
           <FormErrorMessage>{error}</FormErrorMessage>
           <ButtonGroup pt="1rem">
-            <Button colorScheme="blue" type="submit">
+            <Button size={["sm", "md", "lg"]} colorScheme="blue" type="submit">
               Create Account
             </Button>
-            <Button onClick={() => navigate("/")} leftIcon={<ArrowBackIcon />}>
+            <Button
+              size={["sm", "md", "lg"]}
+              onClick={() => navigate("/")}
+              leftIcon={<ArrowBackIcon />}
+            >
               Back
             </Button>
           </ButtonGroup>
