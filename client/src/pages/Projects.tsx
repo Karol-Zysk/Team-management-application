@@ -1,6 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Text, Box, Grid, Link, useToast, Flex } from "@chakra-ui/react";
-import { AccountContext } from "../context/AccountContext";
+import {
+  Text,
+  Box,
+  Grid,
+  Link,
+  useToast,
+  Flex,
+  Heading,
+  Textarea,
+} from "@chakra-ui/react";
+import { AccountContext, UserData } from "../context/AccountContext";
 import { TbFileReport } from "react-icons/tb";
 
 interface Project {
@@ -10,7 +19,8 @@ interface Project {
 
 const Projects = () => {
   const toast = useToast();
-  const { error, setError } = useContext(AccountContext);
+  const { error, setError, user } = useContext(AccountContext);
+  const activeUser = user as UserData;
   const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
@@ -58,28 +68,45 @@ const Projects = () => {
   }
 
   return (
-    <Grid px="24" py="24" w="3/4" templateColumns="repeat(3, 1fr)" gap={6}>
-      {projects.map((project) => (
-        <Link key={project.id} _hover={{ bg: "blue.400" }} p={6}>
-          <Flex
-            my="12"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="center"
+    <Flex justify="space-between" px="24" py="24" w="3/4">
+      <Box>
+        <Heading mb="6">{activeUser.companyName}</Heading>
+        <Text fontSize="larger" mb="6">
+          Number of projects {projects.length}
+        </Text>
+        <Text fontSize="larger" mb="6">
+          Select Project to create Report
+        </Text>
+      </Box>
+
+      <Grid p="4" border="2px" templateColumns="repeat(3, 1fr)" gap={6}>
+        {projects.map((project) => (
+          <Link
+            boxShadow="2xl"
+            borderBottom="1px"
+            borderRight="1px"
+            opacity="0.7"
+            key={project.id}
+            _hover={{ opacity: "1" }}
+            p={6}
           >
-            <Text fontWeight="bold" mb="6" fontSize="2xl">
-              {project.name}
-            </Text>
-            <Flex align="center">
-              <Text mr="4" fontSize="md">
-                Generate Project Report
+            <Flex
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Text fontWeight="bold" mb="6" fontSize="2xl">
+                {project.name}
               </Text>
-              <TbFileReport size="20" />
+              <Flex align="center">
+                <Text mr="4" fontSize="md"></Text>
+                <TbFileReport size="25" />
+              </Flex>
             </Flex>
-          </Flex>
-        </Link>
-      ))}
-    </Grid>
+          </Link>
+        ))}
+      </Grid>
+    </Flex>
   );
 };
 

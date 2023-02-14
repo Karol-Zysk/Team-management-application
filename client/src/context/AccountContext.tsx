@@ -5,6 +5,7 @@ export interface UserData {
   id: string;
   email: string;
   name: string;
+  companyName: string;
   active: boolean;
   sync: boolean;
 }
