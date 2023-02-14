@@ -91,7 +91,6 @@ const EmployeeDetails = ({}) => {
     );
     const data = await response.json();
     setSalaryReport(data);
-    console.log(salaryReport);
 
     setLoading(false);
   };

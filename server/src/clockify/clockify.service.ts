@@ -162,6 +162,7 @@ export class ClockifyService {
       const clockifyIds = employees.map((employee) => employee.clockifyId);
 
       let date: { start: Date; end: Date };
+
       if (dto.date) {
         date = getDatesForMonth(dto.date);
       }
@@ -276,7 +277,7 @@ export class ClockifyService {
         workspaceId,
       });
 
-      return { ...reportParams, salary, date };
+      return { ...reportParams, salary, date, workspaceId };
     } catch (error) {
       throw new UnauthorizedException(error.message);
     }

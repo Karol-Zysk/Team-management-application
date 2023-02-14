@@ -81,11 +81,12 @@ export class ProjectsService {
         budgetEstimate,
         salary,
         date,
+        workspaceId,
       } = await this.clockify.projectReport(user, projectId, dto);
 
       const projectMembers = await this.prisma.employee.findMany({
         where: {
-          AND: [{ userId: user.id }, { hoursWorked: { gt: 0 } }],
+          AND: [{ userId: user.id, workspaceId }, { hoursWorked: { gt: 0 } }],
         },
         select: {
           clockifyId: true,

@@ -13,25 +13,36 @@ import { TeamReport } from "../../interfaces/SalaryReportInterface";
 
 interface TeamSalaryProps {
   salaryReport: TeamReport;
+  start: string;
+  end: string;
 }
 
-const TeamSalaryReport: React.FC<TeamSalaryProps> = ({ salaryReport }) => {
+const TeamSalaryReport: React.FC<TeamSalaryProps> = ({
+  salaryReport,
+  start,
+  end,
+}) => {
   const { createdAt, employees, id, reportName } = salaryReport;
 
   return (
     <Box p={5} shadow="md">
       <Flex align="center" mb={5}>
         <Text fontSize="lg" fontWeight="bold">
-          Raport: {reportName}
+          Report: {reportName}
         </Text>
       </Flex>
       <Box mb={5}>
-        <Text fontWeight="bold">ID raportu:</Text> {id}
+        <Text fontWeight="bold">Report ID:</Text> {id}
       </Box>
 
       <Box mb={5}>
         <Text fontWeight="bold">Data utworzenia:</Text> {createdAt}
       </Box>
+      {start && end && (
+        <Box mb={5}>
+          <Text fontWeight="bold">Time period:</Text>from: {start}, to: {end}
+        </Box>
+      )}
 
       <Box mb={5}>
         <Text fontSize="2xl" mb="8" fontWeight="bold">
@@ -48,7 +59,7 @@ const TeamSalaryReport: React.FC<TeamSalaryProps> = ({ salaryReport }) => {
             </Tr>
           </Thead>
           <Tbody>
-            {employees.map((employee, index) => (
+            {employees.map((employee) => (
               <Tr key={employee.email}>
                 <Td>
                   {employee.firstName} {employee.lastName}

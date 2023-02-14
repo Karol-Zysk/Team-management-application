@@ -37,7 +37,7 @@ let SalaryController = class SalaryController {
     }
 };
 __decorate([
-    (0, request_mapping_decorator_1.Get)(''),
+    (0, request_mapping_decorator_1.Post)(''),
     __param(0, (0, decorators_1.GetUser)()),
     __param(1, (0, route_params_decorator_1.Body)()),
     __metadata("design:type", Function),

@@ -20,7 +20,7 @@ import { EmployeesSalaryReporDto } from '../employee/dto';
 export class SalaryController {
   constructor(private salaryService: SalaryService) {}
 
-  @Get('')
+  @Post('')
   geEmployeesSalary(@GetUser() user: User, @Body() dto: SalaryParamsDto) {
     return this.salaryService.geEmployeesSalary(user, dto);
   }

@@ -219,7 +219,7 @@ let ClockifyService = class ClockifyService {
                 salary,
                 workspaceId,
             });
-            return Object.assign(Object.assign({}, reportParams), { salary, date });
+            return Object.assign(Object.assign({}, reportParams), { salary, date, workspaceId });
         }
         catch (error) {
             throw new common_1.UnauthorizedException(error.message);

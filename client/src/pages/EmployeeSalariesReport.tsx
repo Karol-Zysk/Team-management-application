@@ -20,28 +20,49 @@ const EmployeesSalariesReport = () => {
   const [loading, setLoading] = useState(false);
   const [salaryReport, setSalaryReport] = useState(null);
 
-  const { setError, error } = useContext(AccountContext);
   const toast = useToast();
 
-  const [employees, setEmployees] = useState<Employee[]>();
   const handleGenerateReport = async () => {
-    const accessToken = localStorage.getItem("access_token");
+    try {
+      const accessToken = localStorage.getItem("access_token");
 
-    setLoading(true);
-    const response = await fetch(`http://127.0.0.1:4000/api/v1/salary/report`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({ start: startDate, end: endDate }),
-    });
-    const data = await response.json();
-    console.log(data);
+      setLoading(true);
+      const response = await fetch(
+        `http://127.0.0.1:4000/api/v1/salary/report`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({ start: startDate, end: endDate }),
+        }
+      );
+      if (!response.ok) {
+        const data = await response.json();
+        toast({
+          title: "Error",
+          description: `${data.message}`,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+        return;
+      }
+      const data = await response.json();
 
-    setSalaryReport(data);
+      setSalaryReport(data);
 
-    setLoading(false);
+      setLoading(false);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: `${error.message}`,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
@@ -74,7 +95,13 @@ const EmployeesSalariesReport = () => {
         {loading ? (
           <Spinner />
         ) : (
-          salaryReport && <TeamSalaryReport salaryReport={salaryReport!} />
+          salaryReport && (
+            <TeamSalaryReport
+              start={startDate}
+              end={endDate}
+              salaryReport={salaryReport!}
+            />
+          )
         )}
       </Box>
     </Box>

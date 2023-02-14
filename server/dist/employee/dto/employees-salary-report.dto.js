@@ -18,5 +18,15 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], EmployeesSalaryReporDto.prototype, "date", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], EmployeesSalaryReporDto.prototype, "start", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], EmployeesSalaryReporDto.prototype, "end", void 0);
 exports.EmployeesSalaryReporDto = EmployeesSalaryReporDto;
 //# sourceMappingURL=employees-salary-report.dto.js.map
