@@ -308,7 +308,7 @@ export class ClockifyService {
     try {
       const report = await this.prisma.report.create({
         data: {
-          reportName: `Software Partner report ${dto.date ? dto.date : null}`,
+          reportName: `${user.companyName} report ${dto.date ? dto.date : ''}`,
           userId: user.id,
           employees: employeesSalary,
         },

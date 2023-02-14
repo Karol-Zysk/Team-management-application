@@ -30,7 +30,7 @@ describe('App e2e', () => {
 
     await prisma.cleanDB();
 
-    pactum.request.setBaseUrl('http://localhost:4000');
+    pactum.request.setBaseUrl('http://localhost:4000/api/v1');
   });
 
   afterAll(() => {

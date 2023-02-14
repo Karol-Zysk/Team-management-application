@@ -3,8 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const pipes_1 = require("@nestjs/common/pipes");
+const port = process.env.PORT || 4000;
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    app.setGlobalPrefix('api/v1');
     app.useGlobalPipes(new pipes_1.ValidationPipe({
         whitelist: true,
     }));
@@ -12,7 +14,7 @@ async function bootstrap() {
         origin: 'http://127.0.0.1:5173',
         credentials: true,
     });
-    await app.listen(4000);
+    await app.listen(port);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

@@ -2,6 +2,7 @@ import { Box, Button, ButtonGroup, Text } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import { AccountContext } from "../context/AccountContext";
 import { Employee } from "../interfaces/EmployeeInterface";
+import { motion } from "framer-motion";
 
 const SyncClockifyField = () => {
   const [employee, setEmployee] = useState<Employee[]>([]);
@@ -16,7 +17,7 @@ const SyncClockifyField = () => {
 
     try {
       const response = await fetch(
-        "http://127.0.0.1:4000/employees/syncclockify",
+        "http://127.0.0.1:4000/api/v1/employees/syncclockify",
         {
           method: "POST",
           headers: {
@@ -45,24 +46,31 @@ const SyncClockifyField = () => {
 
   return (
     <Box mt="12">
-      <Text fontSize={["md", "md", "xl"]} mb="5">
-        With a valid API key, you can synchronize your database with Clockify
-        API and use most of the application's features.
-      </Text>
-      <ButtonGroup w="70%" justifyContent="left" alignContent="right" mt="4">
-        <Button
-          size={["sm", "md", "lg"]}
-          onClick={handleSyncronize}
-          isDisabled={!isActive}
-        >
-          Synchronize
-        </Button>
-      </ButtonGroup>
-      {employee.length !== 0 && (
-        <Text mt="3" fontSize={["md", "md", "xl"]} color="lightgreen" mb="5">
-          Udało się zsynchronizować {employee.length} pracowników
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <Text color="green" fontSize={["sm", "sm", "md"]} mb="5">
+          With a valid API key, you can synchronize your database with Clockify
+          API and use most of the application's features.
         </Text>
-      )}
+        <ButtonGroup w="70%" justifyContent="left" alignContent="right" mt="4">
+          <Button
+            size={["sm", "md", "lg"]}
+            onClick={handleSyncronize}
+            isDisabled={!isActive}
+          >
+            Synchronize
+          </Button>
+          {employee.length !== 0 && (
+            <Text
+              mt="2"
+              ml="6"
+              fontSize={["md", "md", "xl"]}
+              color="lightgreen"
+            >
+              {employee.length} new employees added.
+            </Text>
+          )}
+        </ButtonGroup>
+      </motion.div>
     </Box>
   );
 };

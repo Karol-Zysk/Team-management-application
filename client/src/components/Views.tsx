@@ -11,6 +11,7 @@ import Nav from "./Navbar";
 import Employees from "../pages/Employees";
 import EmployeeDetails from "../pages/EmployeeDetails";
 import EmployeeSalariesReport from "../pages/EmployeeSalariesReport";
+import Projects from "../pages/Projects";
 
 const Views = () => {
   const { user } = useContext(AccountContext);
@@ -41,6 +42,7 @@ const Views = () => {
               <Route path="/main" element={<Main />} />
               <Route path="/employees" element={<Employees />} />
               <Route path="/salaries" element={<EmployeeSalariesReport />} />
+              <Route path="/projects" element={<Projects />} />
               <Route path="/employees/:id" element={<EmployeeDetails />} />
             </Route>
             <Route element={<AuthRoutes />} path="/">

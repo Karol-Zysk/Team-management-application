@@ -30,7 +30,6 @@ const EditModal: React.FC<ModalProps> = ({
   isOpen,
   setIsOpen,
 }) => {
-
   const { setError, error } = useContext(AccountContext);
   const toast = useToast();
 
@@ -50,7 +49,7 @@ const EditModal: React.FC<ModalProps> = ({
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:4000/employees/${employeeId}`,
+        `http://127.0.0.1:4000/api/v1/employees/${employeeId}`,
         {
           method: "PATCH",
           headers: {

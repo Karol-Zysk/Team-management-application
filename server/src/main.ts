@@ -1,11 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common/pipes';
-import { DocumentBuilder } from '@nestjs/swagger';
-import { SwaggerModule } from '@nestjs/swagger/dist';
+
+const port = process.env.PORT || 4000;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api/v1');
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -16,15 +17,6 @@ async function bootstrap() {
     credentials: true,
   });
 
-  // const config = new DocumentBuilder()
-  //   .setTitle('Dashboard SP')
-  //   .setDescription('SP Dashboard API')
-  //   .setVersion('1.0')
-  //   .addTag('SoftwarePartner')
-  //   .build();
-  // const document = SwaggerModule.createDocument(app, config);
-  // SwaggerModule.setup('api', app, document);
-
-  await app.listen(4000);
+  await app.listen(port);
 }
 bootstrap();

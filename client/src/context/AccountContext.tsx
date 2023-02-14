@@ -18,6 +18,8 @@ interface AccountContextValue {
   setIsApiKeyValid: React.Dispatch<React.SetStateAction<boolean>>;
   apiKey: string;
   setApiKey: React.Dispatch<React.SetStateAction<string>>;
+  companyName: string;
+  setCompanyName: React.Dispatch<React.SetStateAction<string>>;
   isActive: boolean | undefined;
   setIsActive: React.Dispatch<React.SetStateAction<boolean | undefined>>;
   error: null | string;
@@ -35,6 +37,8 @@ const initialState: AccountContextValue = {
   setIsApiKeyValid: () => false,
   apiKey: "",
   setApiKey: () => "",
+  companyName: "",
+  setCompanyName: () => "",
   isActive: undefined,
   setIsActive: () => undefined,
   error: null,
@@ -51,6 +55,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isApiKeyValid, setIsApiKeyValid] = useState<boolean>(false);
   const [apiKey, setApiKey] = useState<string>("");
+  const [companyName, setCompanyName] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [isActive, setIsActive] = useState<boolean | undefined>(undefined);
   const [isSync, setIsSync] = useState<boolean>(false);
@@ -60,17 +65,19 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
     if (!refreshToken) return;
 
     try {
-      const res = await fetch(`http://127.0.0.1:4000/auth/refresh`, {
+      const res = await fetch(`http://127.0.0.1:4000/api/v1/auth/refresh`, {
         method: "GET",
         headers: {
           authorization: `Bearer ${refreshToken}`,
         },
       });
       const data = await res.json();
+      console.log(data);
+
       if (data.access_token) {
         localStorage.setItem("access_token", data.access_token);
         localStorage.setItem("refresh_token", data.refreshToken);
-        setUser(data);
+
         setIsLoggedIn(true);
       }
     } catch (error: any) {
@@ -96,7 +103,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
-    fetch(`http://127.0.0.1:4000/users/me`, {
+    fetch(`http://127.0.0.1:4000/api/v1/users/me`, {
       headers: {
         authorization: `Bearer ${accessToken}`,
       },
@@ -110,6 +117,8 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
         }
         setUser(data);
         setIsActive(data.active);
+        if (data.companyName) setCompanyName(data.companyName);
+
         setIsSync(data.sync);
 
         setIsLoggedIn(true);
@@ -152,6 +161,8 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
         setError,
         isSync,
         setIsSync,
+        companyName,
+        setCompanyName,
       }}
     >
       {children}

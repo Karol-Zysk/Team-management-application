@@ -28,7 +28,7 @@ const EmployeesSalariesReport = () => {
     const accessToken = localStorage.getItem("access_token");
 
     setLoading(true);
-    const response = await fetch(`http://127.0.0.1:4000/salary/report`, {
+    const response = await fetch(`http://127.0.0.1:4000/api/v1/salary/report`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -71,7 +71,6 @@ const EmployeesSalariesReport = () => {
         </FormControl>
       </Flex>
       <Box>
-          
         {loading ? (
           <Spinner />
         ) : (

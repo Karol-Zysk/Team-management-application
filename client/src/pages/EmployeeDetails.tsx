@@ -41,12 +41,15 @@ const EmployeeDetails = ({}) => {
     }
 
     try {
-      const response = await fetch(`http://127.0.0.1:4000/employees/${id}`, {
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await fetch(
+        `http://127.0.0.1:4000/api/v1/employees/${id}`,
+        {
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       const data = await response.json();
 
@@ -76,7 +79,7 @@ const EmployeeDetails = ({}) => {
 
     setLoading(true);
     const response = await fetch(
-      `http://127.0.0.1:4000/salary/${employee?.clockifyId}`,
+      `http://127.0.0.1:4000/api/v1/salary/${employee?.clockifyId}`,
       {
         method: "POST",
         headers: {

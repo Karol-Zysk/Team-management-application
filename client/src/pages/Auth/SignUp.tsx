@@ -46,7 +46,7 @@ const SignUp: React.FC = () => {
       headers.append("Content-Type", "application/json");
       headers.append("Accept", "application/json");
       headers.append("Origin", "http://localhost:5173");
-      const response = await fetch("http://127.0.0.1:4000/auth/signup", {
+      const response = await fetch("http://127.0.0.1:4000/api/v1/auth/signup", {
         method: "POST",
         headers: headers,
         credentials: "include",
@@ -55,7 +55,7 @@ const SignUp: React.FC = () => {
       });
       const result = await response.json();
       if (result.error) {
-        setError(result.message);
+        console.log(result.message);
       } else {
         localStorage.setItem("access_token", result.access_token);
         localStorage.setItem("refresh_token", result.refresh_token);
@@ -66,7 +66,7 @@ const SignUp: React.FC = () => {
         }, 500);
       }
     } catch (error) {
-      setError(error);
+      console.log(error);
     }
   };
 

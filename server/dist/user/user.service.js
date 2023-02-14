@@ -36,7 +36,7 @@ let UserService = class UserService {
                 active = true;
             const updatedUser = await this.prisma.user.update({
                 where: { id: userId },
-                data: { hash_api_key, active },
+                data: { hash_api_key, active, companyName: dto.companyName },
             });
             delete updatedUser.hash_api_key;
             delete updatedUser.hash;
