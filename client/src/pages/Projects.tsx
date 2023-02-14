@@ -68,44 +68,68 @@ const Projects = () => {
   }
 
   return (
-    <Flex justify="space-between" px="24" py="24" w="3/4">
-      <Box>
-        <Heading mb="6">{activeUser.companyName}</Heading>
+    <Flex px="24" py="24" w="3/4">
+      <Box w="60%" px="8">
+        <Text fontSize="3xl" mb="6">
+          <span style={{ fontWeight: "bold" }}>Company Name: </span>
+          {activeUser.companyName}
+        </Text>
         <Text fontSize="larger" mb="6">
-          Number of projects {projects.length}
+          <span style={{ fontWeight: "bold" }}>Owner:</span> {activeUser.name}
+        </Text>
+        <Text fontSize="larger" mb="6">
+          <span style={{ fontWeight: "bold" }}>Number of projects:</span>{" "}
+          {projects.length}
+        </Text>
+        <Text fontSize="larger" mb="6">
+          <span style={{ fontWeight: "bold" }}>Tip:</span> If you're creating a
+          report for the current project, simply click "generate report" and
+          leave the default settings. If you want to generate a report for a
+          project that took place some time ago, use the option to add salary
+          history for the user{" "}
+          <Link
+            href="/salaryHistory"
+            fontWeight="bold"
+            textDecoration="underline"
+          >
+            here
+          </Link>
+          . This will ensure that the report is generated with the hourly rates
+          that were in effect at that time.
         </Text>
         <Text fontSize="larger" mb="6">
           Select Project to create Report
         </Text>
       </Box>
-
-      <Grid p="4" border="2px" templateColumns="repeat(3, 1fr)" gap={6}>
-        {projects.map((project) => (
-          <Link
-            boxShadow="2xl"
-            borderBottom="1px"
-            borderRight="1px"
-            opacity="0.7"
-            key={project.id}
-            _hover={{ opacity: "1" }}
-            p={6}
-          >
-            <Flex
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="center"
+      <Box p="4">
+        <Grid w="full" templateColumns="repeat(3, 1fr)" gap={4}>
+          {projects.map((project) => (
+            <Link
+              boxShadow="2xl"
+              borderBottom="1px"
+              borderRight="1px"
+              opacity="0.7"
+              key={project.id}
+              _hover={{ opacity: "1" }}
+              p={6}
             >
-              <Text fontWeight="bold" mb="6" fontSize="2xl">
-                {project.name}
-              </Text>
-              <Flex align="center">
-                <Text mr="4" fontSize="md"></Text>
-                <TbFileReport size="25" />
+              <Flex
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Text fontWeight="bold" mb="6" fontSize="md">
+                  {project.name}
+                </Text>
+                <Flex align="center">
+                  <Text mr="4" fontSize="md"></Text>
+                  <TbFileReport size="25" />
+                </Flex>
               </Flex>
-            </Flex>
-          </Link>
-        ))}
-      </Grid>
+            </Link>
+          ))}
+        </Grid>
+      </Box>
     </Flex>
   );
 };

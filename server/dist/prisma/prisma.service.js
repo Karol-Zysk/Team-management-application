@@ -13,12 +13,13 @@ exports.PrismaService = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const client_1 = require("@prisma/client");
+const DB_URI = process.env.DB_URL;
 let PrismaService = class PrismaService extends client_1.PrismaClient {
     constructor(config) {
         super({
             datasources: {
                 db: {
-                    url: `${process.env.DB_URL}`,
+                    url: DB_URI,
                 },
             },
         });
