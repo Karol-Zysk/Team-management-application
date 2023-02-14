@@ -5,8 +5,10 @@ import {
   FormLabel,
   Input,
   Button,
-  Spinner,
   useToast,
+  Spinner,
+  Text,
+  Heading,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -92,14 +94,16 @@ const EmployeeDetails = ({}) => {
   };
 
   return (
-    <Box p={5}>
-      <h2>Szczegóły pracownika</h2>
-      <p>Imię: {employee?.firstName}</p>
-      <p>Nazwisko: {employee?.lastName}</p>
-      <p>Stawka godzinowa: {employee?.hourlyRate}</p>
+    <Box p={8} display="flex" justifyContent="space-around">
+      <Box>
+        <Heading mb={8}>Employee details</Heading>
+        <Text my={4}>First Name: {employee?.firstName}</Text>
+        <Text my={4}>Last Name: {employee?.lastName}</Text>
+        <Text my={4}>Hourly Rate: {employee?.hourlyRate}</Text>
+      </Box>
       <Flex my={2}>
         <FormControl>
-          <FormLabel htmlFor="start-date">Okres czasu: od</FormLabel>
+          <FormLabel htmlFor="start-date">Time Period: from</FormLabel>
           <Input
             type="date"
             id="start-date"
@@ -108,7 +112,7 @@ const EmployeeDetails = ({}) => {
           />
         </FormControl>
         <FormControl ml={4}>
-          <FormLabel htmlFor="end-date">do</FormLabel>
+          <FormLabel htmlFor="end-date">to</FormLabel>
           <Input
             type="date"
             id="end-date"
@@ -117,8 +121,16 @@ const EmployeeDetails = ({}) => {
           />
         </FormControl>
       </Flex>
-      <Button onClick={handleGenerateReport}>Generuj Raport</Button>
-      {salaryReport && <EmployeeSalaryReport salaryReport={salaryReport!} />}
+      <Box>
+        <Button my={6} onClick={handleGenerateReport}>
+          Report
+        </Button>
+        {loading ? (
+          <Spinner />
+        ) : (
+          salaryReport && <EmployeeSalaryReport salaryReport={salaryReport!} />
+        )}
+      </Box>
     </Box>
   );
 };

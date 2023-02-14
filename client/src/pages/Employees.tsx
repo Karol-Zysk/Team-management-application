@@ -1,11 +1,13 @@
 import { EditIcon, InfoIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Button,
   Image,
   Spinner,
   Table,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
@@ -94,7 +96,7 @@ const Employees = () => {
           <Th>hourly rate</Th>
           <Th>Avatar</Th>
           <Th>Edit</Th>
-          <Th>Info</Th>
+          <Th>Report</Th>
         </Tr>
       </Thead>
       <Tbody>
@@ -105,19 +107,20 @@ const Employees = () => {
               <Td>{employee.firstName}</Td>
               <Td>{employee.lastName}</Td>
               <Td>{employee.email}</Td>
-              <Td>{employee.hourlyRate}</Td>
+              <Td>{employee.hourlyRate} zł/h</Td>
               <Td>
                 <Image h="12" src={`${employee.profilePicture}`} />
               </Td>
               <Td>
                 <EditIcon
+                  cursor="pointer"
                   fontSize={["md", "md", "xl"]}
                   onClick={() => handleOpenModal(employee.id)}
                 />
               </Td>
               <Td>
                 <Link to={`/employees/${employee.id}`}>
-                  <InfoIcon />
+                  <Button color="green.400">Salary Report</Button>
                 </Link>
               </Td>
               <EditModal
