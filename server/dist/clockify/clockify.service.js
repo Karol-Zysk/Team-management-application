@@ -187,7 +187,7 @@ let ClockifyService = class ClockifyService {
                 const hours = await utils_1.getHoursWorked.bind(this)(options);
                 let hourlyRate;
                 const employee = await this.prisma.employee.findFirst({
-                    where: { clockifyId: clockifyId, userId: user.id },
+                    where: { clockifyId: clockifyId, userId: user.id, workspaceId },
                     select: {
                         salaryHistory: true,
                         hourlyRate: true,
@@ -204,12 +204,12 @@ let ClockifyService = class ClockifyService {
                 }
                 const salary = hours * hourlyRate;
                 await this.prisma.employee.updateMany({
-                    where: { clockifyId: clockifyId, userId: user.id },
-                    data: { hoursWorked: hours, salary },
+                    where: { clockifyId: clockifyId, userId: user.id, workspaceId },
+                    data: { hoursWorked: hours, salary: Number(salary.toFixed(1)) },
                 });
             }
             const totalSalary = await this.prisma.employee.aggregate({
-                where: { userId: user.id },
+                where: { userId: user.id, workspaceId },
                 _sum: { salary: true },
             });
             const { _sum: { salary }, } = totalSalary;

@@ -16,7 +16,7 @@ model User {
   hash         String
   hash_api_key String?
   refreshToken String?
-  companyName  String?    @unique
+  companyName  String?
   active       Boolean    @default(false)
   sync         Boolean    @default(false)
   employees    Employee[]
@@ -53,7 +53,7 @@ model Project {
   updatedAt        DateTime @updatedAt
   clientName       String
   clientId         String
-  projectId        String   @unique
+  projectId        String
   active           Boolean
   projectName      String
   projectStartDate String

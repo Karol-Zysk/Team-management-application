@@ -86,7 +86,7 @@ export class ProjectsService {
 
       const projectMembers = await this.prisma.employee.findMany({
         where: {
-          AND: [{ userId: user.id, workspaceId }, { hoursWorked: { gt: 0 } }],
+          AND: [{ userId: user.id, workspaceId }],
         },
         select: {
           clockifyId: true,
@@ -102,18 +102,9 @@ export class ProjectsService {
         return member;
       });
 
-      const existingProjectSummary = await this.prisma.project.findUnique({
-        where: { projectId: project.id },
-      });
-
-      if (existingProjectSummary)
-        throw new Error(
-          'This Project summary already exist. Update existing one',
-        );
-
       const projectSummary = await this.prisma.project.create({
         data: {
-          projectName: project.name || dto.projectName,
+          projectName: `${user.companyName}, Project: ${project.name}`,
           duration: parsedDuration,
           projectId: project.id,
           expenses: salary,
@@ -143,7 +134,7 @@ export class ProjectsService {
       });
       if (!report) throw new NotFoundException('Invalid Id');
       await this.prisma.project.delete({
-        where: { projectId },
+        where: { id: projectId },
       });
       return;
     } catch (error) {
@@ -175,7 +166,7 @@ export class ProjectsService {
       const summary = budgetEstimate - salary;
 
       const report = await this.prisma.project.update({
-        where: { projectId },
+        where: { id: project.id },
         data: {
           projectName: dto.projectName,
           budgetEstimate,
