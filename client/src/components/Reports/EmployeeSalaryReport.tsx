@@ -12,16 +12,14 @@ const EmployeeSalaryReport: React.FC<ReportProps> = ({
   salaryReport: {
     clockifyName,
     email,
-    firstName,
     hourlyRate,
     hoursWorked,
-    lastName,
     profilePicture,
     salary,
   },
 }) => {
   return (
-    <Box p={5} shadow="md" borderWidth="1px">
+    <Box p={5} shadow="md" w="full" borderWidth="1px">
       <Flex align="center">
         {profilePicture ? (
           <Image src={profilePicture} mr={3} />
