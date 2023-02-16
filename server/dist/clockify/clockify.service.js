@@ -83,7 +83,6 @@ let ClockifyService = class ClockifyService {
         return;
     }
     async calculateSalary(clockifyId, user, dto, date) {
-        await this.initClockify(user);
         const options = { clockifyId, dto, date };
         const hours = await utils_1.getHoursWorked.bind(this)(options);
         let hourlyRate;
@@ -142,9 +141,10 @@ let ClockifyService = class ClockifyService {
                 promises.push(this.calculateSalary(clockifyId, user, dto, date));
             }
             await Promise.all(promises);
-            return this.prisma.employee.findMany({
+            const employeesWithSalary = await this.prisma.employee.findMany({
                 where: { userId: user.id, workspaceId },
             });
+            return { employeesWithSalary, workspaceId };
         }
         catch (error) {
             throw new common_1.BadRequestException(error.message);
@@ -226,8 +226,8 @@ let ClockifyService = class ClockifyService {
         }
     }
     async employeesSalaryReport(user, dto) {
-        const salary = await this.geEmployeesSalary(user, dto);
-        const employeesSalary = salary.map((data) => {
+        const { workspaceId, employeesWithSalary } = await this.geEmployeesSalary(user, dto);
+        const employeesSalary = employeesWithSalary.map((data) => {
             const { firstName, lastName, email, clockifyName, hourlyRate, hoursWorked, salary, } = data;
             return {
                 firstName,
@@ -239,11 +239,13 @@ let ClockifyService = class ClockifyService {
                 salary,
             };
         });
+        const reportName = `${user.companyName}. ${dto.start && dto.end
+            ? `Period: ${dto.start} to ${dto.end}`
+            : 'Unknown time period'}`;
         try {
-            const { workspaceId } = await this.initClockify(user);
             const report = await this.prisma.report.create({
                 data: {
-                    reportName: `${user.companyName}. Period:  ${dto.start} to:  ${dto.end}`,
+                    reportName,
                     workspaceId,
                     userId: user.id,
                     employees: employeesSalary,

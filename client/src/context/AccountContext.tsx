@@ -79,6 +79,13 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
     null
   );
 
+  const cleanAfterLogout = () => {
+    setUser({});
+    setIsLoggedIn(false);
+    setIsSync(false);
+    setIsActive(false);
+  };
+
   const refreshAccessToken = async () => {
     const refreshToken = localStorage.getItem("refresh_token");
     if (!refreshToken) return;
@@ -100,7 +107,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
       }
     } catch (error: any) {
       console.error(error);
-      setIsLoggedIn(false);
+
       setError(error);
       toast({
         title: "Error",
@@ -116,8 +123,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
     const accessToken = localStorage.getItem("access_token");
 
     if (!accessToken) {
-      setIsLoggedIn(false);
-      setUser({});
+      cleanAfterLogout();
       return;
     }
 
@@ -129,8 +135,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
       .then((res) => res.json())
       .then((data: UserData | any) => {
         if (data.statusCode >= 400) {
-          setUser({});
-          setIsLoggedIn(false);
+          cleanAfterLogout();
           return;
         }
         setUser(data);
@@ -142,8 +147,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
         setIsLoggedIn(true);
       })
       .catch((error) => {
-        setIsLoggedIn(false);
-        setUser({});
+        cleanAfterLogout();
         setError(error);
         toast({
           title: "Error",

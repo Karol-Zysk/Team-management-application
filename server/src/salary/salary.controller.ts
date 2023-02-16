@@ -1,6 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { SalaryService } from './salary.service';
 import {
+  Delete,
   Get,
   Post,
 } from '@nestjs/common/decorators/http/request-mapping.decorator';
@@ -31,6 +32,11 @@ export class SalaryController {
     @Body() dto: EmployeesSalaryReporDto,
   ) {
     return this.salaryService.employeesSalaryReport(user, dto);
+  }
+
+  @Delete('report/:id')
+  deleteEmployeeSalaryReport(@Param('id') salaryId: string) {
+    return this.salaryService.deleteEmployeeSalaryReport(salaryId);
   }
 
   @Post(':id')

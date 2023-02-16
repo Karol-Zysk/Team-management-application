@@ -16,7 +16,6 @@ import { baseUrl } from "../../utils/origin";
 
 const ProjectReportsHistory = () => {
   const { setProjectReport } = useContext(AccountContext);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [reports, setReports] = useState<ProjectReport[]>([]);
 
@@ -26,7 +25,6 @@ const ProjectReportsHistory = () => {
 
   const fetchReports = async () => {
     try {
-      setIsLoading(true);
       const accessToken = localStorage.getItem("access_token");
       if (!accessToken) {
         throw new Error("You're not logged in!");
@@ -44,18 +42,16 @@ const ProjectReportsHistory = () => {
         console.error(`Error: ${data.message}`);
         throw new Error(data.message);
       }
-
       setReports(data);
     } catch (error: any) {
       setError(error);
     } finally {
-      setIsLoading(false);
     }
   };
 
-  const deleteReport = async (id: string) => {
+  async function deleteReport(id: string, event: any) {
+    event.preventDefault();
     try {
-      setIsLoading(true);
       const accessToken = localStorage.getItem("access_token");
       if (!accessToken) {
         throw new Error("You're not logged in!");
@@ -73,16 +69,13 @@ const ProjectReportsHistory = () => {
       });
     } catch (error: any) {
       setError(error);
-    } finally {
-      setIsLoading(false);
     }
-  };
+  }
 
   const handleReportClick = (report: ProjectReport) => {
     setProjectReport(report);
   };
 
-  if (isLoading) return <Spinner />;
   if (error) return <div>Something went wrong</div>;
 
   return (
@@ -113,10 +106,9 @@ const ProjectReportsHistory = () => {
                         variant="solid"
                         size="sm"
                         border="1px"
-                        onClick={() => deleteReport(report.id)}
-                        disabled={isLoading}
+                        onClick={() => deleteReport(report.id, event)}
                       >
-                        {isLoading ? "Deleting..." : "Delete"}
+                        Delete
                       </Button>
                     </Td>
                   </Tr>

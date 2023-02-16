@@ -4,10 +4,8 @@ export async function getHoursWorked({
   clockifyId: clockifyId,
   dto: dto,
   date: date,
-  projectId: projectId,
 }) {
   const workspaces = await this.clockify.workspaces.get();
-  const project = projectId || dto.projectId;
 
   const timeEntries = await this.clockify.workspace
     .withId(workspaces[0].id)
@@ -24,7 +22,6 @@ export async function getHoursWorked({
         : date
         ? new Date(date?.end)
         : new Date(Date.now()),
-      project,
     });
 
   let totalWorkingTime = 0;

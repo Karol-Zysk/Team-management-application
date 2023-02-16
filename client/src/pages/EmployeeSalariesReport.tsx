@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import DateInputs from "../components/DateInputs";
-import ReportsHistory from "../components/Reports/ProjectReportsHistory";
+import ReportsHistory from "../components/Reports/EmployeeReportsHistory";
 import TeamSalaryReport from "../components/Reports/TeamSalaryReport";
 import { AccountContext } from "../context/AccountContext";
 import { motion } from "framer-motion";

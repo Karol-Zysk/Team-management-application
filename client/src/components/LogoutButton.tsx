@@ -7,7 +7,8 @@ import { useNavigate } from "react-router";
 import { baseUrl } from "../utils/origin";
 
 const LogoutButton = () => {
-  const { setIsLoggedIn, setUser } = useContext(AccountContext);
+  const { setIsLoggedIn, setUser, setIsSync, setIsActive } =
+    useContext(AccountContext);
   const toast = useToast();
 
   const navigate = useNavigate();
@@ -25,6 +26,9 @@ const LogoutButton = () => {
       localStorage.removeItem("refresh_token");
       setIsLoggedIn(false);
       setUser({});
+      setIsSync(false);
+      setIsActive(false);
+
       setTimeout(() => {
         navigate("/");
       }, 500);

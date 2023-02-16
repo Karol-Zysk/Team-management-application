@@ -1,6 +1,5 @@
-export declare function getHoursWorked({ clockifyId: clockifyId, dto: dto, date: date, projectId: projectId, }: {
+export declare function getHoursWorked({ clockifyId: clockifyId, dto: dto, date: date, }: {
     clockifyId: any;
     dto: any;
     date: any;
-    projectId: any;
-}): Promise<number>;
+}): Promise<any>;

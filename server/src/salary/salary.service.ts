@@ -3,11 +3,19 @@ import { User } from '@prisma/client';
 import { ClockifyService } from '../clockify/clockify.service';
 import { SalaryParamsDto } from './dto';
 import { EmployeesSalaryReporDto } from '../employee/dto';
-import { BadRequestException } from '@nestjs/common/exceptions';
+import {
+  BadRequestException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common/exceptions';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class SalaryService {
-  constructor(private clockify: ClockifyService) {}
+  constructor(
+    private clockify: ClockifyService,
+    private prisma: PrismaService,
+  ) {}
 
   async geEmployeesSalary(user: User, dto: SalaryParamsDto) {
     const salary = await this.clockify.geEmployeesSalary(user, dto);
@@ -37,5 +45,20 @@ export class SalaryService {
 
   async getAllEmployeeSalaryReports(user: User) {
     return this.clockify.getAllEmployeeSalaryReports(user);
+  }
+
+  async deleteEmployeeSalaryReport(salaryId: string) {
+    try {
+      const report = await this.prisma.report.findFirst({
+        where: { id: salaryId },
+      });
+      if (!report) throw new NotFoundException('Invalid Id');
+      await this.prisma.report.delete({
+        where: { id: salaryId },
+      });
+      return;
+    } catch (error) {
+      throw new UnauthorizedException(error.message);
+    }
   }
 }

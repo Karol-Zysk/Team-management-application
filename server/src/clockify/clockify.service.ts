@@ -115,7 +115,6 @@ export class ClockifyService {
     dto?: any,
     date?: { start: Date; end: Date },
   ) {
-    await this.initClockify(user);
     const options = { clockifyId, dto, date };
     const hours = await getHoursWorked.bind(this)(options);
 
@@ -187,9 +186,10 @@ export class ClockifyService {
 
       await Promise.all(promises);
 
-      return this.prisma.employee.findMany({
+      const employeesWithSalary = await this.prisma.employee.findMany({
         where: { userId: user.id, workspaceId },
       });
+      return { employeesWithSalary, workspaceId };
     } catch (error) {
       throw new BadRequestException(error.message);
     }
@@ -284,8 +284,11 @@ export class ClockifyService {
   }
 
   async employeesSalaryReport(user: User, dto: EmployeesSalaryReporDto) {
-    const salary = await this.geEmployeesSalary(user, dto);
-    const employeesSalary = salary.map((data) => {
+    const { workspaceId, employeesWithSalary } = await this.geEmployeesSalary(
+      user,
+      dto,
+    );
+    const employeesSalary = employeesWithSalary.map((data) => {
       const {
         firstName,
         lastName,
@@ -306,12 +309,15 @@ export class ClockifyService {
         salary,
       };
     });
-
+    const reportName = `${user.companyName}. ${
+      dto.start && dto.end
+        ? `Period: ${dto.start} to ${dto.end}`
+        : 'Unknown time period'
+    }`;
     try {
-      const { workspaceId } = await this.initClockify(user);
       const report = await this.prisma.report.create({
         data: {
-          reportName: `${user.companyName}. Period:  ${dto.start} to:  ${dto.end}`,
+          reportName,
           workspaceId,
           userId: user.id,
           employees: employeesSalary,
