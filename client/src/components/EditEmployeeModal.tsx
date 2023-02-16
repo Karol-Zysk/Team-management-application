@@ -22,9 +22,11 @@ type ModalProps = {
   isOpen: boolean;
   employeeId: string;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  employee: Employee;
 };
 
 const EditModal: React.FC<ModalProps> = ({
+  employee,
   employeeId,
   handleCloseModal,
   isOpen,
@@ -33,10 +35,12 @@ const EditModal: React.FC<ModalProps> = ({
   const { setError, error } = useContext(AccountContext);
   const toast = useToast();
 
-  const [hourlyRate, setHourlyRate] = useState<number | string>("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [profilePicture, setProfilePicture] = useState("");
+  const [hourlyRate, setHourlyRate] = useState<number | string>();
+  const [firstName, setFirstName] = useState<string | undefined>(undefined);
+  const [lastName, setLastName] = useState<string | undefined>(undefined);
+  const [profilePicture, setProfilePicture] = useState<string | undefined>(
+    undefined
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   async function handleEditEmployee(event: any) {
@@ -57,10 +61,10 @@ const EditModal: React.FC<ModalProps> = ({
             authorization: `Bearer ${accessToken}`,
           },
           body: JSON.stringify({
-            hourlyRate,
-            firstName,
-            lastName,
-            profilePicture,
+            hourlyRate: hourlyRate && hourlyRate,
+            firstName: firstName && firstName,
+            lastName: lastName && lastName,
+            profilePicture: profilePicture && profilePicture,
           }),
         }
       );

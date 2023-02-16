@@ -46,8 +46,8 @@ const Links = [
 const NavLink: React.FC<LinkType> = ({ children }) => (
   <Link
     px={2}
+    mt="3"
     py={1}
-    rounded={"md"}
     _hover={{
       textDecoration: "none",
       bg: useColorModeValue("gray.200", "gray.700"),
@@ -67,7 +67,7 @@ export default function Nav({}) {
   return (
     <>
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
-        <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
+        <Flex h={20} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
             size={"md"}
             icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
@@ -88,9 +88,9 @@ export default function Nav({}) {
                 Links.map((links) => (
                   <motion.div
                     key={links.link}
-                    initial={{ y: -10, opacity: 0 }}
+                    initial={{ y: -20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ duration: 0.3 }}
                   >
                     <NavLink key={links.link}>{links}</NavLink>
                   </motion.div>

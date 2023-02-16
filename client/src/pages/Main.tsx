@@ -1,9 +1,8 @@
 import { Box, Text } from "@chakra-ui/react";
-import { useContext, useState } from "react";
+import { useContext,  } from "react";
 import { AccountContext, UserData } from "../context/AccountContext";
 import ApiKeyInput from "../components/ApiKeyInput";
 import SyncClockifyField from "../components/SyncClockifyField";
-import CompanyNameInput from "../components/CompanyNameInput";
 
 const Main = () => {
   const { user, error, setError } = useContext(AccountContext);

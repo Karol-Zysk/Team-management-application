@@ -4,21 +4,24 @@ import {
   Flex,
   FormControl,
   FormLabel,
+  Heading,
   Input,
   Spinner,
+  Text,
   useToast,
 } from "@chakra-ui/react";
 import { useContext, useState } from "react";
-import { useParams } from "react-router";
+import DateInputs from "../components/DateInputs";
+import ReportsHistory from "../components/Reports/ProjectReportsHistory";
 import TeamSalaryReport from "../components/Reports/TeamSalaryReport";
 import { AccountContext } from "../context/AccountContext";
-import { Employee } from "../interfaces/EmployeeInterface";
+import { motion } from "framer-motion";
 
 const EmployeesSalariesReport = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(false);
-  const [salaryReport, setSalaryReport] = useState(null);
+  const { salaryReport, setSalaryReport } = useContext(AccountContext);
 
   const toast = useToast();
 
@@ -66,45 +69,41 @@ const EmployeesSalariesReport = () => {
   };
 
   return (
-    <Box>
-      {" "}
-      <Flex my={2}>
-        <FormControl>
-          <FormLabel htmlFor="start-date">Time Period: from</FormLabel>
-          <Input
-            type="date"
-            id="start-date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-          />
-        </FormControl>
-        <FormControl ml={4}>
-          <FormLabel htmlFor="end-date">to</FormLabel>
-          <Input
-            type="date"
-            id="end-date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-          />
-          <Button my={6} onClick={handleGenerateReport}>
-            Report
-          </Button>
-        </FormControl>
-      </Flex>
+    <Flex p="12">
+      <Box w="50%">
+        <Heading mb="12">Employees Salary Report</Heading>
+        <Text mb="6" fontSize="lg">
+          Enter the dates for which you want the report to be calculated
+        </Text>
+        <DateInputs
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          handleGenerateReport={handleGenerateReport}
+        />
+        <ReportsHistory />
+      </Box>
       <Box>
         {loading ? (
           <Spinner />
         ) : (
           salaryReport && (
-            <TeamSalaryReport
-              start={startDate}
-              end={endDate}
-              salaryReport={salaryReport!}
-            />
+            <motion.div
+              initial={{ y: -5, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.2 }}
+            >
+              <TeamSalaryReport
+                start={startDate}
+                end={endDate}
+                salaryReport={salaryReport!}
+              />
+            </motion.div>
           )
         )}
       </Box>
-    </Box>
+    </Flex>
   );
 };
 export default EmployeesSalariesReport;

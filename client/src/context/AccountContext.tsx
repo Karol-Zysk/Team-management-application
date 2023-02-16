@@ -1,5 +1,10 @@
 import { useToast } from "@chakra-ui/react";
 import { createContext, ReactNode, useEffect, useState } from "react";
+import { ProjectReport } from "../interfaces/ProjectReportInterface";
+import {
+  SalaryReportInterface,
+  TeamReport,
+} from "../interfaces/SalaryReportInterface";
 
 export interface UserData {
   id: string;
@@ -25,6 +30,10 @@ interface AccountContextValue {
   setIsActive: React.Dispatch<React.SetStateAction<boolean | undefined>>;
   error: null | string;
   setError: React.Dispatch<React.SetStateAction<string | null>>;
+  salaryReport: null | TeamReport;
+  setSalaryReport: React.Dispatch<React.SetStateAction<TeamReport | null>>;
+  projectReport: null | ProjectReport;
+  setProjectReport: React.Dispatch<React.SetStateAction<ProjectReport | null>>;
   setIsSync: React.Dispatch<React.SetStateAction<boolean>>;
   isSync: boolean;
 }
@@ -44,6 +53,10 @@ const initialState: AccountContextValue = {
   setIsActive: () => undefined,
   error: null,
   setError: () => null,
+  salaryReport: null,
+  setSalaryReport: () => null,
+  projectReport: null,
+  setProjectReport: () => null,
   setIsSync: () => false,
   isSync: false,
 };
@@ -60,6 +73,10 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   const [error, setError] = useState<string | null>(null);
   const [isActive, setIsActive] = useState<boolean | undefined>(undefined);
   const [isSync, setIsSync] = useState<boolean>(false);
+  const [salaryReport, setSalaryReport] = useState<TeamReport | null>(null);
+  const [projectReport, setProjectReport] = useState<ProjectReport | null>(
+    null
+  );
 
   const refreshAccessToken = async () => {
     const refreshToken = localStorage.getItem("refresh_token");
@@ -159,6 +176,10 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
         setIsActive,
         error,
         setError,
+        salaryReport,
+        setSalaryReport,
+        projectReport,
+        setProjectReport,
         isSync,
         setIsSync,
         companyName,

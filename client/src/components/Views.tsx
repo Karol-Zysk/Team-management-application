@@ -12,6 +12,7 @@ import Employees from "../pages/Employees";
 import EmployeeDetails from "../pages/EmployeeDetails";
 import EmployeeSalariesReport from "../pages/EmployeeSalariesReport";
 import Projects from "../pages/Projects";
+import ProjectReport from "../pages/ProjectReport";
 
 const Views = () => {
   const { user } = useContext(AccountContext);
@@ -44,6 +45,7 @@ const Views = () => {
               <Route path="/salaries" element={<EmployeeSalariesReport />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/employees/:id" element={<EmployeeDetails />} />
+              <Route path="/projects/:id" element={<ProjectReport />} />
             </Route>
             <Route element={<AuthRoutes />} path="/">
               <Route path="/" element={<Login />} />

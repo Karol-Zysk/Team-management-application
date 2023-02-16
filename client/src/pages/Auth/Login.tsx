@@ -52,6 +52,13 @@ const Login: React.FC = () => {
       });
       const result = await response.json();
       if (result.error) {
+        toast({
+          title: "Error",
+          description: `${result.message}`,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
         setError(result.message);
       } else {
         localStorage.setItem("access_token", result.access_token);

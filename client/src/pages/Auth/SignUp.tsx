@@ -7,6 +7,7 @@ import {
   FormLabel,
   Heading,
   Input,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
@@ -32,10 +33,12 @@ const SignUp: React.FC = () => {
   });
 
   const [error, setError] = useState<string | any>("");
+  const toast = useToast();
   const navigate = useNavigate();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+
     setFormData({ ...formData, [name]: value });
   };
 
@@ -55,6 +58,13 @@ const SignUp: React.FC = () => {
       });
       const result = await response.json();
       if (result.error) {
+        toast({
+          title: "Error",
+          description: `${result.message}`,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
         console.log(result.message);
       } else {
         localStorage.setItem("access_token", result.access_token);
@@ -65,7 +75,16 @@ const SignUp: React.FC = () => {
           navigate("/main");
         }, 500);
       }
-    } catch (error) {}
+    } catch (error) {
+      setError(error);
+      toast({
+        title: "Error",
+        description: `${error}`,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
 
   return (

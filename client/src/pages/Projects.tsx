@@ -1,16 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  Text,
-  Box,
-  Grid,
-  Link,
-  useToast,
-  Flex,
-  Heading,
-  Textarea,
-} from "@chakra-ui/react";
+import { Text, Box, Grid, useToast, Flex } from "@chakra-ui/react";
 import { AccountContext, UserData } from "../context/AccountContext";
 import { TbFileReport } from "react-icons/tb";
+import { Link } from "react-router-dom";
+import ProjectReportsHistory from "../components/Reports/ProjectReportsHistory";
+import ProjectReportCard from "../components/Reports/ProjectReportCard";
 
 interface Project {
   id: string;
@@ -19,7 +13,7 @@ interface Project {
 
 const Projects = () => {
   const toast = useToast();
-  const { error, setError, user } = useContext(AccountContext);
+  const { error, setError, user, projectReport } = useContext(AccountContext);
   const activeUser = user as UserData;
   const [projects, setProjects] = useState<Project[]>([]);
 
@@ -68,8 +62,8 @@ const Projects = () => {
   }
 
   return (
-    <Flex px="24" py="24" w="3/4">
-      <Box w="60%" px="8">
+    <Flex px="24" py="24" w="3/4" justify="space-between">
+      <Box w="50%" px="8">
         <Text fontSize="3xl" mb="6">
           <span style={{ fontWeight: "bold" }}>Company Name: </span>
           {activeUser.companyName}
@@ -86,50 +80,40 @@ const Projects = () => {
           report for the current project, simply click "generate report" and
           leave the default settings. If you want to generate a report for a
           project that took place some time ago, use the option to add salary
-          history for the user{" "}
-          <Link
-            href="/salaryHistory"
-            fontWeight="bold"
-            textDecoration="underline"
-          >
-            here
-          </Link>
-          . This will ensure that the report is generated with the hourly rates
-          that were in effect at that time.
+          history for the user <Link to="/salaryHistory">here</Link>. This will
+          ensure that the report is generated with the hourly rates that were in
+          effect at that time.
         </Text>
-        <Text fontSize="larger" mb="6">
-          Select Project to create Report
+        <Text fontWeight="bold" fontSize="2xl" mb="6">
+          Report History
         </Text>
+        <ProjectReportsHistory />
+        {projectReport && <ProjectReportCard projectReport={projectReport} />}
       </Box>
-      <Box p="4">
-        <Grid w="full" templateColumns="repeat(3, 1fr)" gap={4}>
+      <Flex justify="center" h="min" w="40%" p="4">
+        <Grid w="full" templateColumns="repeat(2, 1fr)" gap={2}>
           {projects.map((project) => (
-            <Link
-              boxShadow="2xl"
-              borderBottom="1px"
-              borderRight="1px"
-              opacity="0.7"
-              key={project.id}
-              _hover={{ opacity: "1" }}
-              p={6}
-            >
+            <Link key={project.id} to={`/projects/${project.id}`}>
               <Flex
+                boxShadow="dark-lg"
+                borderRadius="5"
+                opacity="0.7"
+                key={project.id}
+                _hover={{ opacity: "1" }}
+                p={6}
                 flexDirection="column"
                 alignItems="center"
-                justifyContent="center"
+                justify="center"
               >
                 <Text fontWeight="bold" mb="6" fontSize="md">
                   {project.name}
                 </Text>
-                <Flex align="center">
-                  <Text mr="4" fontSize="md"></Text>
-                  <TbFileReport size="25" />
-                </Flex>
+                <TbFileReport size="25" />
               </Flex>
             </Link>
           ))}
         </Grid>
-      </Box>
+      </Flex>
     </Flex>
   );
 };

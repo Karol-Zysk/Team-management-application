@@ -96,40 +96,57 @@ const EmployeeDetails = ({}) => {
   };
 
   return (
-    <Box p={8} display="flex" justifyContent="space-around">
-      <Box display="flex" flexDirection="column">
-        <Heading mb={8}>Employee details</Heading>
-        <Text my={4}>First Name: {employee?.firstName}</Text>
-        <Text my={4}>Last Name: {employee?.lastName}</Text>
-        <Text my={4}>Hourly Rate: {employee?.hourlyRate}</Text>
-      </Box>
-      <Flex flexDirection="column" my={2}>
-        <Box display="flex">
-          <FormControl>
-            <FormLabel htmlFor="start-date">Time Period: from</FormLabel>
-            <Input
-              type="date"
-              id="start-date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-          </FormControl>
-          <FormControl ml={4}>
-            <FormLabel htmlFor="end-date">to</FormLabel>
-            <Input
-              type="date"
-              id="end-date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
-          </FormControl>
+    <Flex
+      p={8}
+      display="flex"
+      align="center"
+      flexDirection="column"
+      justifyContent="center"
+    >
+      <Heading mb={8}>Employee Report</Heading>
+      <Flex w="full" flexDirection="row">
+        <Box w="50%">
+          <Text fontSize="lg" my={4}>
+            <strong>First Name:</strong> {employee?.firstName}
+          </Text>
+          <Text fontSize="lg" my={4}>
+            <strong>Last Name: </strong>
+            {employee?.lastName}
+          </Text>
+          <Text fontSize="lg" my={4}>
+            <strong>Hourly Rate:</strong> {employee?.hourlyRate}
+          </Text>
+          <Flex flexDirection="column" w="min-content" my={2}>
+            <Box display="flex">
+              <FormControl>
+                <FormLabel htmlFor="start-date"> from</FormLabel>
+                <Input
+                  w="min-content"
+                  type="date"
+                  id="start-date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
+              </FormControl>
+              <FormControl ml={4}>
+                <FormLabel htmlFor="end-date">to</FormLabel>
+                <Input
+                  w="min-content"
+                  type="date"
+                  id="end-date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              </FormControl>
+            </Box>
+          </Flex>
+          <Button my={6} onClick={handleGenerateReport}>
+            Report
+          </Button>
         </Box>
-        <Box>
+        <Box w="50%" p="12">
           {" "}
           <Box>
-            <Button my={6} onClick={handleGenerateReport}>
-              Report
-            </Button>
             {loading ? (
               <Spinner />
             ) : (
@@ -140,7 +157,7 @@ const EmployeeDetails = ({}) => {
           </Box>
         </Box>
       </Flex>
-    </Box>
+    </Flex>
   );
 };
 
