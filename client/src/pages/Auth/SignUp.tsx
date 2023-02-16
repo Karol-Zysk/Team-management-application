@@ -49,13 +49,16 @@ const SignUp: React.FC = () => {
       headers.append("Content-Type", "application/json");
       headers.append("Accept", "application/json");
       headers.append("Origin", "http://localhost:5173");
-      const response = await fetch("http://127.0.0.1:4000/api/v1/auth/signup", {
-        method: "POST",
-        headers: headers,
-        credentials: "include",
-        cache: "no-store",
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "https://clock-app-uyb3.onrender.com/api/v1/auth/signup",
+        {
+          method: "POST",
+          headers: headers,
+          credentials: "include",
+          cache: "no-store",
+          body: JSON.stringify(formData),
+        }
+      );
       const result = await response.json();
       if (result.error) {
         toast({

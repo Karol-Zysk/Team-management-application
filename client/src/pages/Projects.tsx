@@ -25,12 +25,15 @@ const Projects = () => {
         return;
       }
       try {
-        const response = await fetch("http://127.0.0.1:4000/api/v1/projects", {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          "https://clock-app-uyb3.onrender.com/api/v1/projects",
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error(response.statusText);

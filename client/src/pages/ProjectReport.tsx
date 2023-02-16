@@ -34,7 +34,7 @@ const ProjectsReport = () => {
 
       setLoading(true);
       const response = await fetch(
-        `http://127.0.0.1:4000/api/v1/projects/report/${id}`,
+        `https://clock-app-uyb3.onrender.com/api/v1/projects/report/${id}`,
         {
           method: "POST",
           headers: {

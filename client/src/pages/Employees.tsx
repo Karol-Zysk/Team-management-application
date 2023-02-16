@@ -43,12 +43,15 @@ const Employees = () => {
       throw new Error("You're not logged in!");
     }
 
-    const response = await fetch("http://127.0.0.1:4000/api/v1/employees", {
-      method: "GET",
-      headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const response = await fetch(
+      "https://clock-app-uyb3.onrender.com/api/v1/employees",
+      {
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
 
     const data = await response.json();
 

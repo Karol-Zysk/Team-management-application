@@ -23,7 +23,7 @@ const ProjectReportsHistory = () => {
       throw new Error("You're not logged in!");
     }
     const response = await fetch(
-      "http://127.0.0.1:4000/api/v1/projects/reports",
+      "https://clock-app-uyb3.onrender.com/api/v1/projects/reports",
       {
         method: "GET",
         headers: {

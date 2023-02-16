@@ -13,7 +13,7 @@ const LogoutButton = () => {
 
   const handleLogout = async () => {
     try {
-      await fetch(`http://127.0.0.1:4000/api/v1/auth/logout`, {
+      await fetch(`https://clock-app-uyb3.onrender.com/api/v1/auth/logout`, {
         method: "GET",
         headers: {
           authorization: `Bearer ${localStorage.getItem("refresh_token")}`,

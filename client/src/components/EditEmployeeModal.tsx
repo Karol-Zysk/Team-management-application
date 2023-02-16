@@ -53,7 +53,7 @@ const EditModal: React.FC<ModalProps> = ({
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:4000/api/v1/employees/${employeeId}`,
+        `https://clock-app-uyb3.onrender.com/api/v1/employees/${employeeId}`,
         {
           method: "PATCH",
           headers: {
