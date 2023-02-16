@@ -8,4 +8,5 @@ export declare class SalaryController {
     geEmployeesSalary(user: User, dto: SalaryParamsDto): Promise<import(".prisma/client").Employee[]>;
     employeesSalaryReport(user: User, dto: EmployeesSalaryReporDto): Promise<import(".prisma/client").Report>;
     geEmployeeSalaryById(user: User, employeeId: string, dto: SalaryParamsDto): Promise<import(".prisma/client").Employee>;
+    getAllEmployeeSalaryReports(user: User): Promise<import(".prisma/client").Report[]>;
 }

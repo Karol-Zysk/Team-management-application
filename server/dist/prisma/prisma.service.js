@@ -30,6 +30,7 @@ let PrismaService = class PrismaService extends client_1.PrismaClient {
             this.project.deleteMany(),
             this.employee.deleteMany(),
             this.user.deleteMany(),
+            this.salaryHistory.deleteMany(),
         ]);
     }
 };

@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { User } from '@prisma/client';
 import Clockify from 'clockify-ts';
+import { userInfo } from 'os';
 import { CryptoService } from '../cryptography/crypto.service';
 import { EmployeesSalaryReporDto } from '../employee/dto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -307,9 +308,11 @@ export class ClockifyService {
     });
 
     try {
+      const { workspaceId } = await this.initClockify(user);
       const report = await this.prisma.report.create({
         data: {
-          reportName: `${user.companyName} report ${dto.date ? dto.date : ''}`,
+          reportName: `${user.companyName}. Period:  ${dto.start} to:  ${dto.end}`,
+          workspaceId,
           userId: user.id,
           employees: employeesSalary,
         },
@@ -317,6 +320,34 @@ export class ClockifyService {
       return report;
     } catch (error) {
       throw new UnauthorizedException(error.message);
+    }
+  }
+
+  async getAllProjectReports(user: User) {
+    console.log('elo');
+    try {
+      const { workspaceId } = await this.initClockify(user);
+
+      const projectReports = await this.prisma.project.findMany({
+        where: { userId: user.id, workspaceId },
+      });
+
+      return projectReports;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async getAllEmployeeSalaryReports(user: User) {
+    try {
+      const { workspaceId } = await this.initClockify(user);
+      const salaryReports = await this.prisma.report.findMany({
+        where: { userId: user.id, workspaceId },
+      });
+
+      return salaryReports;
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
   }
 }

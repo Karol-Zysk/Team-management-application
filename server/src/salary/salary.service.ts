@@ -34,4 +34,8 @@ export class SalaryService {
       throw new BadRequestException(error.message);
     }
   }
+
+  async getAllEmployeeSalaryReports(user: User) {
+    return this.clockify.getAllEmployeeSalaryReports(user);
+  }
 }

@@ -35,6 +35,9 @@ let SalaryController = class SalaryController {
     geEmployeeSalaryById(user, employeeId, dto) {
         return this.salaryService.createEmployeeSalaryById(user, dto, employeeId);
     }
+    getAllEmployeeSalaryReports(user) {
+        return this.salaryService.getAllEmployeeSalaryReports(user);
+    }
 };
 __decorate([
     (0, request_mapping_decorator_1.Post)(''),
@@ -61,6 +64,13 @@ __decorate([
     __metadata("design:paramtypes", [Object, String, dto_1.SalaryParamsDto]),
     __metadata("design:returntype", void 0)
 ], SalaryController.prototype, "geEmployeeSalaryById", null);
+__decorate([
+    (0, request_mapping_decorator_1.Get)(),
+    __param(0, (0, decorators_1.GetUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], SalaryController.prototype, "getAllEmployeeSalaryReports", null);
 SalaryController = __decorate([
     (0, use_guards_decorator_1.UseGuards)(guard_1.JwtGuard),
     (0, common_1.Controller)('salary'),

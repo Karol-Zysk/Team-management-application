@@ -31,6 +31,10 @@ export class EmployeeController {
   async syncClockifyEmployees(@GetUser() user: User) {
     return await this.employeeService.syncClockifyEmployees(user);
   }
+  @Get('clean')
+  async clean() {
+    return await this.prisma.cleanDB();
+  }
 
   @Post()
   createEmployee(@Body() dto: CreateEmployeeDto, @GetUser() user: User) {

@@ -111,6 +111,7 @@ export class ProjectsService {
           budgetEstimate,
           timeEstimate,
           summary,
+          workspaceId,
           note: dto.note || project.note,
           memberships: member,
           active: !project.archived,
@@ -140,6 +141,9 @@ export class ProjectsService {
     } catch (error) {
       throw new UnauthorizedException(error.message);
     }
+  }
+  async getAllProjectReports(user: User) {
+    return this.clockify.getAllProjectReports(user);
   }
 
   async updateProjectReport(

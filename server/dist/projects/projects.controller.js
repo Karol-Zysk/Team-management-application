@@ -24,6 +24,9 @@ let ProjectsController = class ProjectsController {
     constructor(projectsService) {
         this.projectsService = projectsService;
     }
+    async getAllProjectReports(user) {
+        return this.projectsService.getAllProjectReports(user);
+    }
     async getProjects(user) {
         return this.projectsService.getProjects(user);
     }
@@ -49,6 +52,13 @@ let ProjectsController = class ProjectsController {
         return this.projectsService.updateProjectReport(projectId, dto, user);
     }
 };
+__decorate([
+    (0, common_1.Get)('reports'),
+    __param(0, (0, decorators_1.GetUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ProjectsController.prototype, "getAllProjectReports", null);
 __decorate([
     (0, common_1.Get)(),
     __param(0, (0, decorators_1.GetUser)()),

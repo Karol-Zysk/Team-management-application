@@ -41,4 +41,9 @@ export class SalaryController {
   ) {
     return this.salaryService.createEmployeeSalaryById(user, dto, employeeId);
   }
+
+  @Get()
+  getAllEmployeeSalaryReports(@GetUser() user: User) {
+    return this.salaryService.getAllEmployeeSalaryReports(user);
+  }
 }

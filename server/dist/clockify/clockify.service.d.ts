@@ -29,4 +29,6 @@ export declare class ClockifyService {
     geEmployeeSalaryById(user: User, dto: SalaryParamsDto, employeeId: string): Promise<import(".prisma/client").Employee>;
     projectReport(user: User, projectId: string, dto: ReportParamsDto): Promise<any>;
     employeesSalaryReport(user: User, dto: EmployeesSalaryReporDto): Promise<import(".prisma/client").Report>;
+    getAllProjectReports(user: User): Promise<import(".prisma/client").Project[]>;
+    getAllEmployeeSalaryReports(user: User): Promise<import(".prisma/client").Report[]>;
 }

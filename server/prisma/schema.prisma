@@ -57,6 +57,7 @@ model Project {
   active           Boolean
   projectName      String
   projectStartDate String
+  workspaceId      String
   duration         Float
   budgetEstimate   Float?   @default(0)
   timeEstimate     Float?   @default(0)
@@ -70,13 +71,14 @@ model Project {
 }
 
 model Report {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  reportName String?
-  employees  Json[]
-  userId     String   @db.ObjectId
-  user       User     @relation(fields: [userId], references: [id])
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  workspaceId String
+  reportName  String?
+  employees   Json[]
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id])
 }
 
 model SalaryHistory {

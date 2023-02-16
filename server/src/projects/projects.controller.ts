@@ -24,6 +24,11 @@ import { HttpStatus } from '@nestjs/common/enums';
 export class ProjectsController {
   constructor(private projectsService: ProjectsService) {}
 
+  @Get('reports')
+  async getAllProjectReports(@GetUser() user: User) {
+    return this.projectsService.getAllProjectReports(user);
+  }
+
   @Get()
   async getProjects(@GetUser() user: User) {
     return this.projectsService.getProjects(user);

@@ -240,9 +240,11 @@ let ClockifyService = class ClockifyService {
             };
         });
         try {
+            const { workspaceId } = await this.initClockify(user);
             const report = await this.prisma.report.create({
                 data: {
-                    reportName: `${user.companyName} report ${dto.date ? dto.date : ''}`,
+                    reportName: `${user.companyName}. Period:  ${dto.start} to:  ${dto.end}`,
+                    workspaceId,
                     userId: user.id,
                     employees: employeesSalary,
                 },
@@ -251,6 +253,31 @@ let ClockifyService = class ClockifyService {
         }
         catch (error) {
             throw new common_1.UnauthorizedException(error.message);
+        }
+    }
+    async getAllProjectReports(user) {
+        console.log('elo');
+        try {
+            const { workspaceId } = await this.initClockify(user);
+            const projectReports = await this.prisma.project.findMany({
+                where: { userId: user.id, workspaceId },
+            });
+            return projectReports;
+        }
+        catch (error) {
+            throw new common_1.BadRequestException(error.message);
+        }
+    }
+    async getAllEmployeeSalaryReports(user) {
+        try {
+            const { workspaceId } = await this.initClockify(user);
+            const salaryReports = await this.prisma.report.findMany({
+                where: { userId: user.id, workspaceId },
+            });
+            return salaryReports;
+        }
+        catch (error) {
+            throw new common_1.BadRequestException(error.message);
         }
     }
 };

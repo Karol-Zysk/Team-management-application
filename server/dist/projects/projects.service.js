@@ -92,6 +92,7 @@ let ProjectsService = class ProjectsService {
                     budgetEstimate,
                     timeEstimate,
                     summary,
+                    workspaceId,
                     note: dto.note || project.note,
                     memberships: member,
                     active: !project.archived,
@@ -122,6 +123,9 @@ let ProjectsService = class ProjectsService {
         catch (error) {
             throw new exceptions_1.UnauthorizedException(error.message);
         }
+    }
+    async getAllProjectReports(user) {
+        return this.clockify.getAllProjectReports(user);
     }
     async updateProjectReport(projectId, dto, user) {
         try {

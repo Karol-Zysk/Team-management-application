@@ -29,6 +29,9 @@ let EmployeeController = class EmployeeController {
     async syncClockifyEmployees(user) {
         return await this.employeeService.syncClockifyEmployees(user);
     }
+    async clean() {
+        return await this.prisma.cleanDB();
+    }
     createEmployee(dto, user) {
         return this.employeeService.createEmployee(dto, user);
     }
@@ -55,6 +58,12 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], EmployeeController.prototype, "syncClockifyEmployees", null);
+__decorate([
+    (0, common_1.Get)('clean'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], EmployeeController.prototype, "clean", null);
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),

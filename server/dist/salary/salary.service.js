@@ -33,6 +33,9 @@ let SalaryService = class SalaryService {
             throw new exceptions_1.BadRequestException(error.message);
         }
     }
+    async getAllEmployeeSalaryReports(user) {
+        return this.clockify.getAllEmployeeSalaryReports(user);
+    }
 };
 SalaryService = __decorate([
     (0, common_1.Injectable)(),

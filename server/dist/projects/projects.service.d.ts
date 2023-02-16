@@ -13,5 +13,6 @@ export declare class ProjectsService {
     deleteProject(user: User, projectId: string): Promise<void>;
     createProjectReport(user: User, projectId: string, dto: ReportParamsDto): Promise<import(".prisma/client").Project>;
     deleteProjectReport(projectId: string): Promise<void>;
+    getAllProjectReports(user: User): Promise<import(".prisma/client").Project[]>;
     updateProjectReport(projectId: string, dto: UpdateReportDto, user: User): Promise<import(".prisma/client").Project>;
 }

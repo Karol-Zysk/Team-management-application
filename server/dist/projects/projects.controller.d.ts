@@ -4,6 +4,7 @@ import { CreateProjectDto, ReportParamsDto, UpdateReportDto, UpdateProjectDto } 
 export declare class ProjectsController {
     private projectsService;
     constructor(projectsService: ProjectsService);
+    getAllProjectReports(user: User): Promise<import(".prisma/client").Project[]>;
     getProjects(user: User): Promise<import("clockify-ts/dist/cjs/Types/ProjectType").ProjectType[]>;
     getProjectsById(user: User, projectId: string): Promise<import("clockify-ts/dist/cjs/Types/ProjectType").ProjectType>;
     createProject(user: User, payload: CreateProjectDto): Promise<import("clockify-ts/dist/cjs/Types/ProjectType").ProjectType>;
