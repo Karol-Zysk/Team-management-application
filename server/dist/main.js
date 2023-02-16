@@ -11,7 +11,7 @@ async function bootstrap() {
         whitelist: true,
     }));
     app.enableCors({
-        origin: 'https://sp-dashboard.netlify.app/',
+        origin: 'https://sp-dashboard.netlify.app',
         credentials: true,
     });
     await app.listen(port);
