@@ -13,6 +13,7 @@ import {
 import { useContext } from "react";
 import { AccountContext } from "../../context/AccountContext";
 import { TeamReport } from "../../interfaces/SalaryReportInterface";
+import { baseUrl } from "../../utils/origin";
 
 const ReportsHistory = () => {
   const { setSalaryReport } = useContext(AccountContext);
@@ -22,15 +23,12 @@ const ReportsHistory = () => {
     if (!accessToken) {
       throw new Error("You're not logged in!");
     }
-    const response = await fetch(
-      "https://clock-app-uyb3.onrender.com/api/v1/salary",
-      {
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const response = await fetch(`${baseUrl}/salary`, {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
     const data = await response.json();
     console.log(data);
 

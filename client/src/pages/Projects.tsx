@@ -5,6 +5,7 @@ import { TbFileReport } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import ProjectReportsHistory from "../components/Reports/ProjectReportsHistory";
 import ProjectReportCard from "../components/Reports/ProjectReportCard";
+import { baseUrl } from "../utils/origin";
 
 interface Project {
   id: string;
@@ -13,7 +14,8 @@ interface Project {
 
 const Projects = () => {
   const toast = useToast();
-  const { error, setError, user, projectReport } = useContext(AccountContext);
+  const { error, setError, user, projectReport, setProjectReport } =
+    useContext(AccountContext);
   const activeUser = user as UserData;
   const [projects, setProjects] = useState<Project[]>([]);
 
@@ -25,15 +27,12 @@ const Projects = () => {
         return;
       }
       try {
-        const response = await fetch(
-          "https://clock-app-uyb3.onrender.com/api/v1/projects",
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await fetch(`${baseUrl}/projects`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        });
 
         if (!response.ok) {
           throw new Error(response.statusText);
@@ -41,6 +40,7 @@ const Projects = () => {
 
         const data = await response.json();
         setProjects(data);
+        setProjectReport(null);
       } catch (err: any) {
         setError(err.message);
         toast({

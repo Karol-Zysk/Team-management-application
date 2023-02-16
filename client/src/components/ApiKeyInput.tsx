@@ -11,6 +11,7 @@ import {
 import { useContext } from "react";
 import { AccountContext } from "../context/AccountContext";
 import { motion } from "framer-motion";
+import { baseUrl } from "../utils/origin";
 
 interface InputProps {
   error: any;
@@ -54,20 +55,17 @@ const ApiKeyInput: React.FC<InputProps> = ({}) => {
     }
 
     try {
-      const response = await fetch(
-        `https://clock-app-uyb3.onrender.com/api/v1/users`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({
-            clockify_api_key: apiKey,
-            companyName: companyName,
-          }),
-        }
-      );
+      const response = await fetch(`${baseUrl}/users`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          clockify_api_key: apiKey,
+          companyName: companyName,
+        }),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();

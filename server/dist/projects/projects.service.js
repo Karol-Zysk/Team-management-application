@@ -111,7 +111,7 @@ let ProjectsService = class ProjectsService {
     async deleteProjectReport(projectId) {
         try {
             const report = await this.prisma.project.findFirst({
-                where: { projectId },
+                where: { id: projectId },
             });
             if (!report)
                 throw new exceptions_1.NotFoundException('Invalid Id');

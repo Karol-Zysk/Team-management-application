@@ -4,6 +4,7 @@ import { useToast } from "@chakra-ui/toast";
 
 import { AccountContext } from "../context/AccountContext";
 import { useNavigate } from "react-router";
+import { baseUrl } from "../utils/origin";
 
 const LogoutButton = () => {
   const { setIsLoggedIn, setUser } = useContext(AccountContext);
@@ -13,7 +14,7 @@ const LogoutButton = () => {
 
   const handleLogout = async () => {
     try {
-      await fetch(`https://clock-app-uyb3.onrender.com/api/v1/auth/logout`, {
+      await fetch(`${baseUrl}/auth/logout`, {
         method: "GET",
         headers: {
           authorization: `Bearer ${localStorage.getItem("refresh_token")}`,

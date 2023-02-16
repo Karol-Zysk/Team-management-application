@@ -8,7 +8,7 @@ import theme from "./theme";
 import { AccountContextProvider } from "./context/AccountContext";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

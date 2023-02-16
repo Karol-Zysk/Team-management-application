@@ -256,7 +256,6 @@ let ClockifyService = class ClockifyService {
         }
     }
     async getAllProjectReports(user) {
-        console.log('elo');
         try {
             const { workspaceId } = await this.initClockify(user);
             const projectReports = await this.prisma.project.findMany({

@@ -324,7 +324,6 @@ export class ClockifyService {
   }
 
   async getAllProjectReports(user: User) {
-    console.log('elo');
     try {
       const { workspaceId } = await this.initClockify(user);
 

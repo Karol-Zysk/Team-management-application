@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useState, useContext, useEffect } from "react";
 import {
   Table,
   Thead,
@@ -8,66 +8,117 @@ import {
   Td,
   Spinner,
   Flex,
-  Text,
+  Button,
 } from "@chakra-ui/react";
-import { useContext } from "react";
 import { AccountContext } from "../../context/AccountContext";
 import { ProjectReport } from "../../interfaces/ProjectReportInterface";
+import { baseUrl } from "../../utils/origin";
 
 const ProjectReportsHistory = () => {
   const { setProjectReport } = useContext(AccountContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [reports, setReports] = useState<ProjectReport[]>([]);
 
-  const { isLoading, isError, data } = useQuery("reports", async () => {
-    const accessToken = localStorage.getItem("access_token");
-    if (!accessToken) {
-      throw new Error("You're not logged in!");
-    }
-    const response = await fetch(
-      "https://clock-app-uyb3.onrender.com/api/v1/projects/reports",
-      {
+  useEffect(() => {
+    fetchReports();
+  }, []);
+
+  const fetchReports = async () => {
+    try {
+      setIsLoading(true);
+      const accessToken = localStorage.getItem("access_token");
+      if (!accessToken) {
+        throw new Error("You're not logged in!");
+      }
+      const response = await fetch(`${baseUrl}/projects/reports`, {
         method: "GET",
         headers: {
           authorization: `Bearer ${accessToken}`,
         },
+      });
+      const data = await response.json();
+      console.log(data);
+
+      if (!response.ok) {
+        console.error(`Error: ${data.message}`);
+        throw new Error(data.message);
       }
-    );
-    const data = await response.json();
-    console.log(data);
 
-    if (!response.ok) {
-      console.error(`Error: ${data.message}`);
-      throw new Error(data.message);
+      setReports(data);
+    } catch (error: any) {
+      setError(error);
+    } finally {
+      setIsLoading(false);
     }
+  };
 
-    return data;
-  });
-  const reports = data as ProjectReport[];
+  const deleteReport = async (id: string) => {
+    try {
+      setIsLoading(true);
+      const accessToken = localStorage.getItem("access_token");
+      if (!accessToken) {
+        throw new Error("You're not logged in!");
+      }
+      await fetch(`${baseUrl}/projects/report/${id}`, {
+        method: "DELETE",
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      setProjectReport(null);
+      setReports((reports) => {
+        return reports.filter((report) => report.id !== id);
+      });
+    } catch (error: any) {
+      setError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleReportClick = (report: ProjectReport) => {
+    setProjectReport(report);
+  };
+
   if (isLoading) return <Spinner />;
-  if (isError) return <div>Something went wrong...</div>;
+  if (error) return <div>{error.message}</div>;
 
   return (
     <>
       {reports.length > 0 ? (
         <Flex flexDirection="column" mt="12">
-          <Table w="max-content" variant="simple">
+          <Table w="100%" variant="striped">
             <Thead>
               <Tr>
                 <Th>Report Name</Th>
+                <Th>Delete</Th>
               </Tr>
             </Thead>
             <Tbody h="min-content">
-              {data.map((report: ProjectReport) => {
+              {reports.map((report: ProjectReport) => {
                 return (
                   <Tr
-                    onClick={() => {
-                      setProjectReport(report);
-                    }}
                     opacity="0.7"
                     cursor="pointer"
                     _hover={{ opacity: 1, transition: "ease" }}
                     key={report.id}
                   >
-                    <Td>{report.projectName}</Td>
+                    <Td onClick={() => handleReportClick(report)}>
+                      {report.projectName}
+                    </Td>
+                    <Td>
+                      <Button
+                        variant="solid"
+                        size="sm"
+                        border="1px"
+                        onClick={() => deleteReport(report.id)}
+                        disabled={isLoading}
+                      >
+                        {isLoading ? "Deleting..." : "Delete"}
+                      </Button>
+                    </Td>
                   </Tr>
                 );
               })}
@@ -75,7 +126,7 @@ const ProjectReportsHistory = () => {
           </Table>
         </Flex>
       ) : (
-        "Already Empty"
+        "Project History Already Empty"
       )}
     </>
   );

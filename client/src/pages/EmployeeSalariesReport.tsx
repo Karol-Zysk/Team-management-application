@@ -16,6 +16,7 @@ import ReportsHistory from "../components/Reports/ProjectReportsHistory";
 import TeamSalaryReport from "../components/Reports/TeamSalaryReport";
 import { AccountContext } from "../context/AccountContext";
 import { motion } from "framer-motion";
+import { baseUrl } from "../utils/origin";
 
 const EmployeesSalariesReport = () => {
   const [startDate, setStartDate] = useState("");
@@ -30,17 +31,14 @@ const EmployeesSalariesReport = () => {
       const accessToken = localStorage.getItem("access_token");
 
       setLoading(true);
-      const response = await fetch(
-        `https://clock-app-uyb3.onrender.com/api/v1/salary/report`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({ start: startDate, end: endDate }),
-        }
-      );
+      const response = await fetch(`${baseUrl}/salary/report`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ start: startDate, end: endDate }),
+      });
       if (!response.ok) {
         const data = await response.json();
         toast({

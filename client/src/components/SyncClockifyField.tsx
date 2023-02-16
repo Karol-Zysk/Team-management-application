@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { AccountContext } from "../context/AccountContext";
 import { Employee } from "../interfaces/EmployeeInterface";
 import { motion } from "framer-motion";
+import { baseUrl } from "../utils/origin";
 
 const SyncClockifyField = () => {
   const [employee, setEmployee] = useState<Employee[]>([]);
@@ -16,15 +17,12 @@ const SyncClockifyField = () => {
     }
 
     try {
-      const response = await fetch(
-        "https://clock-app-uyb3.onrender.com/api/v1/employees/syncclockify",
-        {
-          method: "POST",
-          headers: {
-            authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await fetch(`${baseUrl}/employees/syncclockify`, {
+        method: "POST",
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      });
 
       const data = await response.json();
 

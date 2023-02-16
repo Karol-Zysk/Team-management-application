@@ -5,6 +5,7 @@ import {
   SalaryReportInterface,
   TeamReport,
 } from "../interfaces/SalaryReportInterface";
+import { baseUrl } from "../utils/origin";
 
 export interface UserData {
   id: string;
@@ -83,15 +84,12 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
     if (!refreshToken) return;
 
     try {
-      const res = await fetch(
-        `https://clock-app-uyb3.onrender.com/api/v1/auth/refresh`,
-        {
-          method: "GET",
-          headers: {
-            authorization: `Bearer ${refreshToken}`,
-          },
-        }
-      );
+      const res = await fetch(`${baseUrl}/auth/refresh`, {
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${refreshToken}`,
+        },
+      });
       const data = await res.json();
 
       if (data.access_token) {
@@ -123,7 +121,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
-    fetch(`https://clock-app-uyb3.onrender.com/api/v1/users/me`, {
+    fetch(`${baseUrl}/users/me`, {
       headers: {
         authorization: `Bearer ${accessToken}`,
       },

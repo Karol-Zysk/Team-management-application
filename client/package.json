@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "set NODE_ENV=development && vite",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
@@ -23,6 +23,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@types/node": "^18.13.0",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.9",
     "@vitejs/plugin-react": "^3.0.0",

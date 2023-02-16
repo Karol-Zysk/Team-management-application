@@ -18,6 +18,7 @@ import EditModal from "../components/EditEmployeeModal";
 import { AccountContext } from "../context/AccountContext";
 import { Employee } from "../interfaces/EmployeeInterface";
 import { useQuery } from "react-query";
+import { baseUrl } from "../utils/origin";
 
 const Employees = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,15 +44,12 @@ const Employees = () => {
       throw new Error("You're not logged in!");
     }
 
-    const response = await fetch(
-      "https://clock-app-uyb3.onrender.com/api/v1/employees",
-      {
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const response = await fetch(`${baseUrl}/employees`, {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
 
     const data = await response.json();
 

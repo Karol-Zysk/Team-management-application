@@ -15,6 +15,7 @@ import { useParams } from "react-router";
 import EmployeeSalaryReport from "../components/Reports/EmployeeSalaryReport";
 import { AccountContext } from "../context/AccountContext";
 import { Employee } from "../interfaces/EmployeeInterface";
+import { baseUrl } from "../utils/origin";
 
 const EmployeeDetails = ({}) => {
   const [startDate, setStartDate] = useState("");
@@ -41,15 +42,12 @@ const EmployeeDetails = ({}) => {
     }
 
     try {
-      const response = await fetch(
-        `https://clock-app-uyb3.onrender.com/api/v1/employees/${id}`,
-        {
-          method: "GET",
-          headers: {
-            authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await fetch(`${baseUrl}/employees/${id}`, {
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      });
 
       const data = await response.json();
 
@@ -78,17 +76,14 @@ const EmployeeDetails = ({}) => {
     const accessToken = localStorage.getItem("access_token");
 
     setLoading(true);
-    const response = await fetch(
-      `https://clock-app-uyb3.onrender.com/api/v1/salary/${employee?.clockifyId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ start: startDate, end: endDate }),
-      }
-    );
+    const response = await fetch(`${baseUrl}/salary/${employee?.clockifyId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ start: startDate, end: endDate }),
+    });
     const data = await response.json();
     setSalaryReport(data);
 

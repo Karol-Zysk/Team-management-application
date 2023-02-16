@@ -1,7 +1,6 @@
 import {
   Box,
   Flex,
-  Link,
   Button,
   useDisclosure,
   useColorModeValue,
@@ -16,6 +15,7 @@ import { useContext } from "react";
 import { AccountContext } from "../context/AccountContext";
 import { motion } from "framer-motion";
 import LogoutButton from "./LogoutButton";
+import { Link } from "react-router-dom";
 
 type LinkType = {
   children: {
@@ -44,18 +44,7 @@ const Links = [
 ];
 
 const NavLink: React.FC<LinkType> = ({ children }) => (
-  <Link
-    px={2}
-    mt="3"
-    py={1}
-    _hover={{
-      textDecoration: "none",
-      bg: useColorModeValue("gray.200", "gray.700"),
-    }}
-    href={children.href}
-  >
-    {children.link}
-  </Link>
+  <Link to={children.href}>{children.link}</Link>
 );
 
 export default function Nav({}) {

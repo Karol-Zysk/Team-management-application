@@ -13,6 +13,7 @@ import {
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import { AccountContext } from "../../context/AccountContext";
+import { baseUrl, origin } from "../../utils/origin";
 
 interface FormData {
   name: string;
@@ -48,17 +49,14 @@ const SignUp: React.FC = () => {
       let headers = new Headers();
       headers.append("Content-Type", "application/json");
       headers.append("Accept", "application/json");
-      headers.append("Origin", "https://sp-dashboard.netlify.app");
-      const response = await fetch(
-        "https://clock-app-uyb3.onrender.com/api/v1/auth/signup",
-        {
-          method: "POST",
-          headers: headers,
-          credentials: "include",
-          cache: "no-store",
-          body: JSON.stringify(formData),
-        }
-      );
+      headers.append("Origin", origin);
+      const response = await fetch(`${baseUrl}/auth/signup`, {
+        method: "POST",
+        headers: headers,
+        credentials: "include",
+        cache: "no-store",
+        body: JSON.stringify(formData),
+      });
       const result = await response.json();
       if (result.error) {
         toast({

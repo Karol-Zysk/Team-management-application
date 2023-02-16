@@ -16,6 +16,7 @@ import { useParams } from "react-router";
 import DateInputs from "../components/DateInputs";
 import ProjectReportCard from "../components/Reports/ProjectReportCard";
 import { AccountContext } from "../context/AccountContext";
+import { baseUrl } from "../utils/origin";
 
 const ProjectsReport = () => {
   const { projectReport, setProjectReport } = useContext(AccountContext);
@@ -33,22 +34,19 @@ const ProjectsReport = () => {
       const accessToken = localStorage.getItem("access_token");
 
       setLoading(true);
-      const response = await fetch(
-        `https://clock-app-uyb3.onrender.com/api/v1/projects/report/${id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({
-            timeEstimate: Number(timeEstimate),
-            budgetEstimate: Number(budgetEstimate),
-            note,
-            start: startDate,
-          }),
-        }
-      );
+      const response = await fetch(`${baseUrl}/projects/report/${id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          timeEstimate: Number(timeEstimate),
+          budgetEstimate: Number(budgetEstimate),
+          note,
+          start: startDate,
+        }),
+      });
       if (!response.ok) {
         const data = await response.json();
         toast({
@@ -95,7 +93,7 @@ const ProjectsReport = () => {
           <Text>hours</Text>
         </VStack>
         <FormLabel mt="6" htmlFor="budgetEstimate">
-          Budget Estimate`
+          Budget Estimate
         </FormLabel>
         <VStack mt="4" h="min-content" flexDirection="row" align="center">
           <Input

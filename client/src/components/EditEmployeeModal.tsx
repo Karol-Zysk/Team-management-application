@@ -16,6 +16,7 @@ import {
 import { useContext, useState } from "react";
 import { AccountContext } from "../context/AccountContext";
 import { Employee } from "../interfaces/EmployeeInterface";
+import { baseUrl } from "../utils/origin";
 
 type ModalProps = {
   handleCloseModal: () => void;
@@ -52,22 +53,19 @@ const EditModal: React.FC<ModalProps> = ({
     }
 
     try {
-      const response = await fetch(
-        `https://clock-app-uyb3.onrender.com/api/v1/employees/${employeeId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({
-            hourlyRate: hourlyRate && hourlyRate,
-            firstName: firstName && firstName,
-            lastName: lastName && lastName,
-            profilePicture: profilePicture && profilePicture,
-          }),
-        }
-      );
+      const response = await fetch(`${baseUrl}/employees/${employeeId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          hourlyRate: hourlyRate && hourlyRate,
+          firstName: firstName && firstName,
+          lastName: lastName && lastName,
+          profilePicture: profilePicture && profilePicture,
+        }),
+      });
 
       if (!response.ok) {
         throw new Error();

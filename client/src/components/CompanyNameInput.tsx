@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { useContext } from "react";
 import { AccountContext } from "../context/AccountContext";
+import { baseUrl } from "../utils/origin";
 
 interface InputProps {
   error: any;
@@ -38,19 +39,16 @@ const CompanyNameInput: React.FC<InputProps> = ({}) => {
     }
 
     try {
-      const response = await fetch(
-        `https://clock-app-uyb3.onrender.com/api/v1/users`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({
-            companyName: companyName,
-          }),
-        }
-      );
+      const response = await fetch(`${baseUrl}/users`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          companyName: companyName,
+        }),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();

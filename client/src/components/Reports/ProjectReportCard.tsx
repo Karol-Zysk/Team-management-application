@@ -46,11 +46,11 @@ const ProjectReportCard: React.FC<ProjectReportProps> = ({ projectReport }) => {
           <strong>Total project time:</strong> {duration} h{" "}
         </Text>
         <Text mb="2" fontSize="md">
-          <strong>Budget Estimate:</strong> {budgetEstimate}{" "}
+          <strong>Budget Estimate:</strong> {budgetEstimate} zł
         </Text>
         <Text mb="2" fontSize="md">
           {" "}
-          <strong>Time Estimate:</strong> {timeEstimate}{" "}
+          <strong>Time Estimate:</strong> {timeEstimate} h
         </Text>
         <Text mb="2" fontSize="md">
           {" "}
