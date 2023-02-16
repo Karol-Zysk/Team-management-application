@@ -83,7 +83,7 @@ const ProjectReportsHistory = () => {
   };
 
   if (isLoading) return <Spinner />;
-  if (error) return <div>{error.message}</div>;
+  if (error) return <div>Something went wrong</div>;
 
   return (
     <>
