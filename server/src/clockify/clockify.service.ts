@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { User } from '@prisma/client';
 import Clockify from 'clockify-ts';
-import { userInfo } from 'os';
 import { CryptoService } from '../cryptography/crypto.service';
 import { EmployeesSalaryReporDto } from '../employee/dto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -296,6 +295,7 @@ export class ClockifyService {
         hoursWorked,
         salary,
       } = data;
+
       return {
         firstName,
         lastName,
