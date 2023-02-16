@@ -13,7 +13,7 @@ async function bootstrap() {
     }),
   );
   app.enableCors({
-    origin: 'https://benevolent-sfogliatella-cd06db.netlify.app/',
+    origin: 'https://sp-dashboard.netlify.app/',
     credentials: true,
   });
 

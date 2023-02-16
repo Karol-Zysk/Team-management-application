@@ -42,7 +42,7 @@ const Login: React.FC = () => {
       let headers = new Headers();
       headers.append("Content-Type", "application/json");
       headers.append("Accept", "application/json");
-      headers.append("Origin", "https://benevolent-sfogliatella-cd06db.netlify.app");
+      headers.append("Origin", "https://sp-dashboard.netlify.app");
       const response = await fetch(
         "https://clock-app-uyb3.onrender.com/api/v1/auth/signin",
         {
