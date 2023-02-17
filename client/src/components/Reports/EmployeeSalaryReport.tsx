@@ -19,15 +19,26 @@ const EmployeeSalaryReport: React.FC<ReportProps> = ({
   },
 }) => {
   return (
-    <Box p={5} shadow="md" w="full" borderWidth="1px">
-      <Flex align="center">
+    <Box shadow="md" borderWidth="1px" w="full">
+      <Flex
+        p={8}
+        direction={["column", "row"]}
+        align={["flex-start", "center"]}
+      >
         {profilePicture ? (
-          <Image src={profilePicture} mr={3} />
+          <Image
+            src={profilePicture}
+            mr={[0, 3]}
+            mb={[3, 0]}
+            boxSize="50px"
+            borderRadius="full"
+          />
         ) : (
           <Box
             as={SunIcon}
             size="50px"
-            mr={3}
+            mr={[0, 3]}
+            mb={[3, 0]}
             bg="gray.300"
             color="gray.700"
             borderRadius="full"
@@ -41,15 +52,15 @@ const EmployeeSalaryReport: React.FC<ReportProps> = ({
       </Box>
       <Box mt={2}>
         <Text fontWeight="bold">Godziny pracy:</Text>
-        <Text>{hoursWorked}</Text>
+        <Text>{hoursWorked ? hoursWorked : 0}</Text>
       </Box>
       <Box mt={2}>
         <Text fontWeight="bold">Hourly rate:</Text>
-        <Text>{hourlyRate}zł/h</Text>
+        <Text>{hourlyRate ? hourlyRate : 0}zł/h</Text>
       </Box>
       <Box mt={2}>
         <Text fontWeight="bold">Salary:</Text>
-        <Text>{salary.toFixed(0)}zł</Text>
+        <Text>{salary ? Number(salary.toFixed(1)) : 0}zł</Text>
       </Box>
     </Box>
   );

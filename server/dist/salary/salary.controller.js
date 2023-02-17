@@ -35,8 +35,9 @@ let SalaryController = class SalaryController {
     deleteEmployeeSalaryReport(salaryId) {
         return this.salaryService.deleteEmployeeSalaryReport(salaryId);
     }
-    geEmployeeSalaryById(user, employeeId, dto) {
-        return this.salaryService.createEmployeeSalaryById(user, dto, employeeId);
+    async geEmployeeSalaryById(user, employeeId, dto) {
+        const salary = await this.salaryService.createEmployeeSalaryById(user, dto, employeeId);
+        return salary;
     }
     getAllEmployeeSalaryReports(user) {
         return this.salaryService.getAllEmployeeSalaryReports(user);
@@ -72,7 +73,7 @@ __decorate([
     __param(2, (0, route_params_decorator_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, String, dto_1.SalaryParamsDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], SalaryController.prototype, "geEmployeeSalaryById", null);
 __decorate([
     (0, request_mapping_decorator_1.Get)(),

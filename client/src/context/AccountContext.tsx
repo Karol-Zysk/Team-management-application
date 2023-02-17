@@ -84,6 +84,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
     setIsLoggedIn(false);
     setIsSync(false);
     setIsActive(false);
+    setCompanyName("");
   };
 
   const refreshAccessToken = async () => {

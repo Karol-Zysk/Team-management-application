@@ -43,7 +43,6 @@ const ReportsHistory = () => {
         },
       });
       const data = await response.json();
-      console.log(data);
 
       if (!response.ok) {
         console.error(`Error: ${data.message}`);
@@ -86,11 +85,15 @@ const ReportsHistory = () => {
   if (error) return <div>Something went wrong...</div>;
 
   return (
-    <Flex flexDirection="column" mt="12">
+    <Flex
+      flexDirection="column"
+      w={{ base: "full", md: "max-content" }}
+      mt="12"
+    >
       <Text fontWeight="bold" fontSize="2xl" mb="6">
         Reports History
       </Text>
-      <Table w="max-content" variant="simple">
+      <Table w="full" variant="striped">
         <Thead>
           <Tr>
             <Th>Report Name</Th>

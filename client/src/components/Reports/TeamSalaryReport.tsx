@@ -22,7 +22,7 @@ const TeamSalaryReport: React.FC<TeamSalaryProps> = ({
   start,
   end,
 }) => {
-  const { createdAt, employees, id, reportName } = salaryReport;
+  const { employees, id, reportName } = salaryReport;
 
   return (
     <Box p={5} shadow="md">
@@ -35,9 +35,6 @@ const TeamSalaryReport: React.FC<TeamSalaryProps> = ({
         <Text fontWeight="bold">Report ID:</Text> {id}
       </Box>
 
-      <Box mb={5}>
-        <Text fontWeight="bold">Data utworzenia:</Text> {createdAt}
-      </Box>
       {start && end && (
         <Box mb={5}>
           <Text fontWeight="bold">Time period:</Text>from: {start}, to: {end}
@@ -48,7 +45,7 @@ const TeamSalaryReport: React.FC<TeamSalaryProps> = ({
         <Text fontSize="2xl" mb="8" fontWeight="bold">
           Employees:
         </Text>
-        <Table>
+        <Table w="min" variant="striped">
           <Thead>
             <Tr>
               <Th>Name</Th>
@@ -61,9 +58,7 @@ const TeamSalaryReport: React.FC<TeamSalaryProps> = ({
           <Tbody>
             {employees.map((employee) => (
               <Tr key={employee.email}>
-                <Td>
-                  {employee.firstName} {employee.lastName}
-                </Td>
+                <Td>{employee.clockifyName}</Td>
                 <Td>{employee.email}</Td>
                 <Td>{employee.hourlyRate}zł/h</Td>
                 <Td>{employee.hoursWorked}</Td>

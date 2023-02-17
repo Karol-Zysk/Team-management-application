@@ -30,11 +30,10 @@ const EmployeeDetails = ({}) => {
   const [employee, setEmployee] = useState<Employee>();
 
   useEffect(() => {
-    handleGetEmployee(event);
+    handleGetEmployee();
   }, [id]);
 
-  async function handleGetEmployee(event: any) {
-    event.preventDefault();
+  async function handleGetEmployee() {
     const accessToken = localStorage.getItem("access_token");
     if (!accessToken) {
       setError("You're not logged in!");
@@ -93,65 +92,72 @@ const EmployeeDetails = ({}) => {
   return (
     <Flex
       p={8}
-      display="flex"
-      align="center"
+      w="full"
       flexDirection="column"
-      justifyContent="center"
+      alignItems="center"
+      justify="space-around"
     >
-      <Heading mb={8}>Employee Report</Heading>
-      <Flex w="full" flexDirection="row">
-        <Box w="50%">
-          <Text fontSize="lg" my={4}>
-            <strong>First Name:</strong> {employee?.firstName}
-          </Text>
-          <Text fontSize="lg" my={4}>
-            <strong>Last Name: </strong>
-            {employee?.lastName}
-          </Text>
-          <Text fontSize="lg" my={4}>
-            <strong>Hourly Rate:</strong> {employee?.hourlyRate}
-          </Text>
-          <Flex flexDirection="column" w="min-content" my={2}>
-            <Box display="flex">
-              <FormControl>
-                <FormLabel htmlFor="start-date"> from</FormLabel>
-                <Input
-                  w="min-content"
-                  type="date"
-                  id="start-date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                />
-              </FormControl>
-              <FormControl ml={4}>
-                <FormLabel htmlFor="end-date">to</FormLabel>
-                <Input
-                  w="min-content"
-                  type="date"
-                  id="end-date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                />
-              </FormControl>
-            </Box>
-          </Flex>
-          <Button my={6} onClick={handleGenerateReport}>
-            Report
-          </Button>
-        </Box>
-        <Box w="50%" p="12">
-          {" "}
-          <Box>
+      <Box w="80%">
+        <Heading mb={8}>Employee Report</Heading>
+        <Flex flexWrap={{ base: "wrap", md: "nowrap" }}>
+          <Box flexBasis={{ base: "100%", md: "50%" }}>
+            <Text fontSize="lg" my={4}>
+              <strong>ClockifyName:</strong> {employee?.clockifyName}
+            </Text>
+            <Text fontSize="lg" my={4}>
+              <strong>First Name:</strong> {employee?.firstName}
+            </Text>
+            <Text fontSize="lg" my={4}>
+              <strong>Last Name: </strong>
+              {employee?.lastName}
+            </Text>
+            <Text fontSize="lg" my={4}>
+              <strong>Hourly Rate:</strong> {employee?.hourlyRate} zł/h
+            </Text>
+            <Text fontSize="lg" my={4} mt="4">
+              <strong>Time Period:</strong>
+            </Text>
+            <Flex flexDirection="column" w="min-content" my={2}>
+              <Box display="flex">
+                <FormControl>
+                  <FormLabel htmlFor="start-date">From</FormLabel>
+                  <Input
+                    w="min-content"
+                    type="date"
+                    id="start-date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                  />
+                </FormControl>
+                <FormControl ml={4}>
+                  <FormLabel htmlFor="end-date">To</FormLabel>
+                  <Input
+                    w="min-content"
+                    type="date"
+                    id="end-date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                  />
+                </FormControl>
+              </Box>
+            </Flex>
+            <Button my={6} onClick={handleGenerateReport}>
+              Report
+            </Button>
+          </Box>
+          <Box p="2" w="80%" h="100%">
             {loading ? (
               <Spinner />
             ) : (
               salaryReport && (
-                <EmployeeSalaryReport salaryReport={salaryReport!} />
+                <Box>
+                  <EmployeeSalaryReport salaryReport={salaryReport} />
+                </Box>
               )
             )}
           </Box>
-        </Box>
-      </Flex>
+        </Flex>
+      </Box>
     </Flex>
   );
 };

@@ -28,7 +28,7 @@ let SalaryService = class SalaryService {
     }
     async createEmployeeSalaryById(user, dto, employeeId) {
         try {
-            const salary = await this.clockify.geEmployeeSalaryById(user, dto, employeeId);
+            const salary = await this.clockify.createEmployeeSalaryById(user, dto, employeeId);
             return salary;
         }
         catch (error) {

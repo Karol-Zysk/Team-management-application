@@ -4,11 +4,12 @@ export async function getHoursWorked({
   clockifyId: clockifyId,
   dto: dto,
   date: date,
+  workspaceId: workspaceId,
+  projectId: projectId,
 }) {
-  const workspaces = await this.clockify.workspaces.get();
-
+  const project = projectId || dto.projectId;
   const timeEntries = await this.clockify.workspace
-    .withId(workspaces[0].id)
+    .withId(workspaceId)
     .users.withId(clockifyId)
     .timeEntries.get({
       ...dto,
@@ -16,13 +17,15 @@ export async function getHoursWorked({
         ? new Date(dto.start)
         : date
         ? new Date(date?.start)
-        : new Date('2020'),
+        : new Date('2016-01-01'),
       end: dto.end
         ? new Date(dto.end)
         : date
         ? new Date(date?.end)
         : new Date(Date.now()),
+      project,
     });
+  // console.log(timeEntries)
 
   let totalWorkingTime = 0;
 

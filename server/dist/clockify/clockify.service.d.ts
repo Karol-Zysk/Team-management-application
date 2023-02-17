@@ -24,12 +24,12 @@ export declare class ClockifyService {
     calculateSalary(clockifyId: string, user: User, dto?: any, date?: {
         start: Date;
         end: Date;
-    }): Promise<import(".prisma/client").Employee>;
+    }, workspaceId?: string): Promise<import(".prisma/client").Employee>;
     geEmployeesSalary(user: User, dto: SalaryParamsDto): Promise<{
         employeesWithSalary: import(".prisma/client").Employee[];
         workspaceId: string;
     }>;
-    geEmployeeSalaryById(user: User, dto: SalaryParamsDto, employeeId: string): Promise<import(".prisma/client").Employee>;
+    createEmployeeSalaryById(user: User, dto: SalaryParamsDto, employeeId: string): Promise<import(".prisma/client").Employee>;
     projectReport(user: User, projectId: string, dto: ReportParamsDto): Promise<any>;
     employeesSalaryReport(user: User, dto: EmployeesSalaryReporDto): Promise<import(".prisma/client").Report>;
     getAllProjectReports(user: User): Promise<import(".prisma/client").Project[]>;

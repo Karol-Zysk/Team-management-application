@@ -82,8 +82,8 @@ let ClockifyService = class ClockifyService {
             .delete();
         return;
     }
-    async calculateSalary(clockifyId, user, dto, date) {
-        const options = { clockifyId, dto, date };
+    async calculateSalary(clockifyId, user, dto, date, workspaceId) {
+        const options = { clockifyId, dto, date, workspaceId };
         const hours = await utils_1.getHoursWorked.bind(this)(options);
         let hourlyRate;
         const employee = await this.prisma.employee.findFirst({
@@ -137,8 +137,14 @@ let ClockifyService = class ClockifyService {
                 };
             }
             const promises = [];
-            for (const clockifyId of clockifyIds) {
-                promises.push(this.calculateSalary(clockifyId, user, dto, date));
+            for (let i = 0; i < clockifyIds.length; i++) {
+                const clockifyId = clockifyIds[i];
+                promises.push(new Promise((resolve) => {
+                    setTimeout(async () => {
+                        const result = await this.calculateSalary(clockifyId, user, dto, date, workspaceId);
+                        resolve(result);
+                    }, i * 100);
+                }));
             }
             await Promise.all(promises);
             const employeesWithSalary = await this.prisma.employee.findMany({
@@ -150,12 +156,13 @@ let ClockifyService = class ClockifyService {
             throw new common_1.BadRequestException(error.message);
         }
     }
-    async geEmployeeSalaryById(user, dto, employeeId) {
+    async createEmployeeSalaryById(user, dto, employeeId) {
         try {
+            const { workspaceId } = await this.initClockify(user);
             let date;
             if (dto.date)
                 date = (0, utils_1.getDatesForMonth)(dto.date);
-            return this.calculateSalary(employeeId, user, dto, date);
+            return this.calculateSalary(employeeId, user, dto, date, workspaceId);
         }
         catch (error) {
             throw new common_1.BadRequestException(error.message);
@@ -182,8 +189,10 @@ let ClockifyService = class ClockifyService {
                 select: { id: true, clockifyId: true },
             });
             const clockifyIds = employees.map((employee) => employee.clockifyId);
+            if (employees.length === 0)
+                throw new common_1.BadRequestException('Sync Employees First');
             for (const clockifyId of clockifyIds) {
-                const options = { clockifyId, dto, projectId };
+                const options = { clockifyId, dto, date, workspaceId, projectId };
                 const hours = await utils_1.getHoursWorked.bind(this)(options);
                 let hourlyRate;
                 const employee = await this.prisma.employee.findFirst({
@@ -205,7 +214,10 @@ let ClockifyService = class ClockifyService {
                 const salary = hours * hourlyRate;
                 await this.prisma.employee.updateMany({
                     where: { clockifyId: clockifyId, userId: user.id, workspaceId },
-                    data: { hoursWorked: hours, salary: Number(salary.toFixed(1)) },
+                    data: {
+                        hoursWorked: hours,
+                        salary: salary ? Number(salary.toFixed(1)) : 0,
+                    },
                 });
             }
             const totalSalary = await this.prisma.employee.aggregate({

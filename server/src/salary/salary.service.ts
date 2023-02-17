@@ -32,11 +32,12 @@ export class SalaryService {
     employeeId: string,
   ) {
     try {
-      const salary = await this.clockify.geEmployeeSalaryById(
+      const salary = await this.clockify.createEmployeeSalaryById(
         user,
         dto,
         employeeId,
       );
+
       return salary;
     } catch (error) {
       throw new BadRequestException(error.message);

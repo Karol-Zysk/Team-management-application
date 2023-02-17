@@ -67,11 +67,16 @@ const EmployeesSalariesReport = () => {
   };
 
   return (
-    <Flex p="12">
-      <Box w="50%">
+    <Flex
+      w="full"
+      flexDirection={{ base: "column", md: "row" }}
+      justify="center"
+      align="center"
+    >
+      <Box p="4" w="100%">
         <Heading mb="12">Employees Salary Report</Heading>
-        <Text mb="6" fontSize="lg">
-          Enter the dates for which you want the report to be calculated
+        <Text mb="6" fontWeight="semibold" fontSize="lg">
+          Enter the dates for which you want the report to be calculated.
         </Text>
         <DateInputs
           startDate={startDate}
@@ -82,7 +87,7 @@ const EmployeesSalariesReport = () => {
         />
         <ReportsHistory />
       </Box>
-      <Box>
+      <Box w={{ base: "full", md: "min" }}>
         {loading ? (
           <Spinner />
         ) : (

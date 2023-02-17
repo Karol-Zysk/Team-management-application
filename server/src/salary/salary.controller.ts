@@ -40,12 +40,18 @@ export class SalaryController {
   }
 
   @Post(':id')
-  geEmployeeSalaryById(
+  async geEmployeeSalaryById(
     @GetUser() user: User,
     @Param('id') employeeId: string,
     @Body() dto: SalaryParamsDto,
   ) {
-    return this.salaryService.createEmployeeSalaryById(user, dto, employeeId);
+    const salary = await this.salaryService.createEmployeeSalaryById(
+      user,
+      dto,
+      employeeId,
+    );
+
+    return salary;
   }
 
   @Get()
