@@ -10,41 +10,74 @@ import {
   FormControl,
   FormLabel,
   Input,
-  FormHelperText,
   useToast,
 } from "@chakra-ui/react";
-import { useContext, useState } from "react";
+import { pick } from "lodash";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
+import {
+  QueryObserverResult,
+  RefetchOptions,
+  RefetchQueryFilters,
+} from "react-query";
 import { AccountContext } from "../context/AccountContext";
-import { Employee } from "../interfaces/EmployeeInterface";
+import { EditedEmployee, Employee } from "../interfaces/EmployeeInterface";
 import { baseUrl } from "../utils/origin";
 
 type ModalProps = {
   handleCloseModal: () => void;
   isOpen: boolean;
-  employeeId: string;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   employee: Employee;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  refetch: <TPageData>(
+    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
+  ) => Promise<QueryObserverResult<any, unknown>>;
 };
 
 const EditModal: React.FC<ModalProps> = ({
   employee,
-  employeeId,
   handleCloseModal,
   isOpen,
   setIsOpen,
+  refetch,
 }) => {
   const { setError, error } = useContext(AccountContext);
   const toast = useToast();
 
-  const [hourlyRate, setHourlyRate] = useState<number | string>();
-  const [firstName, setFirstName] = useState<string | undefined>(undefined);
-  const [lastName, setLastName] = useState<string | undefined>(undefined);
-  const [profilePicture, setProfilePicture] = useState<string | undefined>(
-    undefined
-  );
+  const [currentEmployee, setCurrentEmployee] = useState<Employee>({
+    ...(employee as Employee),
+    firstName: employee.firstName,
+    lastName: employee.lastName,
+  });
+
+  const [hourlyRate, setHourlyRate] = useState<number | string | null>();
+  const [firstName, setFirstName] = useState<string | null>();
+  const [lastName, setLastName] = useState<string | null>();
+  const [profilePicture, setProfilePicture] = useState<string | null>();
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    if (isOpen) {
+      setCurrentEmployee(employee);
+      setFirstName(currentEmployee.firstName || null);
+      setLastName(currentEmployee.lastName || null);
+      setHourlyRate(currentEmployee.hourlyRate || null);
+      setProfilePicture(currentEmployee.profilePicture || null);
+    }
+  }, [isOpen]);
+  useEffect(() => {
+    if (!isOpen) {
+      setCurrentEmployee({
+        firstName: null,
+        lastName: null,
+        hourlyRate: null,
+        clockifyName: null,
+        profilePicture: null,
+      });
+    }
+  }, [isOpen]);
+
   async function handleEditEmployee(event: any) {
+    event.preventDefault();
     setIsLoading(true);
     const accessToken = localStorage.getItem("access_token");
     if (!accessToken) {
@@ -53,7 +86,7 @@ const EditModal: React.FC<ModalProps> = ({
     }
 
     try {
-      const response = await fetch(`${baseUrl}/employees/${employeeId}`, {
+      const response = await fetch(`${baseUrl}/employees/${employee.id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -74,12 +107,13 @@ const EditModal: React.FC<ModalProps> = ({
       setIsLoading(false);
       setIsOpen(false);
       setError(null);
+      refetch();
     } catch (err: any) {
       setIsLoading(false);
       setError(err.message);
       toast({
         title: "Error",
-        description: `${error}`,
+        description: `${err.message}`,
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -91,7 +125,7 @@ const EditModal: React.FC<ModalProps> = ({
     <Modal isOpen={isOpen} onClose={handleCloseModal}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{employeeId}</ModalHeader>
+        <ModalHeader>{employee.id}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <form onSubmit={handleEditEmployee}>
@@ -100,7 +134,7 @@ const EditModal: React.FC<ModalProps> = ({
               <Input
                 id="firstName"
                 type="text"
-                value={firstName}
+                value={firstName || currentEmployee.firstName!}
                 onChange={(event) => setFirstName(event.target.value)}
               />
             </FormControl>
@@ -109,7 +143,7 @@ const EditModal: React.FC<ModalProps> = ({
               <Input
                 id="lastName"
                 type="text"
-                value={lastName}
+                value={lastName || currentEmployee.lastName!}
                 onChange={(event) => setLastName(event.target.value)}
               />
             </FormControl>
@@ -118,7 +152,7 @@ const EditModal: React.FC<ModalProps> = ({
               <Input
                 id="hourlyRate"
                 type="number"
-                value={hourlyRate}
+                value={hourlyRate || currentEmployee.hourlyRate!}
                 onChange={(event) => {
                   const value = event.target.value;
                   setHourlyRate(Number(value));
@@ -130,7 +164,7 @@ const EditModal: React.FC<ModalProps> = ({
               <Input
                 id="profilePicture"
                 type="text"
-                value={profilePicture}
+                value={profilePicture || currentEmployee.profilePicture!}
                 onChange={(event) => setProfilePicture(event.target.value)}
               />
             </FormControl>

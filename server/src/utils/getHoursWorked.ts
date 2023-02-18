@@ -25,7 +25,6 @@ export async function getHoursWorked({
         : new Date(Date.now()),
       project,
     });
-  // console.log(timeEntries)
 
   let totalWorkingTime = 0;
 

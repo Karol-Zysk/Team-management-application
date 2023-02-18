@@ -22,8 +22,8 @@ const Views = () => {
       <Nav />
       <Box
         w="100%"
-        h="full"
-        paddingX={[6, 8, 12]}
+        h="100%"
+        paddingX={[2, 8, 16]}
         paddingY={[12, 16, 18]}
         borderColor="gray.200"
       >

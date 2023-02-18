@@ -56,21 +56,26 @@ export default function Nav({}) {
   return (
     <>
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
-        <Flex h={20} alignItems={"center"} justifyContent={"space-between"}>
-          <IconButton
-            size={"md"}
-            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-            aria-label={"Open Menu"}
-            display={{ md: "none" }}
-            onClick={isOpen ? onClose : onOpen}
-          />
+        <Flex h={24} alignItems={"center"} justifyContent={"space-between"}>
+          {isSync && (
+            <IconButton
+              size={"md"}
+              icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+              aria-label={"Open Menu"}
+              display={{ md: "none" }}
+              onClick={isOpen ? onClose : onOpen}
+            />
+          )}
           <HStack spacing={8} alignItems={"center"}>
-            <Box fontSize="3xl" fontWeight="bold">
+            <Box fontSize="4xl" fontWeight="bold">
               Teamy
             </Box>
             <HStack
               as={"nav"}
-              spacing={4}
+              pl="20"
+              spacing={"10"}
+              fontWeight="semibold"
+              fontSize="lg"
               display={{ base: "none", md: "flex" }}
             >
               {isSync &&

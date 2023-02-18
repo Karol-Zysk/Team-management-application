@@ -13,12 +13,7 @@ import { AccountContext } from "../context/AccountContext";
 import { motion } from "framer-motion";
 import { baseUrl } from "../utils/origin";
 
-interface InputProps {
-  error: any;
-  setError: React.Dispatch<React.SetStateAction<string | null>>;
-}
-
-const ApiKeyInput: React.FC<InputProps> = ({}) => {
+const ApiKeyInput = ({}) => {
   const toast = useToast();
   const {
     isApiKeyValid,
@@ -73,7 +68,6 @@ const ApiKeyInput: React.FC<InputProps> = ({}) => {
       }
 
       setIsApiKeyValid(true);
-
       setCompanyName(companyName);
       setIsActive(true);
       setError(null);
@@ -91,64 +85,61 @@ const ApiKeyInput: React.FC<InputProps> = ({}) => {
   };
 
   return (
-    <>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-        <form onSubmit={handleSubmit}>
-          <FormLabel htmlFor="companyName">{`${
-            companyName ? "Company Name" : "Enter Company Name"
-          } `}</FormLabel>
-          <VStack mt="4" h="min-content" flexDirection="row" align="center">
-            <Input
-              w="70%"
-              id="companyName"
-              placeholder={`${
-                companyName ? companyName : "Enter Company Name"
-              }`}
-              mr="3"
-              size="sm"
-              value={companyName}
-              isDisabled={isApiKeyValid || isActive}
-              onChange={(e) => setCompanyName(e.target.value)}
-            />
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <form onSubmit={handleSubmit}>
+        <FormLabel htmlFor="companyName">{`${
+          companyName ? "Company Name" : "Enter Company Name"
+        } `}</FormLabel>
+        <VStack mt="4" h="min-content" flexDirection="row" align="center">
+          <Input
+            w="70%"
+            id="companyName"
+            placeholder={`${companyName ? companyName : "Enter Company Name"}`}
+            mr="3"
+            size="sm"
+            value={companyName}
+            isDisabled={isApiKeyValid || isActive}
+            required={true}
+            onChange={(e) => setCompanyName(e.target.value)}
+          />
 
-            {companyName && <CheckIcon color="green" />}
-          </VStack>
-          <FormLabel mt="6" htmlFor="clockifyApiKey">{`${
-            isActive ? "You have a valid" : "Enter valid"
-          } Clockify API Key`}</FormLabel>
-          <VStack mt="4" h="min-content" flexDirection="row" align="center">
-            <Input
-              w="70%"
-              id="clockifyApiKey"
-              placeholder="Clockify API Key"
-              mr="3"
-              size="sm"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              isDisabled={isApiKeyValid || isActive}
-            />
+          {companyName && <CheckIcon color="green" />}
+        </VStack>
+        <FormLabel mt="6" htmlFor="clockifyApiKey">{`${
+          isActive ? "You have a valid" : "Enter valid"
+        } Clockify API Key`}</FormLabel>
+        <VStack mt="4" h="min-content" flexDirection="row" align="center">
+          <Input
+            w="70%"
+            id="clockifyApiKey"
+            placeholder="Clockify API Key"
+            mr="3"
+            size="sm"
+            value={apiKey}
+            onChange={(e) => setApiKey(e.target.value)}
+            isDisabled={isApiKeyValid || isActive}
+          />
 
-            {isApiKeyValid && <CheckIcon color="green" />}
-          </VStack>
-          {!isActive && (
-            <Text color="red.300" fontSize={["sm", "sm", "md"]} my="4">
-              Providing a valid API key enables access to the application's
-              functionality
-            </Text>
-          )}
-          <ButtonGroup mt="4">
-            <Button
-              type="submit"
-              color={isApiKeyValid ? "green" : "green"}
-              isDisabled={isApiKeyValid || isActive}
-            >
-              {isActive ? "Activated" : "Activate"}
-            </Button>
-            <Button onClick={editInputKeyHandler}>Edit</Button>
-          </ButtonGroup>
-        </form>
-      </motion.div>
-    </>
+          {isApiKeyValid && <CheckIcon color="green" />}
+        </VStack>
+        {!isActive && (
+          <Text color="red.700" fontSize={["sm", "sm", "md"]} my="4">
+            Providing a valid API key enables access to the application's
+            functionality
+          </Text>
+        )}
+        <ButtonGroup mt="4">
+          <Button
+            type="submit"
+            color={isApiKeyValid ? "green" : ""}
+            isDisabled={isApiKeyValid || isActive}
+          >
+            {isActive ? <CheckIcon /> : "Activate"}
+          </Button>
+          <Button onClick={editInputKeyHandler}>Edit</Button>
+        </ButtonGroup>
+      </form>
+    </motion.div>
   );
 };
 

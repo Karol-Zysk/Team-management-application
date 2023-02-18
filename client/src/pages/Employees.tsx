@@ -25,22 +25,23 @@ import { baseUrl } from "../utils/origin";
 
 const Employees = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [id, setId] = useState("");
+  const [id, setId] = useState<Employee>();
   const { error, user } = useContext(AccountContext);
 
   function handleCloseModal() {
     setIsOpen(false);
   }
 
-  function handleOpenModal(employeeId: string) {
+  function handleOpenModal(employee: Employee) {
     setIsOpen(true);
-    setId(employeeId);
+    setId(employee);
   }
 
   const {
     data: employees = [],
     isLoading,
     isError,
+    refetch,
   } = useQuery("employees", async () => {
     const accessToken = localStorage.getItem("access_token");
     if (!accessToken) {
@@ -79,9 +80,20 @@ const Employees = () => {
   }
 
   return (
-    <Flex w="full" minH="100" flexDirection="column">
-      <Heading mt="12">{activeUser.companyName} Team</Heading>
-      <Table w="min" mt="20" variant="striped">
+    <Flex
+      w="100%"
+      paddingX={[6, 12, 24]}
+      paddingY={[6, 6, 6]}
+      height="100%"
+      flexDirection="column"
+    >
+      <Heading>{activeUser.companyName} Team</Heading>
+      <Table
+        fontSize={["smaller", "md"]}
+        w={["min", "full"]}
+        mt="12"
+        variant="striped"
+      >
         <Thead w="min">
           <Tr>
             <Th w="min" boxShadow="md">
@@ -136,13 +148,13 @@ const Employees = () => {
                 <Td boxShadow="md">{employee.email}</Td>
                 <Td boxShadow="md">{employee.hourlyRate} zł/h</Td>
                 <Td boxShadow="md">
-                  <Avatar h="12" src={`${employee.profilePicture}`} />
+                  <Avatar h="8" src={`${employee.profilePicture}`} />
                 </Td>
                 <Td boxShadow="md">
                   <EditIcon
                     cursor="pointer"
                     fontSize={["md", "md", "xl"]}
-                    onClick={() => handleOpenModal(employee.id)}
+                    onClick={() => handleOpenModal(employee)}
                   />
                 </Td>
                 <Td boxShadow="md">
@@ -164,13 +176,15 @@ const Employees = () => {
             );
           })}
         </Tbody>
-        <EditModal
-          handleCloseModal={handleCloseModal}
-          employeeId={id}
-          employee={employees}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-        />
+        {id && (
+          <EditModal
+            handleCloseModal={handleCloseModal}
+            employee={id!}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            refetch={refetch}
+          />
+        )}
       </Table>{" "}
     </Flex>
   );

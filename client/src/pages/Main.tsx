@@ -1,34 +1,46 @@
-import { Box, Text } from "@chakra-ui/react";
-import { useContext,  } from "react";
+import { Box, Flex, Text } from "@chakra-ui/react";
+import { useContext } from "react";
 import { AccountContext, UserData } from "../context/AccountContext";
 import ApiKeyInput from "../components/ApiKeyInput";
 import SyncClockifyField from "../components/SyncClockifyField";
 
 const Main = () => {
-  const { user, error, setError } = useContext(AccountContext);
+  const { user, isApiKeyValid } = useContext(AccountContext);
   const activeUser = user as UserData;
 
   return (
-    <Box
-      display="flex"
-      w="90%"
-      paddingX={[0, 6, 12]}
-      paddingY={[0, 6, 12]}
+    <Flex
+      flexDirection={["column-reverse", "row"]}
+      w="100%"
+      paddingX={[6, 12, 36]}
+      paddingY={[6, 12, 24]}
       height="100%"
     >
       <Box w="100%">
-        <ApiKeyInput error={error} setError={setError} />
+        {!isApiKeyValid && (
+          <Text fontSize={["lg", "xl"]} fontWeight="semibold" mb="6">
+            To unlock features, please provide informations.
+          </Text>
+        )}
+        <ApiKeyInput />
         <SyncClockifyField />
       </Box>
       <Box
-        display={["none", "flex"]}
+        display={["block", "flex"]}
         alignItems="flex-start"
         justifyContent="flex-end"
         width="100%"
       >
-        <Text fontSize="2xl">Hi {activeUser.name}!</Text>
+        <Text
+          fontSize={["2xl", "4xl"]}
+          fontWeight="semibold"
+          marginBottom={[8, 0]}
+          marginRight={[0, 12]}
+        >
+          Hello {activeUser.name}!
+        </Text>
       </Box>
-    </Box>
+    </Flex>
   );
 };
 

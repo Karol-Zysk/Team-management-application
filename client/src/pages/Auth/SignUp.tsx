@@ -66,7 +66,6 @@ const SignUp: React.FC = () => {
           duration: 5000,
           isClosable: true,
         });
-        console.log(result.message);
       } else {
         localStorage.setItem("access_token", result.access_token);
         localStorage.setItem("refresh_token", result.refresh_token);
