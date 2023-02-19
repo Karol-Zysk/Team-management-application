@@ -58,8 +58,8 @@ const SyncClockifyField = () => {
             Synchronize
           </Button>
           {employee.length !== 0 && (
-            <Text mt="2" ml="6" fontSize={["md", "md", "xl"]} color="green.400">
-              {employee.length} new employees added.
+            <Text mt="1" ml="8" fontSize={["md", "md", "xl"]} color="green.400">
+              {employee.length} new employees.
             </Text>
           )}
         </ButtonGroup>

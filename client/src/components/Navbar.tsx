@@ -56,7 +56,12 @@ export default function Nav({}) {
   return (
     <>
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
-        <Flex h={24} alignItems={"center"} justifyContent={"space-between"}>
+        <Flex
+          h={24}
+          px="4"
+          alignItems={"center"}
+          justifyContent={"space-between"}
+        >
           {isSync && (
             <IconButton
               size={"md"}
@@ -67,7 +72,7 @@ export default function Nav({}) {
             />
           )}
           <HStack spacing={8} alignItems={"center"}>
-            <Box fontSize="4xl" fontWeight="bold">
+            <Box fontSize="3xl" fontWeight="bold">
               Teamy
             </Box>
             <HStack
@@ -91,8 +96,8 @@ export default function Nav({}) {
                 ))}
             </HStack>
           </HStack>
-          <Flex alignItems={"center"} marginRight="2">
-            <Button size={["sm", "md", "lg"]} mr="3" onClick={toggleColorMode}>
+          <Flex alignItems={"center"}>
+            <Button size={["md", "md", "lg"]} mr="3" onClick={toggleColorMode}>
               {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
             </Button>
             {isLoggedIn && <LogoutButton />}

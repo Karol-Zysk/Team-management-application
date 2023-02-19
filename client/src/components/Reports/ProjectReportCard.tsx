@@ -34,7 +34,7 @@ const ProjectReportCard: React.FC<ProjectReportProps> = ({ projectReport }) => {
   return (
     <Box mt="16" px={12} py="6" shadow={"dark-lg"}>
       <Box maxW="900px" m="0 auto">
-        <Heading as="h1" size="lg" mb={5}>
+        <Heading as="h1" mb={5}>
           {projectName}
         </Heading>
 

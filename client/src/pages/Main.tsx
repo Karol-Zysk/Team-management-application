@@ -5,7 +5,7 @@ import ApiKeyInput from "../components/ApiKeyInput";
 import SyncClockifyField from "../components/SyncClockifyField";
 
 const Main = () => {
-  const { user, isApiKeyValid } = useContext(AccountContext);
+  const { user, isSync } = useContext(AccountContext);
   const activeUser = user as UserData;
 
   return (
@@ -17,7 +17,7 @@ const Main = () => {
       height="100%"
     >
       <Box w="100%">
-        {!isApiKeyValid && (
+        {isSync && (
           <Text fontSize={["lg", "xl"]} fontWeight="semibold" mb="6">
             To unlock features, please provide informations.
           </Text>

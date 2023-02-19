@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Text, Box, Grid, useToast, Flex } from "@chakra-ui/react";
+import { Text, Box, Grid, useToast, Flex, Spinner } from "@chakra-ui/react";
 import { AccountContext, UserData } from "../context/AccountContext";
-import { TbFileReport } from "react-icons/tb";
+import { BsFillExclamationSquareFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import ProjectReportsHistory from "../components/Reports/ProjectReportsHistory";
 import ProjectReportCard from "../components/Reports/ProjectReportCard";
@@ -10,6 +10,8 @@ import { baseUrl } from "../utils/origin";
 interface Project {
   id: string;
   name: string;
+  archived: boolean;
+  clientName: string;
 }
 
 const Projects = () => {
@@ -56,6 +58,8 @@ const Projects = () => {
     fetchData();
   }, []);
 
+  console.log(projects);
+
   if (error) {
     return (
       <Text fontSize="xl" color="red.500">
@@ -71,13 +75,8 @@ const Projects = () => {
       flexDirection={{ base: "column", md: "row" }}
       w="full"
       justify="space-between"
-      borderWidth="2px"
     >
-      <Box
-        w={{ base: "full", md: "40%" }}
-        px={{ base: "4", md: "8" }}
-        mb={{ base: "8", md: "0" }}
-      >
+      <Box w={{ base: "full", md: "40%" }} mb={{ base: "8", md: "0" }}>
         <Text fontSize={{ base: "2xl", md: "3xl" }} mb="6" fontWeight="bold">
           Company Name: {activeUser.companyName}
         </Text>
@@ -104,49 +103,76 @@ const Projects = () => {
         {projectReport && <ProjectReportCard projectReport={projectReport} />}
       </Box>
       <Flex justify="center" h="min" w={{ base: "full", md: "40%" }} p="4">
-        <Grid
-          templateColumns={{ base: "repeat(3, 1fr)", md: "repeat(3, 1fr)" }}
-          gap={2}
-        >
-          {projects.map((project) => (
-            <Link key={project.id} to={`/projects/${project.id}`}>
-              <Flex
-                boxShadow="xl"
-                borderRadius="5"
-                border="2px"
-                opacity="0.7"
-                key={project.id}
-                _hover={{ opacity: "1" }}
-                p={{ base: "4", md: "6" }}
-                flexDirection="column"
-                alignItems="center"
-                justify="center"
-                textAlign="center"
-                h="full"
-              >
-                <Text
-                  fontWeight="bold"
-                  mb="6"
-                  fontSize={{ base: "md", md: "md" }}
-                  h="50%"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
+        {!projects ? (
+          <Spinner />
+        ) : (
+          <Grid
+            w={"min-content"}
+            templateColumns={{ base: "repeat(3, 1fr)", md: "repeat(3, 1fr)" }}
+            gap={4}
+          >
+            {projects.map((project) => (
+              <Link key={project.id} to={`/projects/${project.id}`}>
+                <Flex
+                  bg="gray.100"
+                  color="blackAlpha.900"
+                  boxShadow="md"
+                  minH={200}
+                  minW={170}
+                  maxW={170}
+                  position="relative"
+                  borderTopLeftRadius="2xl"
+                  key={project.id}
+                  _hover={{ opacity: "1" }}
+                  p={{ base: "4", md: "4" }}
+                  flexDirection="column"
+                  h="full"
                 >
-                  {project.name}
-                </Text>
-                <Box
-                  h="50%"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <TbFileReport fontSize="25" />
-                </Box>
-              </Flex>
-            </Link>
-          ))}
-        </Grid>
+                  <Text
+                    w="full"
+                    display="flex"
+                    fontWeight="bold"
+                    fontSize={{ base: "smaller", md: "smaller" }}
+                    my="4"
+                    justifyContent="center"
+                  >
+                    {activeUser.companyName}
+                  </Text>
+                  <Text
+                    fontWeight="bold"
+                    fontSize={{ base: "smaller", md: "smaller" }}
+                    mb="6"
+                    justifyContent="center"
+                    position="relative"
+                  >
+                    Project: {project.name}
+                  </Text>
+                  <Text
+                    fontWeight="bold"
+                    mb="4"
+                    fontSize={{ base: "smaller", md: "smaller" }}
+                    justifyContent="center"
+                    position="relative"
+                  >
+                    Client: {project.clientName}
+                  </Text>
+                  <Box
+                    position="absolute"
+                    right="-5px"
+                    bottom="-5px"
+                    color="yellow.400"
+                    zIndex="3"
+                  >
+                    <BsFillExclamationSquareFill
+                      color={project.archived ? "green" : "orange"}
+                      fontSize="40"
+                    />
+                  </Box>
+                </Flex>
+              </Link>
+            ))}
+          </Grid>
+        )}
       </Flex>
     </Flex>
   );

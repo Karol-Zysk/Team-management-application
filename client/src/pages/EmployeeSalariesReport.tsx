@@ -70,10 +70,10 @@ const EmployeesSalariesReport = () => {
     <Flex
       w="full"
       flexDirection={{ base: "column", md: "row" }}
-      justify="center"
-      align="center"
+      px={{ base: "4", md: "24" }}
+      py={{ base: "4", md: "24" }}
     >
-      <Box p="4" w="100%">
+      <Box w="100%">
         <Heading mb="12">Employees Salary Report</Heading>
         <Text mb="6" fontWeight="semibold" fontSize="lg">
           Enter the dates for which you want the report to be calculated.

@@ -76,7 +76,7 @@ const ProjectsReport = () => {
   };
 
   return (
-    <Flex w="full" p="12">
+    <Flex w="full" px={{ base: "4", md: "24" }} py={{ base: "4", md: "24" }}>
       <Box w="50%">
         <FormLabel htmlFor="timeEstimate">Time Estimate</FormLabel>
         <VStack mt="4" h="min-content" flexDirection="row" align="center">

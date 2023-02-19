@@ -128,7 +128,7 @@ const ApiKeyInput = ({}) => {
             functionality
           </Text>
         )}
-        <ButtonGroup mt="4">
+        <ButtonGroup size={["sm", "md", "lg"]} mt="4">
           <Button
             type="submit"
             color={isApiKeyValid ? "green" : ""}

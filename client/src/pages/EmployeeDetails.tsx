@@ -91,13 +91,14 @@ const EmployeeDetails = ({}) => {
 
   return (
     <Flex
-      p={8}
+      px={{ base: "4", md: "24" }}
+      py={{ base: "4", md: "12" }}
       w="full"
       flexDirection="column"
       alignItems="center"
       justify="space-around"
     >
-      <Box w="80%">
+      <Box px={{ base: "4", md: "24" }} py={{ base: "4", md: "24" }} w="100%">
         <Heading mb={8}>Employee Report</Heading>
         <Flex flexWrap={{ base: "wrap", md: "nowrap" }}>
           <Box flexBasis={{ base: "100%", md: "50%" }}>

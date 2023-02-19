@@ -81,13 +81,14 @@ const Employees = () => {
 
   return (
     <Flex
+      overflowX={["scroll", "auto"]}
       w="100%"
-      paddingX={[6, 12, 24]}
-      paddingY={[6, 6, 6]}
+      px={{ base: "4", md: "24" }}
+      py={{ base: "4", md: "24" }}
       height="100%"
       flexDirection="column"
     >
-      <Heading>{activeUser.companyName} Team</Heading>
+      <Heading ml={[6, 0]}>{activeUser.companyName} Team</Heading>
       <Table
         fontSize={["smaller", "md"]}
         w={["min", "full"]}
