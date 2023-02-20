@@ -17,7 +17,7 @@ const Main = () => {
       height="100%"
     >
       <Box w="100%">
-        {isSync && (
+        {!activeUser.active && (
           <Text fontSize={["lg", "xl"]} fontWeight="semibold" mb="6">
             To unlock features, please provide informations.
           </Text>

@@ -11,7 +11,7 @@ async function projectReportConstans({ projectId, dto, salary, }) {
         .get();
     const budgetEstimate = dto.budgetEstimate || ((_a = project.budgetEstimate) === null || _a === void 0 ? void 0 : _a.estimate) || 0;
     const summary = budgetEstimate - salary;
-    const parsedDuration = Number((0, moment_1.duration)(project.duration).asHours().toFixed(1));
+    const parsedDuration = Number((0, moment_1.duration)(project.duration).asHours().toFixed(2));
     const parsedEstimate = Number((0, moment_1.duration)(project.timeEstimate.estimate).asHours().toFixed(1));
     const timeEstimate = dto.timeEstimate || parsedEstimate || 0;
     return {

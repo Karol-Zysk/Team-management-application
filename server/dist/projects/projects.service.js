@@ -69,7 +69,7 @@ let ProjectsService = class ProjectsService {
             const { project, timeEstimate, parsedDuration, summary, budgetEstimate, salary, date, workspaceId, } = await this.clockify.projectReport(user, projectId, dto);
             const projectMembers = await this.prisma.employee.findMany({
                 where: {
-                    AND: [{ userId: user.id, workspaceId }],
+                    AND: [{ userId: user.id, workspaceId }, { hoursWorked: { gt: 0 } }],
                 },
                 select: {
                     clockifyId: true,

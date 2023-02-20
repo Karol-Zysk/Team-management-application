@@ -87,7 +87,7 @@ const ApiKeyInput = ({}) => {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <form onSubmit={handleSubmit}>
-        <FormLabel htmlFor="companyName">{`${
+        <FormLabel fontSize="lg" htmlFor="companyName">{`${
           companyName ? "Company Name" : "Enter Company Name"
         } `}</FormLabel>
         <VStack mt="4" h="min-content" flexDirection="row" align="center">
@@ -105,7 +105,7 @@ const ApiKeyInput = ({}) => {
 
           {companyName && <CheckIcon color="green" />}
         </VStack>
-        <FormLabel mt="6" htmlFor="clockifyApiKey">{`${
+        <FormLabel fontSize="lg" mt="6" htmlFor="clockifyApiKey">{`${
           isActive ? "You have a valid" : "Enter valid"
         } Clockify API Key`}</FormLabel>
         <VStack mt="4" h="min-content" flexDirection="row" align="center">

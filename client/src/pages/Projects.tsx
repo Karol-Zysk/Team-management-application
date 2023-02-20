@@ -1,7 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Text, Box, Grid, useToast, Flex, Spinner } from "@chakra-ui/react";
+import {
+  Text,
+  Box,
+  Grid,
+  useToast,
+  Flex,
+  Spinner,
+  transition,
+} from "@chakra-ui/react";
 import { AccountContext, UserData } from "../context/AccountContext";
-import { BsFillExclamationSquareFill } from "react-icons/bs";
+import { BsTools, BsCheck2, BsCheck2Circle } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import ProjectReportsHistory from "../components/Reports/ProjectReportsHistory";
 import ProjectReportCard from "../components/Reports/ProjectReportCard";
@@ -102,11 +110,18 @@ const Projects = () => {
         <ProjectReportsHistory />
         {projectReport && <ProjectReportCard projectReport={projectReport} />}
       </Box>
-      <Flex justify="center" h="min" w={{ base: "full", md: "40%" }} p="4">
+      <Flex
+        justify="center"
+        overflowY="scroll"
+        h="80vh"
+        w={{ base: "full", md: "50%" }}
+        p="4"
+      >
         {!projects ? (
           <Spinner />
         ) : (
           <Grid
+            m="4"
             w={"min-content"}
             templateColumns={{ base: "repeat(3, 1fr)", md: "repeat(3, 1fr)" }}
             gap={4}
@@ -120,10 +135,15 @@ const Projects = () => {
                   minH={200}
                   minW={170}
                   maxW={170}
+                  transition="ease-in-out 300ms"
                   position="relative"
                   borderTopLeftRadius="2xl"
                   key={project.id}
-                  _hover={{ opacity: "1" }}
+                  _hover={{
+                    transform: "scale(1.1)",
+                    zIndex: 10,
+                    transition: "ease 300ms",
+                  }}
                   p={{ base: "4", md: "4" }}
                   flexDirection="column"
                   h="full"
@@ -163,10 +183,11 @@ const Projects = () => {
                     color="yellow.400"
                     zIndex="3"
                   >
-                    <BsFillExclamationSquareFill
-                      color={project.archived ? "green" : "orange"}
-                      fontSize="40"
-                    />
+                    {project.archived ? (
+                      <BsCheck2Circle color={"green"} fontSize="45" />
+                    ) : (
+                      <BsTools color={"orange"} fontSize="35" />
+                    )}
                   </Box>
                 </Flex>
               </Link>
