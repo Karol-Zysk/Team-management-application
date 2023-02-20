@@ -18,11 +18,13 @@ export async function projectReportConstans({
 
   const budgetEstimate =
     dto.budgetEstimate || project.budgetEstimate?.estimate || 0;
-  const summary = budgetEstimate - salary;  
+  const summary = budgetEstimate - salary;
 
+  const momentDuration = duration(project.duration);
   const parsedDuration = Number(
-    duration(project.duration).asHours().toFixed(2),
+    (momentDuration.asMilliseconds() / (1000 * 60 * 60)).toFixed(2),
   );
+
   const parsedEstimate = Number(
     duration(project.timeEstimate.estimate).asHours().toFixed(1),
   );

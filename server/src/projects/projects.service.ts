@@ -86,7 +86,7 @@ export class ProjectsService {
 
       const projectMembers = await this.prisma.employee.findMany({
         where: {
-          AND: [{ userId: user.id, workspaceId }, { hoursWorked: { gt: 0 } }],
+          AND: [{ userId: user.id, workspaceId }, { hoursWorked: { not: 0 } }],
         },
         select: {
           clockifyId: true,
