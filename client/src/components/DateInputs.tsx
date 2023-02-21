@@ -50,7 +50,17 @@ const DateInputs: React.FC<DateInputProps> = ({
           </FormControl>
         )}
       </Flex>
-      <Button my={6} onClick={handleGenerateReport}>
+      <Button
+        size={["sm", "md", "lg"]}
+        bg="facebook.400"
+        color="white"
+        rounded="xl"
+        border="2px"
+        _hover={{ bg: "facebook.200", color: "black", borderColor: "black" }}
+        borderColor="white"
+        my={6}
+        onClick={handleGenerateReport}
+      >
         Report
       </Button>
     </Flex>

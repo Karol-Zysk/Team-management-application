@@ -15,7 +15,7 @@ async function getHoursWorked({ clockifyId: clockifyId, dto: dto, date: date, wo
             ? new Date(dto.end)
             : date
                 ? new Date(date === null || date === void 0 ? void 0 : date.end)
-                : new Date(Date.now()), project }));
+                : new Date(Date.now()), project, 'page-size': 5000 }));
     let totalWorkingTime = 0;
     timeEntries.forEach((timeEntry) => {
         const workingTime = moment.duration(timeEntry.timeInterval.duration);

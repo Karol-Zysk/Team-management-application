@@ -95,7 +95,20 @@ const CompanyNameInput: React.FC<InputProps> = ({}) => {
           {companyName && <CheckIcon color="green" />}
         </VStack>
         <ButtonGroup w="70%" justifyContent="left" alignContent="right" mt="4">
-          <Button size={["sm", "md", "lg"]} type="submit">
+          <Button
+            size={["sm", "md", "lg"]}
+            bg="facebook.400"
+            color="white"
+            rounded="xl"
+            border="2px"
+            _hover={{
+              bg: "facebook.200",
+              color: "black",
+              borderColor: "black",
+            }}
+            borderColor="white"
+            type="submit"
+          >
             Submit
           </Button>
           {/* <Button size={["sm", "md", "lg"]} onClick={editInputHandler}>

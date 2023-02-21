@@ -22,6 +22,8 @@ import { AccountContext, UserData } from "../context/AccountContext";
 import { Employee } from "../interfaces/EmployeeInterface";
 import { useQuery } from "react-query";
 import { baseUrl } from "../utils/origin";
+import PageTitle from "../components/PageTitle";
+import Layout from "../components/Layout";
 
 const Employees = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -80,56 +82,43 @@ const Employees = () => {
   }
 
   return (
-    <Flex
-      overflowX={["scroll", "auto"]}
-      w="100%"
-      px={{ base: "4", md: "24" }}
-      py={{ base: "4", md: "24" }}
-      height="100%"
-      flexDirection="column"
-    >
-      <Heading ml={[6, 0]}>{activeUser.companyName} Team</Heading>
-      <Table
-        fontSize={["smaller", "md"]}
-        w={["min", "full"]}
-        mt="12"
-        variant="striped"
-      >
-        <Thead w="min">
+    <Layout title={`${activeUser.companyName} Team`}>
+      <Table fontSize={["smaller", "md"]} w={["min", "100%"]} variant="striped">
+        <Thead w={["min", "100%"]}>
           <Tr>
-            <Th w="min" boxShadow="md">
+            <Th w={["min", "max-content"]} boxShadow="md">
               Lp.
             </Th>
-            <Th w="min" boxShadow="md">
+            <Th w={["min", "max-content"]} boxShadow="md">
               Clockify Name
             </Th>
-            <Th w="min" boxShadow="md">
+            <Th w={["min", "max-content"]} boxShadow="md">
               first name
             </Th>
-            <Th w="min" boxShadow="md">
+            <Th w={["min", "max-content"]} boxShadow="md">
               last name
             </Th>
-            <Th w="min" boxShadow="md">
+            <Th w={["min", "max-content"]} boxShadow="md">
               email
             </Th>
-            <Th w="min" boxShadow="md">
+            <Th w={["min", "max-content"]} boxShadow="md">
               hourly rate
             </Th>
-            <Th w="min" boxShadow="md">
+            <Th w={["min", "max-content"]} boxShadow="md">
               Avatar
             </Th>
-            <Th w="min" boxShadow="md">
+            <Th w={["min", "max-content"]} boxShadow="md">
               Edit
             </Th>
-            <Th w="min" boxShadow="md">
+            <Th w={["min", "max-content"]} boxShadow="md">
               Report
             </Th>
           </Tr>
         </Thead>
-        <Tbody h="min-content">
+        <Tbody w="max-content" h="min-content">
           {employees.map((employee: Employee, index: number) => {
             return (
-              <Tr key={employee.id}>
+              <Tr w="max-content" key={employee.id}>
                 <Td
                   borderRight="1px"
                   boxShadow="md"
@@ -161,13 +150,18 @@ const Employees = () => {
                 <Td boxShadow="md">
                   <Link to={`/employees/${employee.id}`}>
                     <Button
-                      border="1px"
-                      color="gray.500"
-                      boxShadow="md"
-                      borderColor="gray.300"
-                      _hover={{ bg: "gray.200" }}
+                      size={["xs", "sm", "md"]}
+                      bg="facebook.400"
+                      color="white"
+                      rounded="xl"
+                      border="2px"
+                      _hover={{
+                        bg: "facebook.200",
+                        color: "black",
+                        borderColor: "black",
+                      }}
+                      borderColor="white"
                       leftIcon={<InfoIcon />}
-                      size="sm"
                     >
                       Report
                     </Button>
@@ -186,8 +180,8 @@ const Employees = () => {
             refetch={refetch}
           />
         )}
-      </Table>{" "}
-    </Flex>
+      </Table>
+    </Layout>
   );
 };
 

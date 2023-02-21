@@ -85,61 +85,84 @@ const ApiKeyInput = ({}) => {
   };
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      <form onSubmit={handleSubmit}>
-        <FormLabel fontSize="lg" htmlFor="companyName">{`${
-          companyName ? "Company Name" : "Enter Company Name"
-        } `}</FormLabel>
-        <VStack mt="4" h="min-content" flexDirection="row" align="center">
-          <Input
-            w="70%"
-            id="companyName"
-            placeholder={`${companyName ? companyName : "Enter Company Name"}`}
-            mr="3"
-            size="sm"
-            value={companyName}
-            isDisabled={isApiKeyValid || isActive}
-            required={true}
-            onChange={(e) => setCompanyName(e.target.value)}
-          />
+    <form onSubmit={handleSubmit}>
+      <FormLabel fontSize={["lg", "2xl"]} htmlFor="companyName">{`${
+        companyName ? "Company Name" : "Enter Company Name"
+      } `}</FormLabel>
+      <VStack mt="4" h="min-content" flexDirection="row" align="center">
+        <Input
+          w="70%"
+          id="companyName"
+          placeholder={`${companyName ? companyName : "Enter Company Name"}`}
+          mr="3"
+          size={["sm", "md"]}
+          _placeholder={{ opacity: 0.8, color: "gray.500" }}
+          value={companyName}
+          isDisabled={isApiKeyValid || isActive}
+          required={true}
+          onChange={(e) => setCompanyName(e.target.value)}
+        />
 
-          {companyName && <CheckIcon color="green" />}
-        </VStack>
-        <FormLabel fontSize="lg" mt="6" htmlFor="clockifyApiKey">{`${
-          isActive ? "You have a valid" : "Enter valid"
-        } Clockify API Key`}</FormLabel>
-        <VStack mt="4" h="min-content" flexDirection="row" align="center">
-          <Input
-            w="70%"
-            id="clockifyApiKey"
-            placeholder="Clockify API Key"
-            mr="3"
-            size="sm"
-            value={apiKey}
-            onChange={(e) => setApiKey(e.target.value)}
-            isDisabled={isApiKeyValid || isActive}
-          />
+        {companyName && <CheckIcon fontSize={24} color="green" />}
+      </VStack>
+      <FormLabel fontSize={["lg", "2xl"]} mt="6" htmlFor="clockifyApiKey">{`${
+        isActive ? "You have a valid" : "Enter valid"
+      } Clockify API Key`}</FormLabel>
+      <VStack mt="4" h="min-content" flexDirection="row" align="center">
+        <Input
+          w="70%"
+          id="clockifyApiKey"
+          placeholder="Clockify API Key"
+          mr="3"
+          size={["sm", "md"]}
+          background="white"
+          _placeholder={{ opacity: 0.8, color: "gray.500" }}
+          value={apiKey}
+          onChange={(e) => setApiKey(e.target.value)}
+          isDisabled={isApiKeyValid || isActive}
+        />
 
-          {isApiKeyValid && <CheckIcon color="green" />}
-        </VStack>
-        {!isActive && (
-          <Text color="red.700" fontSize={["sm", "sm", "md"]} my="4">
-            Providing a valid API key enables access to the application's
-            functionality
-          </Text>
-        )}
-        <ButtonGroup size={["sm", "md", "lg"]} mt="4">
-          <Button
-            type="submit"
-            color={isApiKeyValid ? "green" : ""}
-            isDisabled={isApiKeyValid || isActive}
-          >
-            {isActive ? <CheckIcon /> : "Activate"}
-          </Button>
-          <Button onClick={editInputKeyHandler}>Edit</Button>
-        </ButtonGroup>
-      </form>
-    </motion.div>
+        {isApiKeyValid && <CheckIcon fontSize={24} color="green" />}
+      </VStack>
+      {!isActive && (
+        <Text
+          color="red.700"
+          fontWeight="semibold"
+          fontSize={["sm", "md", "lg"]}
+          my="4"
+        >
+          Providing a valid API key enables access to the application's
+          functionality
+        </Text>
+      )}
+      <ButtonGroup size={["sm", "md", "lg"]} mt="4">
+        <Button
+          type="submit"
+          size={["sm", "md", "lg"]}
+          bg="facebook.400"
+          color="white"
+          rounded="xl"
+          border="2px"
+          _hover={{ bg: "facebook.200", color: "black", borderColor: "black" }}
+          borderColor="white"
+          isDisabled={isApiKeyValid || isActive}
+        >
+          {isApiKeyValid ? <CheckIcon /> : "Activate"}
+        </Button>
+        <Button
+          size={["sm", "md", "lg"]}
+          bg="facebook.400"
+          color="white"
+          rounded="xl"
+          border="2px"
+          _hover={{ bg: "facebook.200", color: "black", borderColor: "black" }}
+          borderColor="white"
+          onClick={editInputKeyHandler}
+        >
+          Edit
+        </Button>
+      </ButtonGroup>
+    </form>
   );
 };
 

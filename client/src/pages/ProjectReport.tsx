@@ -13,7 +13,9 @@ import {
 } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import { useParams } from "react-router";
+import Layout from "../components/Layout";
 import DateInputs from "../components/DateInputs";
+import PageTitle from "../components/PageTitle";
 import ProjectReportCard from "../components/Reports/ProjectReportCard";
 import { AccountContext } from "../context/AccountContext";
 import { baseUrl } from "../utils/origin";
@@ -21,6 +23,7 @@ import { baseUrl } from "../utils/origin";
 const ProjectsReport = () => {
   const { projectReport, setProjectReport } = useContext(AccountContext);
   const [startDate, setStartDate] = useState("");
+  const [project, setProject] = useState();
   const [timeEstimate, setTimeEstimate] = useState("");
   const [budgetEstimate, setBudgetEstimate] = useState("");
   const [note, setNote] = useState("");
@@ -28,6 +31,46 @@ const ProjectsReport = () => {
 
   const toast = useToast();
   const { id } = useParams();
+  const handleGetReport = async () => {
+    try {
+      const accessToken = localStorage.getItem("access_token");
+
+      setLoading(true);
+      const response = await fetch(`${baseUrl}/projects/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        toast({
+          title: "Error",
+          description: `${data.message}`,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+        return;
+      }
+      const data = await response.json();
+
+      setProject(data);
+      console.log(data);
+
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      toast({
+        title: "Error",
+        description: `${error.message}`,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
 
   const handleGenerateReport = async () => {
     try {
@@ -76,7 +119,9 @@ const ProjectsReport = () => {
   };
 
   return (
-    <Flex w="full" px={{ base: "4", md: "24" }} py={{ base: "4", md: "24" }}>
+    <Layout
+      title={`Create ${projectReport && projectReport.projectName} Report`}
+    >
       <Box w="50%">
         <FormLabel htmlFor="timeEstimate">Time Estimate</FormLabel>
         <VStack mt="4" h="min-content" flexDirection="row" align="center">
@@ -135,7 +180,7 @@ const ProjectsReport = () => {
           projectReport && <ProjectReportCard projectReport={projectReport!} />
         )}
       </Box>
-    </Flex>
+    </Layout>
   );
 };
 

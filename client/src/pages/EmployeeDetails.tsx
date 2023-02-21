@@ -12,6 +12,8 @@ import {
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
+import Layout from "../components/Layout";
+import PageTitle from "../components/PageTitle";
 import EmployeeSalaryReport from "../components/Reports/EmployeeSalaryReport";
 import { AccountContext } from "../context/AccountContext";
 import { Employee } from "../interfaces/EmployeeInterface";
@@ -90,76 +92,80 @@ const EmployeeDetails = ({}) => {
   };
 
   return (
-    <Flex
-      px={{ base: "4", md: "24" }}
-      py={{ base: "4", md: "12" }}
-      w="full"
-      flexDirection="column"
-      alignItems="center"
-      justify="space-around"
-    >
-      <Box px={{ base: "4", md: "24" }} py={{ base: "4", md: "24" }} w="100%">
-        <Heading mb={8}>Employee Report</Heading>
-        <Flex flexWrap={{ base: "wrap", md: "nowrap" }}>
-          <Box flexBasis={{ base: "100%", md: "50%" }}>
-            <Text fontSize="lg" my={4}>
-              <strong>ClockifyName:</strong> {employee?.clockifyName}
-            </Text>
-            <Text fontSize="lg" my={4}>
-              <strong>First Name:</strong> {employee?.firstName}
-            </Text>
-            <Text fontSize="lg" my={4}>
-              <strong>Last Name: </strong>
-              {employee?.lastName}
-            </Text>
-            <Text fontSize="lg" my={4}>
-              <strong>Hourly Rate:</strong> {employee?.hourlyRate} zł/h
-            </Text>
-            <Text fontSize="lg" my={4} mt="4">
-              <strong>Time Period:</strong>
-            </Text>
-            <Flex flexDirection="column" w="min-content" my={2}>
-              <Box display="flex">
-                <FormControl>
-                  <FormLabel htmlFor="start-date">From</FormLabel>
-                  <Input
-                    w="min-content"
-                    type="date"
-                    id="start-date"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                  />
-                </FormControl>
-                <FormControl ml={4}>
-                  <FormLabel htmlFor="end-date">To</FormLabel>
-                  <Input
-                    w="min-content"
-                    type="date"
-                    id="end-date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                  />
-                </FormControl>
+    <Layout title={`${employee?.clockifyName} Salary`}>
+      <Flex flexWrap={{ base: "wrap", md: "nowrap" }}>
+        <Box flexBasis={{ base: "100%", md: "50%" }}>
+          <Text fontSize="lg" my={4}>
+            <strong>ClockifyName:</strong> {employee?.clockifyName}
+          </Text>
+          <Text fontSize="lg" my={4}>
+            <strong>First Name:</strong> {employee?.firstName}
+          </Text>
+          <Text fontSize="lg" my={4}>
+            <strong>Last Name: </strong>
+            {employee?.lastName}
+          </Text>
+          <Text fontSize="lg" my={4}>
+            <strong>Hourly Rate:</strong> {employee?.hourlyRate} zł/h
+          </Text>
+          <Text fontSize="lg" my={4} mt="4">
+            <strong>Time Period:</strong>
+          </Text>
+          <Flex flexDirection="column" w="min-content" my={2}>
+            <Box display="flex">
+              <FormControl>
+                <FormLabel htmlFor="start-date">From</FormLabel>
+                <Input
+                  w="min-content"
+                  type="date"
+                  id="start-date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
+              </FormControl>
+              <FormControl ml={4}>
+                <FormLabel htmlFor="end-date">To</FormLabel>
+                <Input
+                  w="min-content"
+                  type="date"
+                  id="end-date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              </FormControl>
+            </Box>
+          </Flex>
+          <Button
+            size={["sm", "md", "lg"]}
+            bg="facebook.400"
+            color="white"
+            rounded="xl"
+            border="2px"
+            _hover={{
+              bg: "facebook.200",
+              color: "black",
+              borderColor: "black",
+            }}
+            borderColor="white"
+            my={6}
+            onClick={handleGenerateReport}
+          >
+            Report
+          </Button>
+        </Box>
+        <Box p="2" w="80%" h="100%">
+          {loading ? (
+            <Spinner />
+          ) : (
+            salaryReport && (
+              <Box>
+                <EmployeeSalaryReport salaryReport={salaryReport} />
               </Box>
-            </Flex>
-            <Button my={6} onClick={handleGenerateReport}>
-              Report
-            </Button>
-          </Box>
-          <Box p="2" w="80%" h="100%">
-            {loading ? (
-              <Spinner />
-            ) : (
-              salaryReport && (
-                <Box>
-                  <EmployeeSalaryReport salaryReport={salaryReport} />
-                </Box>
-              )
-            )}
-          </Box>
-        </Flex>
-      </Box>
-    </Flex>
+            )
+          )}
+        </Box>
+      </Flex>
+    </Layout>
   );
 };
 

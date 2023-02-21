@@ -1,11 +1,6 @@
 import {
   Box,
-  Button,
-  Flex,
-  FormControl,
-  FormLabel,
-  Heading,
-  Input,
+
   Spinner,
   Text,
   useToast,
@@ -17,6 +12,7 @@ import TeamSalaryReport from "../components/Reports/TeamSalaryReport";
 import { AccountContext } from "../context/AccountContext";
 import { motion } from "framer-motion";
 import { baseUrl } from "../utils/origin";
+import Layout from "../components/Layout";
 
 const EmployeesSalariesReport = () => {
   const [startDate, setStartDate] = useState("");
@@ -67,14 +63,8 @@ const EmployeesSalariesReport = () => {
   };
 
   return (
-    <Flex
-      w="full"
-      flexDirection={{ base: "column", md: "row" }}
-      px={{ base: "4", md: "24" }}
-      py={{ base: "4", md: "24" }}
-    >
+    <Layout title="Employees Salary Report">
       <Box w="100%">
-        <Heading mb="12">Employees Salary Report</Heading>
         <Text mb="6" fontWeight="semibold" fontSize="lg">
           Enter the dates for which you want the report to be calculated.
         </Text>
@@ -106,7 +96,7 @@ const EmployeesSalariesReport = () => {
           )
         )}
       </Box>
-    </Flex>
+    </Layout>
   );
 };
 export default EmployeesSalariesReport;

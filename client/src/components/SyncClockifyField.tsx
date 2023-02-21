@@ -45,20 +45,41 @@ const SyncClockifyField = () => {
   return (
     <Box mt="12">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-        <Text color="green.300" fontSize={["md", "md", "lg"]} mb="5">
+        <Text
+          color="green.500"
+          fontWeight="semibold"
+          fontSize={["md", "md", "lg"]}
+          mb="5"
+        >
           With a valid API key, you can synchronize your database with Clockify
           API and use most of the application's features.
         </Text>
         <ButtonGroup w="70%" justifyContent="left" alignContent="right" mt="4">
           <Button
             size={["sm", "md", "lg"]}
+            bg="facebook.400"
+            color="white"
+            rounded="xl"
+            border="2px"
+            _hover={{
+              bg: "facebook.200",
+              color: "black",
+              borderColor: "black",
+            }}
+            borderColor="white"
             onClick={handleSyncronize}
             isDisabled={!isActive}
           >
             Synchronize
           </Button>
           {employee.length !== 0 && (
-            <Text mt="1" ml="8" fontSize={["md", "md", "xl"]} color="green.400">
+            <Text
+              fontWeight="semibold"
+              mt="1"
+              ml="12"
+              fontSize={["md", "md", "xl"]}
+              color="green.500"
+            >
               {employee.length} new employees.
             </Text>
           )}

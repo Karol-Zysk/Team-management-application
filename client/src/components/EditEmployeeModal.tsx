@@ -12,15 +12,14 @@ import {
   Input,
   useToast,
 } from "@chakra-ui/react";
-import { pick } from "lodash";
-import { useContext, useEffect, useLayoutEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   QueryObserverResult,
   RefetchOptions,
   RefetchQueryFilters,
 } from "react-query";
 import { AccountContext } from "../context/AccountContext";
-import { EditedEmployee, Employee } from "../interfaces/EmployeeInterface";
+import { Employee } from "../interfaces/EmployeeInterface";
 import { baseUrl } from "../utils/origin";
 
 type ModalProps = {
@@ -124,8 +123,8 @@ const EditModal: React.FC<ModalProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={handleCloseModal}>
       <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>{employee.id}</ModalHeader>
+      <ModalContent p="8" border="2px">
+        <ModalHeader>Edit {employee.clockifyName}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <form onSubmit={handleEditEmployee}>
@@ -170,7 +169,17 @@ const EditModal: React.FC<ModalProps> = ({
             </FormControl>
             <ModalFooter>
               <Button
-                background="blue"
+                size={["sm", "md", "lg"]}
+                bg="facebook.400"
+                color="white"
+                rounded="xl"
+                border="2px"
+                _hover={{
+                  bg: "facebook.200",
+                  color: "black",
+                  borderColor: "black",
+                }}
+                borderColor="white"
                 mr={3}
                 isLoading={isLoading}
                 type="submit"

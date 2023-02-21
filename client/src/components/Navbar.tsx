@@ -51,11 +51,17 @@ export default function Nav({}) {
   const { isSync, isLoggedIn } = useContext(AccountContext);
 
   const { colorMode, toggleColorMode } = useColorMode();
+  const shadow = useColorModeValue("1px 1px 1px black", "1px 1px 1px white");
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>
-      <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
+      <Box
+        bg={useColorModeValue("whiteAlpha.900", "gray.900")}
+        px={4}
+        borderBottom="4px"
+      >
         <Flex
           h={24}
           px="4"
@@ -72,8 +78,12 @@ export default function Nav({}) {
             />
           )}
           <HStack spacing={8} alignItems={"center"}>
-            <Box fontSize="3xl" fontWeight="bold">
-              Teamy
+            <Box
+              textShadow={shadow}
+              fontSize={["2xl", "5xl"]}
+              fontWeight="bold"
+            >
+              Teamy.
             </Box>
             <HStack
               as={"nav"}

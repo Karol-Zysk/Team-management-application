@@ -102,9 +102,17 @@ const ProjectReportsHistory = () => {
                     </Td>
                     <Td>
                       <Button
-                        variant="solid"
-                        size="sm"
-                        border="1px"
+                        size={["xs", "sm", "md"]}
+                        bg="red.400"
+                        color="white"
+                        rounded="xl"
+                        border="2px"
+                        _hover={{
+                          bg: "red.200",
+                          color: "black",
+                          borderColor: "black",
+                        }}
+                        borderColor="white"
                         onClick={() => deleteReport(report.id, event)}
                       >
                         Delete

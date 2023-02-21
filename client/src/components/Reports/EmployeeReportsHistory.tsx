@@ -117,9 +117,17 @@ const ReportsHistory = () => {
                 </Td>
                 <Td>
                   <Button
-                    variant="solid"
-                    size="sm"
-                    border="1px"
+                    size={["sm", "md", "lg"]}
+                    bg="facebook.400"
+                    color="white"
+                    rounded="xl"
+                    border="2px"
+                    _hover={{
+                      bg: "facebook.200",
+                      color: "black",
+                      borderColor: "black",
+                    }}
+                    borderColor="white"
                     onClick={() => deleteReport(report.id, event)}
                     disabled={isLoading}
                   >

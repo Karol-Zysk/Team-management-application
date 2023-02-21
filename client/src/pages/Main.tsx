@@ -1,21 +1,19 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { useContext } from "react";
 import { AccountContext, UserData } from "../context/AccountContext";
 import ApiKeyInput from "../components/ApiKeyInput";
 import SyncClockifyField from "../components/SyncClockifyField";
+import PageTitle from "../components/PageTitle";
+import Layout from "../components/Layout";
+import image from "../assets/employee.svg";
+import MainSvg from "../components/MainSvg";
 
 const Main = () => {
-  const { user, isSync } = useContext(AccountContext);
+  const { user } = useContext(AccountContext);
   const activeUser = user as UserData;
 
   return (
-    <Flex
-      flexDirection={["column-reverse", "row"]}
-      w="100%"
-      paddingX={[6, 12, 36]}
-      paddingY={[6, 12, 24]}
-      height="100%"
-    >
+    <Layout title="Account Settings">
       <Box w="100%">
         {!activeUser.active && (
           <Text fontSize={["lg", "xl"]} fontWeight="semibold" mb="6">
@@ -25,22 +23,26 @@ const Main = () => {
         <ApiKeyInput />
         <SyncClockifyField />
       </Box>
-      <Box
+      <Flex
+        flexDirection="column"
         display={["block", "flex"]}
-        alignItems="flex-start"
-        justifyContent="flex-end"
-        width="100%"
+        alignItems="flex-end"
+        width="60%"
       >
         <Text
           fontSize={["2xl", "4xl"]}
           fontWeight="semibold"
-          marginBottom={[8, 0]}
+          marginBottom={[8, 12]}
           marginRight={[0, 12]}
+          textShadow={"2px 1px 1px"}
         >
           Hello {activeUser.name}!
         </Text>
-      </Box>
-    </Flex>
+        <Box display={["none", "block"]}>
+          <MainSvg />
+        </Box>
+      </Flex>
+    </Layout>
   );
 };
 

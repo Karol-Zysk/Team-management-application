@@ -24,6 +24,7 @@ export async function getHoursWorked({
         ? new Date(date?.end)
         : new Date(Date.now()),
       project,
+      'page-size': 5000,
     });
 
   let totalWorkingTime = 0;
