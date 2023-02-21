@@ -1,9 +1,9 @@
 import { Box, Button, ButtonGroup, Text } from "@chakra-ui/react";
 import { useContext, useState } from "react";
-import { AccountContext } from "../context/AccountContext";
-import { Employee } from "../interfaces/EmployeeInterface";
+import { AccountContext } from "../../context/AccountContext";
+import { Employee } from "../../interfaces/EmployeeInterface";
 import { motion } from "framer-motion";
-import { baseUrl } from "../utils/origin";
+import { baseUrl } from "../../utils/origin";
 
 const SyncClockifyField = () => {
   const [employee, setEmployee] = useState<Employee[]>([]);

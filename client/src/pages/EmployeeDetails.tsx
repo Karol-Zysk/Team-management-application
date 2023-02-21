@@ -14,7 +14,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import Layout from "../components/Layout";
 import PageTitle from "../components/PageTitle";
-import EmployeeSalaryReport from "../components/Reports/EmployeeSalaryReport";
+import EmployeeSalaryReport from "../components/Employee/EmployeeSalaryReport";
 import { AccountContext } from "../context/AccountContext";
 import { Employee } from "../interfaces/EmployeeInterface";
 import { baseUrl } from "../utils/origin";

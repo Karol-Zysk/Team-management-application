@@ -1,28 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  Text,
-  Box,
-  Grid,
-  useToast,
-  Flex,
-  Spinner,
-  transition,
-} from "@chakra-ui/react";
+import { Text, useToast, Flex, Spinner } from "@chakra-ui/react";
 import { AccountContext, UserData } from "../context/AccountContext";
-import { BsTools, BsCheck2, BsCheck2Circle } from "react-icons/bs";
 import { HiBuildingOffice2 } from "react-icons/hi2";
+import { FaProjectDiagram, FaUserTie } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import ProjectReportsHistory from "../components/Reports/ProjectReportsHistory";
-import ProjectReportCard from "../components/Reports/ProjectReportCard";
+import ProjectReportsHistory from "../components/Projects/ProjectReportsHistory";
 import { baseUrl } from "../utils/origin";
 import Layout from "../components/Layout";
-
-interface Project {
-  id: string;
-  name: string;
-  archived: boolean;
-  clientName: string;
-}
+import ProjectGrid from "../components/Projects/ProjectGrid";
+import { Project } from "../interfaces/ProjectReportInterface";
 
 const Projects = () => {
   const toast = useToast();
@@ -81,30 +67,42 @@ const Projects = () => {
   return (
     <Layout title={`${activeUser.companyName} Projects`}>
       <Flex justifyContent="space-around">
-        <Flex direction="column" w="40%">
-          <Flex>
-            <HiBuildingOffice2 />
+        <Flex direction="column" w="50%">
+          <Flex mb="6" align="center">
+            <HiBuildingOffice2 fontSize={32} />
             <Text
               fontWeight="semibold"
+              ml="2"
               fontSize={{ base: "lg", md: "2xl" }}
-              mb="6"
             >
               <span style={{ fontWeight: "bold" }}>Company:</span>{" "}
               {activeUser.companyName}
             </Text>
           </Flex>
-          <Text
-            fontWeight="semibold"
-            fontSize={{ base: "lg", md: "2xl" }}
-            mb="6"
-          >
-            <span style={{ fontWeight: "bold" }}>Owner:</span> {activeUser.name}
-          </Text>
-          <Text fontSize={{ base: "lg", md: "2xl" }} mb="6">
-            <span style={{ fontWeight: "bold" }}>Number of projects:</span>{" "}
-            {projects.length}
-          </Text>
-          <Text fontSize={{ base: "sm", md: "larger" }} mb="6">
+          <Flex mb="6" align="center">
+            <FaUserTie fontSize={32} />
+            <Text
+              fontWeight="semibold"
+              ml="2"
+              fontSize={{ base: "lg", md: "2xl" }}
+            >
+              <span style={{ fontWeight: "bold" }}>Owner:</span>{" "}
+              {activeUser.name}
+            </Text>
+          </Flex>
+          <Flex mb="10" align="center">
+            <FaProjectDiagram fontSize={32} />
+            <Text
+              fontWeight="semibold"
+              ml="2"
+              fontSize={{ base: "lg", md: "2xl" }}
+            >
+              <span style={{ fontWeight: "bold" }}>Number Of Projects:</span>{" "}
+              {projects.length}
+            </Text>
+          </Flex>
+
+          <Text fontSize={{ base: "lg", md: "xl" }} mb="12">
             <span style={{ fontWeight: "bold" }}>Tip:</span> If you're creating
             a report for the current project, simply click "generate report" and
             leave the default settings. If you want to generate a report for a
@@ -118,86 +116,11 @@ const Projects = () => {
           </Text>
           <ProjectReportsHistory />
         </Flex>
-        {projectReport && <ProjectReportCard projectReport={projectReport} />}
-
-        <Flex justify="center" h="80vh" w={{ base: "full", md: "50%" }} p="4">
+        <Flex justify="center" p="4" w="50%">
           {!projects ? (
             <Spinner />
           ) : (
-            <Grid
-              m="4"
-              w={"min-content"}
-              templateColumns={{ base: "repeat(3, 1fr)", md: "repeat(3, 1fr)" }}
-              gap={4}
-            >
-              {projects.map((project) => (
-                <Link key={project.id} to={`/projects/${project.id}`}>
-                  <Flex
-                    bg="white"
-                    border="2px"
-                    color="blackAlpha.900"
-                    boxShadow="md"
-                    minH={170}
-                    maxW={150}
-                    minW={150}
-                    transition="ease-in-out 300ms"
-                    position="relative"
-                    borderTopLeftRadius="2xl"
-                    key={project.id}
-                    _hover={{
-                      transform: "scale(1.1)",
-                      zIndex: 10,
-                      transition: "ease 300ms",
-                    }}
-                    p={{ base: "4", md: "4" }}
-                    flexDirection="column"
-                    h="full"
-                  >
-                    <Text
-                      w="full"
-                      display="flex"
-                      fontWeight="bold"
-                      fontSize={{ base: "sm", md: "sm" }}
-                      my="4"
-                      justifyContent="center"
-                    >
-                      {activeUser.companyName}
-                    </Text>
-                    <Text
-                      fontWeight="bold"
-                      fontSize={{ base: "smaller", md: "smaller" }}
-                      mb="6"
-                      justifyContent="center"
-                      position="relative"
-                    >
-                      Project: {project.name}
-                    </Text>
-                    <Text
-                      fontWeight="bold"
-                      mb="4"
-                      fontSize={{ base: "smaller", md: "smaller" }}
-                      justifyContent="center"
-                      position="relative"
-                    >
-                      Client: {project.clientName}
-                    </Text>
-                    <Box
-                      position="absolute"
-                      right="-5px"
-                      bottom="-5px"
-                      color="yellow.400"
-                      zIndex="3"
-                    >
-                      {project.archived ? (
-                        <BsCheck2Circle color={"green"} fontSize="45" />
-                      ) : (
-                        <BsTools color={"orange"} fontSize="35" />
-                      )}
-                    </Box>
-                  </Flex>
-                </Link>
-              ))}
-            </Grid>
+            <ProjectGrid projects={projects} activeUser={activeUser} />
           )}
         </Flex>
       </Flex>

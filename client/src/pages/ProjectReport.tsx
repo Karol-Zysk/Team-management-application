@@ -11,19 +11,26 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import Layout from "../components/Layout";
 import DateInputs from "../components/DateInputs";
 import PageTitle from "../components/PageTitle";
-import ProjectReportCard from "../components/Reports/ProjectReportCard";
+import ProjectReportCard from "../components/Projects/ProjectReportCard";
 import { AccountContext } from "../context/AccountContext";
 import { baseUrl } from "../utils/origin";
+import { Project } from "../interfaces/ProjectReportInterface";
 
 const ProjectsReport = () => {
+  useEffect(() => {
+    return () => {
+      handleGetProject();
+    };
+  }, []);
+
   const { projectReport, setProjectReport } = useContext(AccountContext);
   const [startDate, setStartDate] = useState("");
-  const [project, setProject] = useState();
+  const [project, setProject] = useState<Project | undefined>();
   const [timeEstimate, setTimeEstimate] = useState("");
   const [budgetEstimate, setBudgetEstimate] = useState("");
   const [note, setNote] = useState("");
@@ -31,7 +38,8 @@ const ProjectsReport = () => {
 
   const toast = useToast();
   const { id } = useParams();
-  const handleGetReport = async () => {
+
+  const handleGetProject = async () => {
     try {
       const accessToken = localStorage.getItem("access_token");
 
@@ -56,8 +64,7 @@ const ProjectsReport = () => {
       }
       const data = await response.json();
 
-      setProject(data);
-      console.log(data);
+      if (data) setProject(data);
 
       setLoading(false);
     } catch (error: any) {
@@ -119,50 +126,56 @@ const ProjectsReport = () => {
   };
 
   return (
-    <Layout
-      title={`Create ${projectReport && projectReport.projectName} Report`}
-    >
-      <Box w="50%">
-        <FormLabel htmlFor="timeEstimate">Time Estimate</FormLabel>
+    <Layout title={`Create ${project && project?.name} Report`}>
+      <Flex w="min" direction="column" justify="space-between">
+        <FormLabel fontSize={["lg", "2xl"]} htmlFor="timeEstimate">
+          Time Estimate
+        </FormLabel>
         <VStack mt="4" h="min-content" flexDirection="row" align="center">
           <Input
-            w="min-content"
             id="timeEstimate"
+            w="min"
             placeholder={`Time Estimate`}
             mr="3"
-            type="number"
-            size="sm"
+            size={["sm", "md"]}
+            _placeholder={{ opacity: 0.8, color: "gray.500" }}
             value={timeEstimate}
             onChange={(e) => setTimeEstimate(e.target.value)}
           />
-          <Text>hours</Text>
+          <Text fontWeight="semibold" fontSize={["md", "lg"]}>
+            hours
+          </Text>
         </VStack>
-        <FormLabel mt="6" htmlFor="budgetEstimate">
+        <FormLabel fontSize={["lg", "2xl"]} mt="6" htmlFor="budgetEstimate">
           Budget Estimate
         </FormLabel>
         <VStack mt="4" h="min-content" flexDirection="row" align="center">
           <Input
-            w="min-content"
             id="budgetEstimate"
-            placeholder="Budget Estimate"
+            w="min"
+            placeholder={`Budget Estimate`}
             mr="3"
-            type="number"
-            size="sm"
+            size={["sm", "md"]}
+            _placeholder={{ opacity: 0.8, color: "gray.500" }}
             value={budgetEstimate}
             onChange={(e) => setBudgetEstimate(e.target.value)}
           />
-          <Text>PLN</Text>
+          <Text fontWeight="semibold" fontSize={["md", "lg"]}>
+            PLN
+          </Text>
         </VStack>{" "}
-        <FormLabel mt="6" htmlFor="note">
+        <FormLabel mt="6" fontSize={["lg", "2xl"]} htmlFor="note">
           Note
         </FormLabel>
         <VStack my="4" h="min-content" flexDirection="row" align="center">
           <Textarea
-            w="70%"
-            id="budgetEstimate"
-            placeholder="Note about project"
+            id="note"
+            w="max-content"
+            h="max-content"
+            placeholder={`Note...`}
             mr="3"
-            size="sm"
+            size={["sm", "md"]}
+            _placeholder={{ opacity: 0.8, color: "gray.500" }}
             value={note}
             onChange={(e) => setNote(e.target.value)}
           />
@@ -172,8 +185,8 @@ const ProjectsReport = () => {
           setStartDate={setStartDate}
           handleGenerateReport={handleGenerateReport}
         />
-      </Box>
-      <Box>
+      </Flex>
+      <Box border="2px">
         {loading ? (
           <Spinner />
         ) : (

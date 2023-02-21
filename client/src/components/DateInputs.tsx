@@ -23,10 +23,10 @@ const DateInputs: React.FC<DateInputProps> = ({
   handleGenerateReport,
 }) => {
   return (
-    <Flex flexDirection="column" w="min-content" p="2" my={2}>
+    <Flex flexDirection="column" p="2" my={2}>
       <Flex>
         <FormControl>
-          <FormLabel htmlFor="start-date" mb="4">
+          <FormLabel htmlFor="start-date" fontSize={["lg", "2xl"]} mb="4">
             {endDate ? "Time Period: from" : "Project Start Date"}
           </FormLabel>
           <Input

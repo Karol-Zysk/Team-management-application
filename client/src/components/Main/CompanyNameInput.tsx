@@ -9,8 +9,8 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useContext } from "react";
-import { AccountContext } from "../context/AccountContext";
-import { baseUrl } from "../utils/origin";
+import { AccountContext } from "../../context/AccountContext";
+import { baseUrl } from "../../utils/origin";
 
 interface InputProps {
   error: any;

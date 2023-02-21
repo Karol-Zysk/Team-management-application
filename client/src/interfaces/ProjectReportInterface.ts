@@ -26,3 +26,10 @@ interface Membership {
   salary: number;
   profilePicture: string;
 }
+
+export interface Project {
+  id: string;
+  name: string;
+  archived: boolean;
+  clientName: string;
+}

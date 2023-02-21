@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import EditModal from "../components/EditEmployeeModal";
+import EditModal from "../components/Employee/EditEmployeeModal";
 import { AccountContext, UserData } from "../context/AccountContext";
 import { Employee } from "../interfaces/EmployeeInterface";
 import { useQuery } from "react-query";

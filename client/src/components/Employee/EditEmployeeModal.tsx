@@ -18,9 +18,9 @@ import {
   RefetchOptions,
   RefetchQueryFilters,
 } from "react-query";
-import { AccountContext } from "../context/AccountContext";
-import { Employee } from "../interfaces/EmployeeInterface";
-import { baseUrl } from "../utils/origin";
+import { AccountContext } from "../../context/AccountContext";
+import { Employee } from "../../interfaces/EmployeeInterface";
+import { baseUrl } from "../../utils/origin";
 
 type ModalProps = {
   handleCloseModal: () => void;

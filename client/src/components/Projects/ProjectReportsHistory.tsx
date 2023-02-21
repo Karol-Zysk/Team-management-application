@@ -80,7 +80,7 @@ const ProjectReportsHistory = () => {
   return (
     <>
       {reports.length > 0 ? (
-        <Flex flexDirection="column" mt="12">
+        <Flex flexDirection="column">
           <Table w="100%" variant="striped">
             <Thead>
               <Tr>
@@ -92,7 +92,7 @@ const ProjectReportsHistory = () => {
               {reports.map((report: ProjectReport) => {
                 return (
                   <Tr
-                    opacity="0.7"
+                    opacity="0.85"
                     cursor="pointer"
                     _hover={{ opacity: 1, transition: "ease" }}
                     key={report.id}
@@ -103,12 +103,12 @@ const ProjectReportsHistory = () => {
                     <Td>
                       <Button
                         size={["xs", "sm", "md"]}
-                        bg="red.400"
+                        bg="red.600"
                         color="white"
                         rounded="xl"
                         border="2px"
                         _hover={{
-                          bg: "red.200",
+                          bg: "red.400",
                           color: "black",
                           borderColor: "black",
                         }}

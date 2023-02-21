@@ -1,8 +1,8 @@
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { useContext } from "react";
 import { AccountContext, UserData } from "../context/AccountContext";
-import ApiKeyInput from "../components/ApiKeyInput";
-import SyncClockifyField from "../components/SyncClockifyField";
+import ApiKeyInput from "../components/Main/ApiKeyInput";
+import SyncClockifyField from "../components/Main/SyncClockifyField";
 import PageTitle from "../components/PageTitle";
 import Layout from "../components/Layout";
 import image from "../assets/employee.svg";

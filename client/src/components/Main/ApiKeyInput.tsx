@@ -9,9 +9,9 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useContext } from "react";
-import { AccountContext } from "../context/AccountContext";
+import { AccountContext } from "../../context/AccountContext";
 import { motion } from "framer-motion";
-import { baseUrl } from "../utils/origin";
+import { baseUrl } from "../../utils/origin";
 
 const ApiKeyInput = ({}) => {
   const toast = useToast();
@@ -91,8 +91,8 @@ const ApiKeyInput = ({}) => {
       } `}</FormLabel>
       <VStack mt="4" h="min-content" flexDirection="row" align="center">
         <Input
-          w="70%"
           id="companyName"
+          w="70%"
           placeholder={`${companyName ? companyName : "Enter Company Name"}`}
           mr="3"
           size={["sm", "md"]}
