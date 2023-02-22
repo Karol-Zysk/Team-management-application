@@ -92,7 +92,7 @@ export default function Footer() {
             Teamy.
           </Box>
         </Box>
-        <Text>© 2022 Software Partner. All rights reserved</Text>
+        <Text>© 2023 Software Partner. All rights reserved</Text>
         <Stack direction={"row"} spacing={6}>
           <SocialButton label={"Twitter"} href={"#"}>
             <FaTwitter />
