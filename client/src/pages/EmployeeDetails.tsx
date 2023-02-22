@@ -75,20 +75,39 @@ const EmployeeDetails = ({}) => {
 
   const handleGenerateReport = async () => {
     const accessToken = localStorage.getItem("access_token");
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `${baseUrl}/salary/${employee?.clockifyId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({ start: startDate, end: endDate }),
+        }
+      );
+      if (response.status >= 400) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+      }
+      const data = await response.json();
+      setSalaryReport(data);
 
-    setLoading(true);
-    const response = await fetch(`${baseUrl}/salary/${employee?.clockifyId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({ start: startDate, end: endDate }),
-    });
-    const data = await response.json();
-    setSalaryReport(data);
-
-    setLoading(false);
+      setLoading(false);
+    } catch (err: any) {
+      setLoading(false);
+      console.error(err.message);
+      setError(err.message);
+      toast({
+        title: "Error",
+        description: `${err.message}`,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
@@ -117,6 +136,8 @@ const EmployeeDetails = ({}) => {
               <FormControl>
                 <FormLabel htmlFor="start-date">From</FormLabel>
                 <Input
+                  bg="white"
+                  color="black"
                   w="min-content"
                   type="date"
                   id="start-date"
@@ -127,6 +148,8 @@ const EmployeeDetails = ({}) => {
               <FormControl ml={4}>
                 <FormLabel htmlFor="end-date">To</FormLabel>
                 <Input
+                  bg="white"
+                  color="black"
                   w="min-content"
                   type="date"
                   id="end-date"
@@ -160,7 +183,11 @@ const EmployeeDetails = ({}) => {
           ) : (
             salaryReport && (
               <Box>
-                <EmployeeSalaryReport start={startDate} end={endDate} salaryReport={salaryReport} />
+                <EmployeeSalaryReport
+                  start={startDate}
+                  end={endDate}
+                  salaryReport={salaryReport}
+                />
               </Box>
             )
           )}

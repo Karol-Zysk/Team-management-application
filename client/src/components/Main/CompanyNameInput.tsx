@@ -87,6 +87,8 @@ const CompanyNameInput: React.FC<InputProps> = ({}) => {
             id="companyName"
             placeholder={`${companyName ? companyName : "Enter Company Name"}`}
             mr="3"
+            bg="white"
+            color="black"
             size="sm"
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}

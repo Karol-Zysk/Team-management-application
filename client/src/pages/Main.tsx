@@ -14,34 +14,21 @@ const Main = () => {
 
   return (
     <Layout title="Account Settings">
-      <Box w="50%">
-        {!activeUser.active && (
-          <Text fontSize={["lg", "xl"]} fontWeight="semibold" mb="6">
-            To unlock features, please provide informations.
-          </Text>
-        )}
-        <ApiKeyInput />
-        <SyncClockifyField />
-      </Box>
-      <Flex
-        flexDirection="column"
-        display={["block", "flex"]}
-        alignItems="center"
-        justify="center"
-        width="50%"
-      >
+      <Flex direction="column">
         <Flex
           w="auto"
           justify="center"
           h="min"
+          mx="20%"
           px="8"
           py="4"
           mb="6"
-          bg={useColorModeValue("gray.200", "facebook.600")}
+          transform={["none", "translateY(-30%)"]}
+          bg={useColorModeValue("facebook.300", "facebook.600")}
           opacity={1}
           boxShadow={useColorModeValue(
-            "4px 4px 6px black",
-            "4px 4px 6px  black"
+            "4px 4px 8px black",
+            "4px 4px 8px  black"
           )}
         >
           <Heading
@@ -57,14 +44,28 @@ const Main = () => {
             Hello {activeUser.name}
           </Heading>
         </Flex>
-        <Flex
-          p="8"
-          w="100%"
-          justify="center"
-          align="center"
-          display={["none", "block"]}
-        >
-          <MainSvg />
+        <Flex>
+          <Box w="50%">
+            <ApiKeyInput />
+            <SyncClockifyField />
+          </Box>
+          <Flex
+            flexDirection="column"
+            display={["block", "flex"]}
+            alignItems="center"
+            justify="center"
+            width="50%"
+          >
+            <Flex
+              p="8"
+              w="100%"
+              justify="center"
+              align="center"
+              display={["none", "block"]}
+            >
+              <MainSvg />
+            </Flex>
+          </Flex>
         </Flex>
       </Flex>
     </Layout>

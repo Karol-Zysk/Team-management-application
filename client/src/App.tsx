@@ -1,4 +1,3 @@
-import { Box } from "@chakra-ui/react";
 import Views from "./components/Views";
 import { AccountContextProvider } from "./context/AccountContext";
 

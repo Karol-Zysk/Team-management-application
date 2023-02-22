@@ -7,6 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import theme from "./theme";
 import { AccountContextProvider } from "./context/AccountContext";
 import { QueryClient, QueryClientProvider } from "react-query";
+import "./index.css";
 
 export const queryClient = new QueryClient();
 

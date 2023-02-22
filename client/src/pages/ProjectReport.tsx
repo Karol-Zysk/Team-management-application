@@ -127,8 +127,6 @@ const ProjectsReport = () => {
     }
   };
 
-  
-
   return (
     <Layout title={`Create ${project && project?.name} Report`}>
       <Flex justify="space-between" w="full">
@@ -142,6 +140,8 @@ const ProjectsReport = () => {
               w="min"
               placeholder={`Time Estimate`}
               mr="3"
+              bg="white"
+              color="black"
               size={["sm", "md"]}
               _placeholder={{ opacity: 0.8, color: "gray.500" }}
               value={timeEstimate}
@@ -160,6 +160,8 @@ const ProjectsReport = () => {
               w="min"
               placeholder={`Budget Estimate`}
               mr="3"
+              bg="white"
+              color="black"
               size={["sm", "md"]}
               _placeholder={{ opacity: 0.8, color: "gray.500" }}
               value={budgetEstimate}
@@ -175,6 +177,8 @@ const ProjectsReport = () => {
           <VStack mt="2" h="min-content" flexDirection="row" align="center">
             <Textarea
               id="note"
+              bg="white"
+              color="black"
               w="100%"
               h="max-content"
               placeholder={`Note...`}
@@ -191,7 +195,7 @@ const ProjectsReport = () => {
             handleGenerateReport={handleGenerateReport}
           />
         </Flex>
-        <Flex w={["full", "60%"]} align="center" justify="center" >
+        <Flex w={["full", "60%"]} align="center" justify="center">
           {loading ? (
             <Spinner size="xl" />
           ) : projectReport ? (

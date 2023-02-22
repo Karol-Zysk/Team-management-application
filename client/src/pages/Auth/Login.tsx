@@ -87,7 +87,7 @@ const Login: React.FC = () => {
       w={{ base: "90%", md: "500px" }}
       m="auto"
       justify="center"
-      minH="70vh"
+      minH="75vh"
       spacing="1rem"
     >
       <Heading>Login</Heading>
@@ -97,6 +97,8 @@ const Login: React.FC = () => {
           <Input
             type="email"
             id="email"
+            bg="white"
+            color="black"
             name="email"
             value={formData.email}
             onChange={handleChange}
@@ -107,6 +109,8 @@ const Login: React.FC = () => {
             type="password"
             id="password"
             name="password"
+            bg="white"
+            color="black"
             value={formData.password}
             onChange={handleChange}
             required

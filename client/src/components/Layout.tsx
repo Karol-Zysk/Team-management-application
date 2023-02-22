@@ -19,7 +19,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
         minH="70vh"
         height="100%"
       >
-        <Flex w="100%" h="min" direction={["column"]}>
+        <Flex w="100%" direction={["column"]}>
           <PageTitle title={title} />
           <Box
             w="100%"

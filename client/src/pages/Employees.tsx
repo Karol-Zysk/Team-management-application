@@ -14,6 +14,7 @@ import {
   Th,
   Thead,
   Tr,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
@@ -82,105 +83,95 @@ const Employees = () => {
   }
 
   return (
-    <Layout title={`${activeUser.companyName} Team`}>
-      <Table fontSize={["smaller", "md"]} w={["min", "100%"]} variant="striped">
-        <Thead w={["min", "100%"]}>
-          <Tr>
-            <Th w={["min", "max-content"]} boxShadow="md">
-              Lp.
-            </Th>
-            <Th w={["min", "max-content"]} boxShadow="md">
-              Clockify Name
-            </Th>
-            <Th w={["min", "max-content"]} boxShadow="md">
-              first name
-            </Th>
-            <Th w={["min", "max-content"]} boxShadow="md">
-              last name
-            </Th>
-            <Th w={["min", "max-content"]} boxShadow="md">
-              email
-            </Th>
-            <Th w={["min", "max-content"]} boxShadow="md">
-              hourly rate
-            </Th>
-            <Th w={["min", "max-content"]} boxShadow="md">
-              Avatar
-            </Th>
-            <Th w={["min", "max-content"]} boxShadow="md">
-              Edit
-            </Th>
-            <Th w={["min", "max-content"]} boxShadow="md">
-              Report
-            </Th>
-          </Tr>
-        </Thead>
-        <Tbody w="max-content" h="min-content">
-          {employees.map((employee: Employee, index: number) => {
-            return (
-              <Tr w="max-content" key={employee.id}>
-                <Td
-                  borderRight="1px"
-                  boxShadow="md"
-                  borderColor="blackAlpha.100"
+    <Layout
+      title={`${activeUser.companyName ? activeUser.companyName : "Your"} Team`}
+    >
+      <Box
+        p="8"
+        boxShadow={useColorModeValue("3px 3px 3px black", "3px 3px 3px  gray")}
+        minH="50vh"
+        bg={useColorModeValue("facebook.400", "black")}
+        overflowX={["scroll", "auto"]}
+      >
+        <Table size={["sm"]} fontSize={["smaller", "md"]} variant="striped">
+          <Thead
+            color={useColorModeValue("black", "white")}
+            w={["min", "100%"]}
+          >
+            <Tr>
+              <Th color={useColorModeValue("black", "white")}>Lp.</Th>
+              <Th color={useColorModeValue("black", "white")}>Clockify Name</Th>
+              <Th color={useColorModeValue("black", "white")}>first name</Th>
+              <Th color={useColorModeValue("black", "white")}>last name</Th>
+              <Th color={useColorModeValue("black", "white")}>email</Th>
+              <Th color={useColorModeValue("black", "white")}>hourly rate</Th>
+              <Th color={useColorModeValue("black", "white")}>Avatar</Th>
+              <Th color={useColorModeValue("black", "white")}>Edit</Th>
+              <Th color={useColorModeValue("black", "white")}>Report</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {employees.map((employee: Employee, index: number) => {
+              return (
+                <Tr
+                  color={useColorModeValue("black", "white")}
+                  key={employee.id}
                 >
-                  {index + 1}.
-                </Td>
-                <Td
-                  borderRight="1px"
-                  boxShadow="md"
-                  borderColor="blackAlpha.100"
-                >
-                  {employee.clockifyName}
-                </Td>
-                <Td boxShadow="md">{employee.firstName}</Td>
-                <Td boxShadow="md">{employee.lastName}</Td>
-                <Td boxShadow="md">{employee.email}</Td>
-                <Td boxShadow="md">{employee.hourlyRate} zł/h</Td>
-                <Td boxShadow="md">
-                  <Avatar h="8" src={`${employee.profilePicture}`} />
-                </Td>
-                <Td boxShadow="md">
-                  <EditIcon
-                    cursor="pointer"
-                    fontSize={["md", "md", "xl"]}
-                    onClick={() => handleOpenModal(employee)}
-                  />
-                </Td>
-                <Td boxShadow="md">
-                  <Link to={`/employees/${employee.id}`}>
-                    <Button
-                      size={["xs", "sm", "md"]}
-                      bg="facebook.400"
-                      color="white"
-                      rounded="xl"
-                      border="2px"
-                      _hover={{
-                        bg: "facebook.200",
-                        color: "black",
-                        borderColor: "black",
-                      }}
-                      borderColor="white"
-                      leftIcon={<InfoIcon />}
-                    >
-                      Report
-                    </Button>
-                  </Link>
-                </Td>
-              </Tr>
-            );
-          })}
-        </Tbody>
-        {id && (
-          <EditModal
-            handleCloseModal={handleCloseModal}
-            employee={id!}
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            refetch={refetch}
-          />
-        )}
-      </Table>
+                  <Td borderRight="1px" borderColor="blackAlpha.100">
+                    {index + 1}.
+                  </Td>
+                  <Td borderRight="1px" borderColor="blackAlpha.100">
+                    {employee.clockifyName}
+                  </Td>
+                  <Td>{employee.firstName}</Td>
+                  <Td>{employee.lastName}</Td>
+                  <Td>{employee.email}</Td>
+                  <Td>{employee.hourlyRate} zł/h</Td>
+                  <Td>
+                    <Avatar h="8" src={`${employee.profilePicture}`} />
+                  </Td>
+                  <Td>
+                    <EditIcon
+                      cursor="pointer"
+                      fontSize={["md", "md", "xl"]}
+                      onClick={() => handleOpenModal(employee)}
+                    />
+                  </Td>
+                  <Td>
+                    <Link to={`/employees/${employee.id}`}>
+                      <Button
+                        size={["xs", "sm", "md"]}
+                        bg="facebook.400"
+                        color="white"
+                        rounded="xl"
+                        border="2px"
+                        _hover={{
+                          bg: "facebook.200",
+                          color: "black",
+                          borderColor: "black",
+                        }}
+                        borderColor="white"
+                        leftIcon={<InfoIcon />}
+                      >
+                        Report
+                      </Button>
+                    </Link>
+                  </Td>
+                </Tr>
+              );
+            })}
+          </Tbody>
+          {id && (
+            <EditModal
+              handleCloseModal={handleCloseModal}
+              employee={id!}
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              refetch={refetch}
+            />
+          )}
+        </Table>
+      </Box>
     </Layout>
   );
 };

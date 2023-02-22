@@ -131,6 +131,8 @@ const EditModal: React.FC<ModalProps> = ({
             <FormControl>
               <FormLabel htmlFor="firstName">First Name</FormLabel>
               <Input
+                bg="white"
+                color="black"
                 id="firstName"
                 type="text"
                 value={firstName || currentEmployee.firstName!}
@@ -140,6 +142,8 @@ const EditModal: React.FC<ModalProps> = ({
             <FormControl mt={4}>
               <FormLabel htmlFor="lastName">Last Name</FormLabel>
               <Input
+                bg="white"
+                color="black"
                 id="lastName"
                 type="text"
                 value={lastName || currentEmployee.lastName!}
@@ -149,6 +153,8 @@ const EditModal: React.FC<ModalProps> = ({
             <FormControl mt={4}>
               <FormLabel htmlFor="hourlyRate">Hourly Rate</FormLabel>
               <Input
+                bg="white"
+                color="black"
                 id="hourlyRate"
                 type="number"
                 value={hourlyRate || currentEmployee.hourlyRate!}
@@ -161,6 +167,8 @@ const EditModal: React.FC<ModalProps> = ({
             <FormControl mt={4}>
               <FormLabel htmlFor="profilePicture">Profile Picture</FormLabel>
               <Input
+                bg="white"
+                color="black"
                 id="profilePicture"
                 type="text"
                 value={profilePicture || currentEmployee.profilePicture!}

@@ -103,6 +103,8 @@ const SignUp: React.FC = () => {
             type="text"
             id="name"
             name="name"
+            bg="white"
+            color="black"
             value={formData.name}
             onChange={handleChange}
             required
@@ -112,6 +114,8 @@ const SignUp: React.FC = () => {
             type="email"
             id="email"
             name="email"
+            bg="white"
+            color="black"
             value={formData.email}
             onChange={handleChange}
             required
@@ -121,6 +125,8 @@ const SignUp: React.FC = () => {
             type="password"
             id="password"
             name="password"
+            bg="white"
+            color="black"
             value={formData.password}
             onChange={handleChange}
             required

@@ -16,9 +16,7 @@ interface TeamSalaryProps {
   salaryReport: TeamReport;
 }
 
-const TeamSalaryReport: React.FC<TeamSalaryProps> = ({
-  salaryReport,
-}) => {
+const TeamSalaryReport: React.FC<TeamSalaryProps> = ({ salaryReport }) => {
   const { employees, id, reportName } = salaryReport;
 
   const shadow = useColorModeValue(
@@ -45,11 +43,11 @@ const TeamSalaryReport: React.FC<TeamSalaryProps> = ({
         </Text>
       </Flex>
 
-      <Box mb={5}>
+      <Box p="8" overflowX={["scroll", "auto"]}>
         <Text px="4" fontSize="xl" mb="8" fontWeight="bold">
           Employees:
         </Text>
-        <Table w="100%" variant="striped">
+        <Table size={["sm"]} fontSize={["smaller", "md"]} variant="striped">
           <Thead>
             <Tr>
               <Th>Name</Th>
