@@ -9,7 +9,7 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children, title }) => {
-  const bg = useColorModeValue("gray.50", "gray.900");
+  const bg = useColorModeValue("gray.100", "gray.900");
   const bg2 = useColorModeValue("facebook.400", "facebook.600");
   return (
     <>

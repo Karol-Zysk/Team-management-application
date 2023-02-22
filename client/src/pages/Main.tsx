@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Text, useColorModeValue } from "@chakra-ui/react";
 import { useContext } from "react";
 import { AccountContext, UserData } from "../context/AccountContext";
 import ApiKeyInput from "../components/Main/ApiKeyInput";
@@ -26,17 +26,34 @@ const Main = () => {
       <Flex
         flexDirection="column"
         display={["block", "flex"]}
-        alignItems="flex-end"
+        alignItems="center"
         width="60%"
       >
-        <Text
-          fontSize={["2xl", "3xl"]}
-          fontWeight="semibold"
-          marginBottom={[8, 12]}
-          marginRight={[0, 12]}
+        <Flex
+          w="auto"
+          justify="center"
+          h="min"
+          px="8"
+          py="6"
+          mb="6"
+          bg={useColorModeValue("gray.100", "facebook.600")}
+          opacity={1}
+          borderBottom="4px"
+          borderLeft="4px"
         >
-          Hello {activeUser.name}!
-        </Text>
+          <Heading
+            color={useColorModeValue("white", "white")}
+            textShadow={useColorModeValue(
+              "3px 3px 3px black",
+              "3px 3px 3px  black"
+            )}
+            fontSize="4xl"
+            fontWeight="bold"
+            as="h1"
+          >
+            Hello {activeUser.name}
+          </Heading>
+        </Flex>
         <Flex
           p="8"
           w="100%"

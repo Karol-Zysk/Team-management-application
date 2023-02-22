@@ -8,7 +8,7 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AccountContext } from "../../context/AccountContext";
 import { motion } from "framer-motion";
 import { baseUrl } from "../../utils/origin";
@@ -18,8 +18,6 @@ const ApiKeyInput = ({}) => {
   const {
     isApiKeyValid,
     setIsApiKeyValid,
-    apiKey,
-    setApiKey,
     isActive,
     setIsActive,
     error,
@@ -27,7 +25,8 @@ const ApiKeyInput = ({}) => {
     companyName,
     setCompanyName,
   } = useContext(AccountContext);
-
+  
+  const [apiKey, setApiKey] = useState<string | undefined>(undefined);
   const editInputKeyHandler = () => {
     setIsApiKeyValid(false);
     setIsActive(false);
@@ -98,8 +97,9 @@ const ApiKeyInput = ({}) => {
           size={["sm", "md"]}
           _placeholder={{ opacity: 0.8, color: "gray.500" }}
           value={companyName}
-          isDisabled={isApiKeyValid || isActive}
+          isDisabled={isActive}
           required={true}
+          background="white"
           onChange={(e) => setCompanyName(e.target.value)}
         />
 

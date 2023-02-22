@@ -23,8 +23,7 @@ interface AccountContextValue {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   isApiKeyValid: boolean;
   setIsApiKeyValid: React.Dispatch<React.SetStateAction<boolean>>;
-  apiKey: string | undefined;
-  setApiKey: React.Dispatch<React.SetStateAction<string | undefined>>;
+
   companyName: string | undefined;
   setCompanyName: React.Dispatch<React.SetStateAction<string | undefined>>;
   isActive: boolean | undefined;
@@ -47,8 +46,7 @@ const initialState: AccountContextValue = {
   setUser: () => {},
   isApiKeyValid: false,
   setIsApiKeyValid: () => false,
-  apiKey: undefined,
-  setApiKey: () => undefined,
+
   companyName: undefined,
   setCompanyName: () => undefined,
   isActive: undefined,
@@ -71,7 +69,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserData | {} | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isApiKeyValid, setIsApiKeyValid] = useState<boolean>(false);
-  const [apiKey, setApiKey] = useState<string | undefined>(undefined);
+
   const [companyName, setCompanyName] = useState<string | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
   const [isActive, setIsActive] = useState<boolean | undefined>(undefined);
@@ -144,11 +142,13 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
         }
         setUser(data);
         setIsActive(data.active);
-        if (!isActive) setIsApiKeyValid(false);
-        setIsApiKeyValid(true);
-        setIsSync(data.sync);
-        setIsLoggedIn(true);
+        if (!data.active) setIsApiKeyValid(false);
+        setIsApiKeyValid(false);
         if (data.companyName) setCompanyName(data.companyName);
+        setCompanyName("");
+        setIsSync(data.sync);
+
+        setIsLoggedIn(true);
       })
       .catch((error) => {
         cleanAfterLogout();
@@ -179,8 +179,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
         setIsLoggedIn,
         isApiKeyValid,
         setIsApiKeyValid,
-        apiKey,
-        setApiKey,
+
         isActive,
         setIsActive,
         error,

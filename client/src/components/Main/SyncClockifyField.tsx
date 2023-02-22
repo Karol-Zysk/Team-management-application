@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup, Text } from "@chakra-ui/react";
+import { Box, Button, ButtonGroup, Spinner, Text } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import { AccountContext } from "../../context/AccountContext";
 import { Employee } from "../../interfaces/EmployeeInterface";
@@ -7,6 +7,7 @@ import { baseUrl } from "../../utils/origin";
 
 const SyncClockifyField = () => {
   const [employee, setEmployee] = useState<Employee[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const { isActive, setError, setIsSync } = useContext(AccountContext);
 
   const handleSyncronize = async (event: any) => {
@@ -17,6 +18,7 @@ const SyncClockifyField = () => {
     }
 
     try {
+      setLoading(true);
       const response = await fetch(`${baseUrl}/employees/syncclockify`, {
         method: "POST",
         headers: {
@@ -36,7 +38,9 @@ const SyncClockifyField = () => {
       setIsSync(true);
 
       setError(null);
+      setLoading(false);
     } catch (err: any) {
+      setLoading(false);
       console.error(err.message);
       setError(err.message);
     }
@@ -72,16 +76,20 @@ const SyncClockifyField = () => {
           >
             Synchronize
           </Button>
-          {employee.length !== 0 && (
-            <Text
-              fontWeight="semibold"
-              mt="1"
-              ml="12"
-              fontSize={["md", "md", "xl"]}
-              color="green.500"
-            >
-              {employee.length} new employees.
-            </Text>
+          {loading ? (
+            <Spinner size="lg" ml="4" mt="2" />
+          ) : (
+            employee.length !== 0 && (
+              <Text
+                fontWeight="semibold"
+                mt="1"
+                ml="12"
+                fontSize={["md", "md", "xl"]}
+                color="green.500"
+              >
+                {employee.length} new employees.
+              </Text>
+            )
           )}
         </ButtonGroup>
       </motion.div>
