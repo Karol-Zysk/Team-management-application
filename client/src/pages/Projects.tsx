@@ -63,6 +63,9 @@ const Projects = () => {
       </Text>
     );
   }
+  if (!projects) {
+    return <Spinner />;
+  }
 
   return (
     <Layout title={`${activeUser.companyName} Projects`}>
