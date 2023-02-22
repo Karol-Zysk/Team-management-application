@@ -70,7 +70,7 @@ export default function Footer() {
   return (
     <Box
       borderTop="4px"
-      bg={useColorModeValue("gray.100", "gray.900")}
+      bg={useColorModeValue("gray.200", "gray.900")}
       color={useColorModeValue("gray.700", "gray.200")}
     >
       <Container
