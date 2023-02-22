@@ -27,19 +27,22 @@ const Main = () => {
         flexDirection="column"
         display={["block", "flex"]}
         alignItems="center"
-        width="60%"
+        justify="center"
+        width="50%"
       >
         <Flex
           w="auto"
           justify="center"
           h="min"
           px="8"
-          py="6"
+          py="4"
           mb="6"
-          bg={useColorModeValue("gray.100", "facebook.600")}
+          bg={useColorModeValue("gray.200", "facebook.600")}
           opacity={1}
-          borderBottom="4px"
-          borderLeft="4px"
+          boxShadow={useColorModeValue(
+            "4px 4px 6px black",
+            "4px 4px 6px  black"
+          )}
         >
           <Heading
             color={useColorModeValue("white", "white")}
