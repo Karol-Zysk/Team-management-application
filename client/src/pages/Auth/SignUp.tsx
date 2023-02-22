@@ -68,7 +68,7 @@ const SignUp: React.FC = () => {
         });
       } else {
         localStorage.setItem("access_token", result.access_token);
-        localStorage.setItem("refresh_token", result.refresh_token);
+        localStorage.setItem("refresh_token", result.refreshToken);
         setIsLoggedIn(true);
 
         setTimeout(() => {
@@ -92,7 +92,7 @@ const SignUp: React.FC = () => {
       w={{ base: "90%", md: "500px" }}
       m="auto"
       justify="center"
-      h="70vh"
+      minH="70vh"
       spacing="1rem"
     >
       <Heading>Sign Up</Heading>

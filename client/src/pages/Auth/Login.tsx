@@ -5,6 +5,7 @@ import {
   FormLabel,
   Heading,
   Input,
+  useColorModeValue,
   useToast,
   VStack,
 } from "@chakra-ui/react";
@@ -86,7 +87,7 @@ const Login: React.FC = () => {
       w={{ base: "90%", md: "500px" }}
       m="auto"
       justify="center"
-      h="70vh"
+      minH="70vh"
       spacing="1rem"
     >
       <Heading>Login</Heading>

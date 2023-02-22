@@ -25,8 +25,8 @@ interface AccountContextValue {
   setIsApiKeyValid: React.Dispatch<React.SetStateAction<boolean>>;
   apiKey: string;
   setApiKey: React.Dispatch<React.SetStateAction<string>>;
-  companyName: string;
-  setCompanyName: React.Dispatch<React.SetStateAction<string>>;
+  companyName: string | undefined;
+  setCompanyName: React.Dispatch<React.SetStateAction<string | undefined>>;
   isActive: boolean | undefined;
   setIsActive: React.Dispatch<React.SetStateAction<boolean | undefined>>;
   error: null | string;
@@ -37,6 +37,7 @@ interface AccountContextValue {
   setProjectReport: React.Dispatch<React.SetStateAction<ProjectReport | null>>;
   setIsSync: React.Dispatch<React.SetStateAction<boolean>>;
   isSync: boolean;
+  cleanAfterLogout: () => void;
 }
 
 const initialState: AccountContextValue = {
@@ -48,8 +49,8 @@ const initialState: AccountContextValue = {
   setIsApiKeyValid: () => false,
   apiKey: "",
   setApiKey: () => "",
-  companyName: "",
-  setCompanyName: () => "",
+  companyName: undefined,
+  setCompanyName: () => undefined,
   isActive: undefined,
   setIsActive: () => undefined,
   error: null,
@@ -60,6 +61,7 @@ const initialState: AccountContextValue = {
   setProjectReport: () => null,
   setIsSync: () => false,
   isSync: false,
+  cleanAfterLogout: () => {},
 };
 
 const AccountContext = createContext<AccountContextValue>(initialState);
@@ -70,7 +72,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isApiKeyValid, setIsApiKeyValid] = useState<boolean>(false);
   const [apiKey, setApiKey] = useState<string>("");
-  const [companyName, setCompanyName] = useState<string>("");
+  const [companyName, setCompanyName] = useState<string | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
   const [isActive, setIsActive] = useState<boolean | undefined>(undefined);
   const [isSync, setIsSync] = useState<boolean>(false);
@@ -84,7 +86,8 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
     setIsLoggedIn(false);
     setIsSync(false);
     setIsActive(false);
-    setCompanyName("");
+    setCompanyName(undefined);
+    setIsApiKeyValid(false);
   };
 
   const refreshAccessToken = async () => {
@@ -190,6 +193,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
         setIsSync,
         companyName,
         setCompanyName,
+        cleanAfterLogout,
       }}
     >
       {children}

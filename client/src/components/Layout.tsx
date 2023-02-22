@@ -13,8 +13,13 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
   const bg2 = useColorModeValue("facebook.400", "facebook.600");
   return (
     <>
-      <Flex flexDirection={["column-reverse", "row"]} w="100%" height="100%">
-        <Flex w="100%" direction={["column"]}>
+      <Flex
+        flexDirection={["column-reverse", "row"]}
+        w="100%"
+        minH="70vh"
+        height="100%"
+      >
+        <Flex w="100%" h="min" direction={["column"]}>
           <PageTitle title={title} />
           <Box
             w="100%"
@@ -28,6 +33,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                 opacity={95}
                 bg={bg}
                 border="4px"
+                mb={[6, 6]}
                 paddingX={[6, 12, 36]}
                 paddingY={[6, 12, 24]}
               >
