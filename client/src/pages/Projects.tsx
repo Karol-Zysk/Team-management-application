@@ -63,7 +63,7 @@ const Projects = () => {
       </Text>
     );
   }
-  if (!projects) {
+  if (projects.length <= 0) {
     return <Spinner />;
   }
 
