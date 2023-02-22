@@ -12,15 +12,13 @@ import { Project } from "../interfaces/ProjectReportInterface";
 
 const Projects = () => {
   const toast = useToast();
-  const { error, setError, user, projectReport, setProjectReport } =
+  const { error, setError, user, setProjectReport } =
     useContext(AccountContext);
   const activeUser = user as UserData;
   const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
-    return () => {
-      fetchData();
-    };
+    fetchData();
   }, []);
 
   const fetchData = async () => {
