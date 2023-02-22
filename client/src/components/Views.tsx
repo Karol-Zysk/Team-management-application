@@ -26,6 +26,7 @@ const Views = () => {
           <Flex
             w="100%"
             h="100%"
+            minH="full"
             borderColor="gray.200"
             justify="center"
             align="center"
