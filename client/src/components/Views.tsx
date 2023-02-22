@@ -13,6 +13,7 @@ import EmployeeDetails from "../pages/EmployeeDetails";
 import EmployeeSalariesReport from "../pages/EmployeeSalariesReport";
 import Projects from "../pages/Projects";
 import ProjectReport from "../pages/ProjectReport";
+import Footer from "./Footer";
 
 const Views = () => {
   const { user } = useContext(AccountContext);
@@ -52,6 +53,7 @@ const Views = () => {
           </Flex>
         )}
       </>
+      <Footer />
     </Box>
   );
 };

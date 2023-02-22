@@ -6,20 +6,12 @@ interface PageTitleProps {
 }
 
 const PageTitle: React.FC<PageTitleProps> = ({ title }) => {
-  const shadow = useColorModeValue("1px 1px 1px  black", "1px 1px 1px  gray");
+  const shadow = useColorModeValue("2px 2px 2px  black", "2px 2px 2px  black");
   const bg = useColorModeValue("facebook.400", "facebook.600");
 
   return (
-    <Box
-      textShadow={shadow}
-      w="100%"
-      h="min"
-      px="16"
-      py="8"
-      bg={bg}
-      opacity={1}
-    >
-      <Heading fontSize="4xl" as="h1">
+    <Box w="100%" h="min" px="16" py="6" bg={bg} opacity={1}>
+      <Heading textShadow={shadow} fontSize="4xl" fontWeight="semibold" as="h1">
         {title}
       </Heading>
     </Box>

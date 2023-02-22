@@ -1,10 +1,4 @@
-import {
-  Box,
-
-  Spinner,
-  Text,
-  useToast,
-} from "@chakra-ui/react";
+import { Box, Flex, Spinner, Text, useToast } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import DateInputs from "../components/DateInputs";
 import ReportsHistory from "../components/Employee/EmployeeReportsHistory";
@@ -64,38 +58,34 @@ const EmployeesSalariesReport = () => {
 
   return (
     <Layout title="Employees Salary Report">
-      <Box w="100%">
-        <Text mb="6" fontWeight="semibold" fontSize="lg">
-          Enter the dates for which you want the report to be calculated.
-        </Text>
-        <DateInputs
-          startDate={startDate}
-          setStartDate={setStartDate}
-          endDate={endDate}
-          setEndDate={setEndDate}
-          handleGenerateReport={handleGenerateReport}
-        />
-        <ReportsHistory />
-      </Box>
-      <Box w={{ base: "full", md: "min" }}>
-        {loading ? (
-          <Spinner />
-        ) : (
-          salaryReport && (
-            <motion.div
-              initial={{ y: -5, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.2 }}
-            >
+      <Flex w="full" justify="space-between">
+        <Flex display="column" minW="35%" maxW="35%">
+          <Text mb="6" fontWeight="semibold" fontSize="2xl">
+            Enter the dates for which you want the report to be calculated.
+          </Text>
+          <DateInputs
+            startDate={startDate}
+            setStartDate={setStartDate}
+            endDate={endDate}
+            setEndDate={setEndDate}
+            handleGenerateReport={handleGenerateReport}
+          />
+          <Flex w="100%">
+            <ReportsHistory />
+          </Flex>
+        </Flex>
+        <Flex w={{ base: "full", md: "60%" }}>
+          {loading ? (
+            <Spinner />
+          ) : (
+            salaryReport && (
               <TeamSalaryReport
-                start={startDate}
-                end={endDate}
                 salaryReport={salaryReport!}
               />
-            </motion.div>
-          )
-        )}
-      </Box>
+            )
+          )}
+        </Flex>
+      </Flex>
     </Layout>
   );
 };

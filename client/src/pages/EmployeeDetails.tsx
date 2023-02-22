@@ -93,24 +93,25 @@ const EmployeeDetails = ({}) => {
 
   return (
     <Layout title={`${employee?.clockifyName} Salary`}>
-      <Flex flexWrap={{ base: "wrap", md: "nowrap" }}>
+      <Flex w="full">
         <Box flexBasis={{ base: "100%", md: "50%" }}>
-          <Text fontSize="lg" my={4}>
+          <Text mb="6" fontWeight="semibold" fontSize="2xl">
+            Enter the dates for which you want the report to be calculated.
+          </Text>
+          <Text fontSize="xl" my={4}>
             <strong>ClockifyName:</strong> {employee?.clockifyName}
           </Text>
-          <Text fontSize="lg" my={4}>
+          <Text fontSize="xl" my={4}>
             <strong>First Name:</strong> {employee?.firstName}
           </Text>
-          <Text fontSize="lg" my={4}>
+          <Text fontSize="xl" my={4}>
             <strong>Last Name: </strong>
             {employee?.lastName}
           </Text>
-          <Text fontSize="lg" my={4}>
+          <Text fontSize="xl" my={4}>
             <strong>Hourly Rate:</strong> {employee?.hourlyRate} zł/h
           </Text>
-          <Text fontSize="lg" my={4} mt="4">
-            <strong>Time Period:</strong>
-          </Text>
+
           <Flex flexDirection="column" w="min-content" my={2}>
             <Box display="flex">
               <FormControl>
@@ -159,7 +160,7 @@ const EmployeeDetails = ({}) => {
           ) : (
             salaryReport && (
               <Box>
-                <EmployeeSalaryReport salaryReport={salaryReport} />
+                <EmployeeSalaryReport start={startDate} end={endDate} salaryReport={salaryReport} />
               </Box>
             )
           )}

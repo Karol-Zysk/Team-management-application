@@ -14,7 +14,7 @@ const Main = () => {
 
   return (
     <Layout title="Account Settings">
-      <Box w="100%">
+      <Box w="50%">
         {!activeUser.active && (
           <Text fontSize={["lg", "xl"]} fontWeight="semibold" mb="6">
             To unlock features, please provide informations.
@@ -30,17 +30,22 @@ const Main = () => {
         width="60%"
       >
         <Text
-          fontSize={["2xl", "4xl"]}
+          fontSize={["2xl", "3xl"]}
           fontWeight="semibold"
           marginBottom={[8, 12]}
           marginRight={[0, 12]}
-          textShadow={"2px 1px 1px"}
         >
           Hello {activeUser.name}!
         </Text>
-        <Box display={["none", "block"]}>
+        <Flex
+          p="8"
+          w="100%"
+          justify="center"
+          align="center"
+          display={["none", "block"]}
+        >
           <MainSvg />
-        </Box>
+        </Flex>
       </Flex>
     </Layout>
   );

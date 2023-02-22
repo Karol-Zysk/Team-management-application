@@ -52,6 +52,7 @@ export default function Nav({}) {
 
   const { colorMode, toggleColorMode } = useColorMode();
   const shadow = useColorModeValue("1px 1px 1px black", "1px 1px 1px white");
+  const color = useColorModeValue("facebook.500", "white");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -82,6 +83,7 @@ export default function Nav({}) {
               textShadow={shadow}
               fontSize={["2xl", "5xl"]}
               fontWeight="bold"
+              color={color}
             >
               Teamy.
             </Box>

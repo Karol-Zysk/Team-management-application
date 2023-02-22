@@ -71,7 +71,6 @@ const ReportsHistory = () => {
         },
       });
 
-      // setSalaryReport(null);
       setReports((reports) => {
         return reports.filter((report) => report.id !== id);
       });

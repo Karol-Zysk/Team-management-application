@@ -5,6 +5,7 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Text,
 } from "@chakra-ui/react";
 
 interface DateInputProps {
@@ -23,32 +24,36 @@ const DateInputs: React.FC<DateInputProps> = ({
   handleGenerateReport,
 }) => {
   return (
-    <Flex flexDirection="column" p="2" my={2}>
-      <Flex>
-        <FormControl>
-          <FormLabel htmlFor="start-date" fontSize={["lg", "2xl"]} mb="4">
-            {endDate ? "Time Period: from" : "Project Start Date"}
-          </FormLabel>
-          <Input
-            w="min-content"
-            type="date"
-            id="start-date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-          />
-        </FormControl>
-        {setEndDate && (
-          <FormControl ml={4}>
-            <FormLabel htmlFor="end-date">to</FormLabel>
+    <Flex flexDirection="column" my={2}>
+      <Flex direction="column">
+        <Text fontSize={["lg", "xl"]} fontWeight="semibold" mb="4">
+          {" "}
+          {endDate ? "Time Period: from" : "Project Start Date"}
+        </Text>
+        <Flex>
+          <FormControl>
+            <FormLabel htmlFor="start-date">From</FormLabel>
             <Input
               w="min-content"
               type="date"
-              id="end-date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
+              id="start-date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
             />
           </FormControl>
-        )}
+          {setEndDate && (
+            <FormControl ml={4}>
+              <FormLabel htmlFor="end-date">To</FormLabel>
+              <Input
+                w="min-content"
+                type="date"
+                id="end-date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+            </FormControl>
+          )}
+        </Flex>
       </Flex>
       <Button
         size={["sm", "md", "lg"]}

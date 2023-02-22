@@ -8,67 +8,88 @@ import {
   Th,
   Thead,
   Tr,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { TeamReport } from "../../interfaces/SalaryReportInterface";
 
 interface TeamSalaryProps {
   salaryReport: TeamReport;
-  start: string;
-  end: string;
 }
 
 const TeamSalaryReport: React.FC<TeamSalaryProps> = ({
   salaryReport,
-  start,
-  end,
 }) => {
   const { employees, id, reportName } = salaryReport;
 
+  const shadow = useColorModeValue(
+    "4px 4px 4px 2px  black",
+    "2px 2px 1px 2px  white"
+  );
+
+  const bg = useColorModeValue("#f6f6f6", "gray.800");
+
   return (
-    <Box p={5} shadow="md">
-      <Flex align="center" mb={5}>
-        <Text fontSize="lg" fontWeight="bold">
-          Report: {reportName}
+    <Flex
+      transform={["none", "translate(30px,-20px)"]}
+      display="column"
+      px="4"
+      py="12"
+      w="100%"
+      bg={bg}
+      opacity={1}
+      boxShadow={shadow}
+    >
+      <Flex px="4" align="center" mb={5}>
+        <Text fontSize="xl" fontWeight="bold">
+          {reportName}
         </Text>
       </Flex>
-      <Box mb={5}>
-        <Text fontWeight="bold">Report ID:</Text> {id}
-      </Box>
-
-      {start && end && (
-        <Box mb={5}>
-          <Text fontWeight="bold">Time period:</Text>from: {start}, to: {end}
-        </Box>
-      )}
 
       <Box mb={5}>
-        <Text fontSize="2xl" mb="8" fontWeight="bold">
+        <Text px="4" fontSize="xl" mb="8" fontWeight="bold">
           Employees:
         </Text>
-        <Table w="min" variant="striped">
+        <Table w="100%" variant="striped">
           <Thead>
             <Tr>
               <Th>Name</Th>
-              <Th>Email</Th>
               <Th>Hourly Rate</Th>
               <Th>Hours Worked</Th>
-              <Th>Salary</Th>
+              <Th pl="0">Salary</Th>
             </Tr>
           </Thead>
-          <Tbody>
-            {employees.map((employee) => (
-              <Tr key={employee.email}>
-                <Td>{employee.clockifyName}</Td>
-                <Td>{employee.email}</Td>
-                <Td>{employee.hourlyRate}zł/h</Td>
-                <Td>{employee.hoursWorked}</Td>
-                <Td>{employee.salary}zł</Td>
+          <Tbody fontSize="sm">
+            {employees.map((member, index) => (
+              <Tr key={index}>
+                <Td fontWeight="semibold">{member.clockifyName}</Td>
+                <Td>
+                  <Text fontWeight="bold">
+                    {member.hourlyRate || (
+                      <Text as="span" color="red.500">
+                        0
+                      </Text>
+                    )}{" "}
+                    zł/h
+                  </Text>
+                </Td>
+                <Td>{member.hoursWorked}</Td>
+
+                <Td pl="0">
+                  <Text fontWeight="semibold">
+                    {member.salary || (
+                      <Text as="span" color="red.500">
+                        0
+                      </Text>
+                    )}{" "}
+                    zł
+                  </Text>
+                </Td>
               </Tr>
             ))}
           </Tbody>
         </Table>
       </Box>
-    </Box>
+    </Flex>
   );
 };
 

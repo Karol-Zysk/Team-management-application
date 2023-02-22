@@ -8,6 +8,7 @@ import {
   Spinner,
   Text,
   Textarea,
+  useColorModeValue,
   useToast,
   VStack,
 } from "@chakra-ui/react";
@@ -20,6 +21,7 @@ import ProjectReportCard from "../components/Projects/ProjectReportCard";
 import { AccountContext } from "../context/AccountContext";
 import { baseUrl } from "../utils/origin";
 import { Project } from "../interfaces/ProjectReportInterface";
+import ProjectSvg from "../components/ProjectSvg";
 
 const ProjectsReport = () => {
   useEffect(() => {
@@ -125,74 +127,80 @@ const ProjectsReport = () => {
     }
   };
 
+  
+
   return (
     <Layout title={`Create ${project && project?.name} Report`}>
-      <Flex w="min" direction="column" justify="space-between">
-        <FormLabel fontSize={["lg", "2xl"]} htmlFor="timeEstimate">
-          Time Estimate
-        </FormLabel>
-        <VStack mt="4" h="min-content" flexDirection="row" align="center">
-          <Input
-            id="timeEstimate"
-            w="min"
-            placeholder={`Time Estimate`}
-            mr="3"
-            size={["sm", "md"]}
-            _placeholder={{ opacity: 0.8, color: "gray.500" }}
-            value={timeEstimate}
-            onChange={(e) => setTimeEstimate(e.target.value)}
+      <Flex justify="space-between" w="full">
+        <Flex w="min" direction="column">
+          <FormLabel fontSize={["lg", "2xl"]} htmlFor="timeEstimate">
+            Time Estimate
+          </FormLabel>
+          <VStack mt="2" h="min-content" flexDirection="row" align="center">
+            <Input
+              id="timeEstimate"
+              w="min"
+              placeholder={`Time Estimate`}
+              mr="3"
+              size={["sm", "md"]}
+              _placeholder={{ opacity: 0.8, color: "gray.500" }}
+              value={timeEstimate}
+              onChange={(e) => setTimeEstimate(e.target.value)}
+            />
+            <Text fontWeight="semibold" fontSize={["md", "lg"]}>
+              hours
+            </Text>
+          </VStack>
+          <FormLabel fontSize={["lg", "2xl"]} mt="6" htmlFor="budgetEstimate">
+            Budget Estimate
+          </FormLabel>
+          <VStack mt="2" h="min-content" flexDirection="row" align="center">
+            <Input
+              id="budgetEstimate"
+              w="min"
+              placeholder={`Budget Estimate`}
+              mr="3"
+              size={["sm", "md"]}
+              _placeholder={{ opacity: 0.8, color: "gray.500" }}
+              value={budgetEstimate}
+              onChange={(e) => setBudgetEstimate(e.target.value)}
+            />
+            <Text fontWeight="semibold" fontSize={["md", "lg"]}>
+              PLN
+            </Text>
+          </VStack>{" "}
+          <FormLabel fontSize={["lg", "2xl"]} mt="6" htmlFor="note">
+            Note
+          </FormLabel>
+          <VStack mt="2" h="min-content" flexDirection="row" align="center">
+            <Textarea
+              id="note"
+              w="100%"
+              h="max-content"
+              placeholder={`Note...`}
+              mr="3"
+              size={["sm", "md"]}
+              _placeholder={{ opacity: 0.8, color: "gray.500" }}
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+            />
+          </VStack>{" "}
+          <DateInputs
+            startDate={startDate}
+            setStartDate={setStartDate}
+            handleGenerateReport={handleGenerateReport}
           />
-          <Text fontWeight="semibold" fontSize={["md", "lg"]}>
-            hours
-          </Text>
-        </VStack>
-        <FormLabel fontSize={["lg", "2xl"]} mt="6" htmlFor="budgetEstimate">
-          Budget Estimate
-        </FormLabel>
-        <VStack mt="4" h="min-content" flexDirection="row" align="center">
-          <Input
-            id="budgetEstimate"
-            w="min"
-            placeholder={`Budget Estimate`}
-            mr="3"
-            size={["sm", "md"]}
-            _placeholder={{ opacity: 0.8, color: "gray.500" }}
-            value={budgetEstimate}
-            onChange={(e) => setBudgetEstimate(e.target.value)}
-          />
-          <Text fontWeight="semibold" fontSize={["md", "lg"]}>
-            PLN
-          </Text>
-        </VStack>{" "}
-        <FormLabel mt="6" fontSize={["lg", "2xl"]} htmlFor="note">
-          Note
-        </FormLabel>
-        <VStack my="4" h="min-content" flexDirection="row" align="center">
-          <Textarea
-            id="note"
-            w="max-content"
-            h="max-content"
-            placeholder={`Note...`}
-            mr="3"
-            size={["sm", "md"]}
-            _placeholder={{ opacity: 0.8, color: "gray.500" }}
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-          />
-        </VStack>{" "}
-        <DateInputs
-          startDate={startDate}
-          setStartDate={setStartDate}
-          handleGenerateReport={handleGenerateReport}
-        />
+        </Flex>
+        <Flex w={["full", "60%"]} align="center" justify="center" >
+          {loading ? (
+            <Spinner size="xl" />
+          ) : projectReport ? (
+            <ProjectReportCard projectReport={projectReport} />
+          ) : (
+            <ProjectSvg />
+          )}
+        </Flex>
       </Flex>
-      <Box border="2px">
-        {loading ? (
-          <Spinner />
-        ) : (
-          projectReport && <ProjectReportCard projectReport={projectReport!} />
-        )}
-      </Box>
     </Layout>
   );
 };

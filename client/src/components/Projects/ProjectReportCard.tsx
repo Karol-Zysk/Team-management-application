@@ -9,6 +9,7 @@ import {
   Th,
   Thead,
   Tr,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { ProjectReport } from "../../interfaces/ProjectReportInterface";
 
@@ -31,36 +32,52 @@ const ProjectReportCard: React.FC<ProjectReportProps> = ({ projectReport }) => {
     timeEstimate,
   } = projectReport;
 
-  return (
-    <Box mt="16" px={12} py="6" shadow={"dark-lg"}>
-      <Box maxW="900px" m="0 auto">
-        <Heading as="h1" mb={5}>
-          {projectName}
-        </Heading>
+  const shadow = useColorModeValue(
+    "4px 4px 4px 2px  black",
+    "2px 2px 1px 2px  white"
+  );
 
-        <Text mb="2" fontSize="md">
-          <strong>Project Start Date:</strong>{" "}
-          {new Date(projectStartDate).toLocaleDateString()}{" "}
-        </Text>
-        <Text mb="2" fontSize="md">
-          <strong>Total project time:</strong> {duration} h{" "}
-        </Text>
-        <Text mb="2" fontSize="md">
-          <strong>Budget Estimate:</strong> {budgetEstimate} zł
-        </Text>
-        <Text mb="2" fontSize="md">
-          {" "}
-          <strong>Time Estimate:</strong> {timeEstimate} h
-        </Text>
-        <Text mb="2" fontSize="md">
-          {" "}
-          <strong>Expenses:</strong> {expenses}{" "}
-        </Text>
-        <Text mb="2" fontSize="md">
-          {" "}
-          <strong>Note:</strong> {note}
-        </Text>
-        <Table my="6">
+  const bg = useColorModeValue("#f6f6f6", "gray.800");
+
+  return (
+    <Flex
+      display="clumn"
+      px="16"
+      py="16"
+      w="95%"
+      bg={bg}
+      opacity={1}
+      boxShadow={shadow}
+    >
+      <Heading fontSize="3xl" fontWeight="semibold" mb={8}>
+        {projectName}
+      </Heading>
+
+      <Text mb={["2", "4"]} fontSize={["md", "xl"]}>
+        <strong>Start Date:</strong>{" "}
+        {new Date(projectStartDate).toLocaleDateString()}{" "}
+      </Text>
+      <Text mb={["2", "4"]} fontSize={["md", "xl"]}>
+        <strong>Total project time:</strong> {duration} h{" "}
+      </Text>
+      <Text mb={["2", "4"]} fontSize={["md", "xl"]}>
+        <strong>Budget Estimate:</strong> {budgetEstimate} zł
+      </Text>
+      <Text mb={["2", "4"]} fontSize={["md", "xl"]}>
+        {" "}
+        <strong>Time Estimate:</strong> {timeEstimate} h
+      </Text>
+      <Text mb={["2", "4"]} fontSize={["md", "xl"]}>
+        {" "}
+        <strong>Expenses:</strong> {expenses}
+        {" zł"}
+      </Text>
+      <Text mb={["2", "4"]} fontSize={["md", "xl"]}>
+        {" "}
+        <strong>Note:</strong> {note}
+      </Text>
+      {memberships.length > 0 ? (
+        <Table my="6" variant="striped">
           <Thead>
             <Tr>
               <Th>Member</Th>
@@ -69,46 +86,62 @@ const ProjectReportCard: React.FC<ProjectReportProps> = ({ projectReport }) => {
               <Th>Salary</Th>
             </Tr>
           </Thead>
-          <Tbody>
+          <Tbody fontSize="sm">
             {memberships.map((member, index) => (
               <Tr key={index}>
-                <Td fontWeight="bold">{member.clockifyName}</Td>
+                <Td fontWeight="semibold">{member.clockifyName}</Td>
                 <Td>{member.hoursWorked}</Td>
                 <Td>
-                  {member.hourlyRate || (
-                    <Text fontWeight="bold" color="red.500">
-                      0
-                    </Text>
-                  )}
+                  <Text fontWeight="bold">
+                    {member.hourlyRate || (
+                      <Text as="span" color="red.500">
+                        0
+                      </Text>
+                    )}{" "}
+                    zł/h
+                  </Text>
                 </Td>
                 <Td>
-                  {member.salary || (
-                    <Text fontWeight="bold" color="red.500">
-                      0
-                    </Text>
-                  )}
+                  <Text fontWeight="semibold">
+                    {member.salary || (
+                      <Text as="span" color="red.500">
+                        0
+                      </Text>
+                    )}{" "}
+                    zł
+                  </Text>
                 </Td>
               </Tr>
             ))}
           </Tbody>
         </Table>
-        <Box mt={6}>
-          <Text mb="4" fontSize="md">
-            <strong>Summary:</strong>
-            <Text as="span" color={summary > 0 ? "green" : "red"}>
-              {" "}
-            </Text>
-            {summary} zł{" "}
+      ) : (
+        <Flex p="4" my="4" border="2px" justify="center">
+          <Text
+            color="yellow.500"
+            fontWeight="semibold"
+            fontSize={["md", "lg"]}
+          >
+            No members ? Maybe wrong time period!
           </Text>
-          <Text fontSize="md" mb="4">
-            <strong>Created At:</strong> {new Date(createdAt).toLocaleString()}{" "}
+        </Flex>
+      )}
+      <Box mt={6}>
+        <Text mb={["2", "4"]} fontSize={["md", "xl"]}>
+          <strong>Summary:</strong>
+          <Text as="span" color={summary > 0 ? "green" : "red"}>
+            {" "}
           </Text>
-          <Text fontSize="md">
-            <strong>Active:</strong> {active ? "Yes" : "No"}
-          </Text>
-        </Box>
+          {summary} zł{" "}
+        </Text>
+        <Text mb={["2", "4"]} fontSize={["md", "xl"]}>
+          <strong>Created At:</strong> {new Date(createdAt).toLocaleString()}{" "}
+        </Text>
+        <Text mb={["2", "4"]} fontSize={["md", "xl"]}>
+          <strong>Active:</strong> {active ? "Yes" : "No"}
+        </Text>
       </Box>
-    </Box>
+    </Flex>
   );
 };
 
