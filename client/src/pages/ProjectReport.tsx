@@ -197,7 +197,13 @@ const ProjectsReport = () => {
         </Flex>
         <Flex w={["full", "60%"]} align="center" justify="center">
           {loading ? (
-            <Spinner size="xl" />
+            <Spinner
+              size="xl"
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.300"
+              color="facebook.400"
+            />
           ) : projectReport ? (
             <ProjectReportCard projectReport={projectReport} />
           ) : (

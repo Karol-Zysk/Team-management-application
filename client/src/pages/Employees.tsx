@@ -76,9 +76,15 @@ const Employees = () => {
 
   if (isLoading) {
     return (
-      <Box>
-        <Spinner />
-      </Box>
+      <Flex minH="50vh" justify="center" align="center">
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.300"
+          color="facebook.400"
+          size="xl"
+        />
+      </Flex>
     );
   }
 

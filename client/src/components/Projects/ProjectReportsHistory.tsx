@@ -6,7 +6,6 @@ import {
   Tr,
   Th,
   Td,
-  Spinner,
   Flex,
   Button,
 } from "@chakra-ui/react";

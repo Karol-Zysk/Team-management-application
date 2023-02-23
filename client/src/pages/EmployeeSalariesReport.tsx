@@ -74,15 +74,17 @@ const EmployeesSalariesReport = () => {
             <ReportsHistory />
           </Flex>
         </Flex>
-        <Flex w={{ base: "full", md: "60%" }}>
+        <Flex w={{ base: "full", md: "60%" }} align="center" justify="center">
           {loading ? (
-            <Spinner />
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.300"
+              color="facebook.400"
+              size="xl"
+            />
           ) : (
-            salaryReport && (
-              <TeamSalaryReport
-                salaryReport={salaryReport!}
-              />
-            )
+            salaryReport && <TeamSalaryReport salaryReport={salaryReport!} />
           )}
         </Flex>
       </Flex>

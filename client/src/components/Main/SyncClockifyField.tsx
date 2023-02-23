@@ -77,7 +77,15 @@ const SyncClockifyField = () => {
             Synchronize
           </Button>
           {loading ? (
-            <Spinner size="lg" ml="4" mt="2" />
+            <Spinner
+              size="lg"
+              ml="4"
+              mt="2"
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.300"
+              color="facebook.400"
+            />
           ) : (
             employee.length !== 0 && (
               <Text

@@ -25,7 +25,13 @@ const Views = () => {
       <Flex direction="column" height="100%" flex="1">
         {user === null ? (
           <Flex flex="1" borderColor="gray.200" justify="center" align="center">
-            <Spinner justifySelf="center" size="xl" />
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.300"
+              color="facebook.400"
+              size="xl"
+            />
           </Flex>
         ) : (
           <Routes>

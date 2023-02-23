@@ -87,7 +87,15 @@ const ReportsHistory = () => {
   const indexOfFirstProject = indexOfLastProject - reportsPerPage;
   const currentReports = reports.slice(indexOfFirstProject, indexOfLastProject);
 
-  if (isLoading) return <Spinner />;
+  if (isLoading)
+    return (
+      <Spinner
+        thickness="4px"
+        speed="0.65s"
+        emptyColor="gray.300"
+        color="facebook.400"
+      />
+    );
   if (error) return <div>Something went wrong...</div>;
 
   return (
