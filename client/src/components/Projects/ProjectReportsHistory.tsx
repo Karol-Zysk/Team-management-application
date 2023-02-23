@@ -81,7 +81,7 @@ const ProjectReportsHistory = () => {
     <>
       {reports.length > 0 ? (
         <Flex flexDirection="column">
-          <Table w="100%" variant="striped">
+          <Table w="100%" variant="striped" size="sm">
             <Thead>
               <Tr>
                 <Th>Report Name</Th>
@@ -102,7 +102,7 @@ const ProjectReportsHistory = () => {
                     </Td>
                     <Td>
                       <Button
-                        size={["xs", "sm", "md"]}
+                        size={["xs", "sm"]}
                         bg="red.600"
                         color="white"
                         rounded="xl"

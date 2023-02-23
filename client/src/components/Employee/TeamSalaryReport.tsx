@@ -74,7 +74,7 @@ const TeamSalaryReport: React.FC<TeamSalaryProps> = ({ salaryReport }) => {
 
                 <Td pl="0">
                   <Text fontWeight="semibold">
-                    {member.salary || (
+                    {member.salary.toFixed(2) || (
                       <Text as="span" color="red.500">
                         0
                       </Text>

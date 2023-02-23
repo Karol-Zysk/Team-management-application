@@ -92,7 +92,7 @@ const ReportsHistory = () => {
       <Text fontWeight="bold" fontSize="2xl" mb="6">
         Reports History
       </Text>
-      <Table w="full" variant="striped">
+      <Table w="full" variant="striped" size="sm">
         <Thead>
           <Tr>
             <Th>Report Name</Th>
@@ -116,7 +116,7 @@ const ReportsHistory = () => {
                 </Td>
                 <Td>
                   <Button
-                    size={["sm", "md", "lg"]}
+                    size={["sm"]}
                     bg="facebook.400"
                     color="white"
                     rounded="xl"

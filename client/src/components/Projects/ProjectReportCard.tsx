@@ -108,7 +108,7 @@ const ProjectReportCard: React.FC<ProjectReportProps> = ({ projectReport }) => {
                     </Td>
                     <Td>
                       <Text fontWeight="semibold">
-                        {member.salary || (
+                        {member.salary.toFixed(2) || (
                           <Text as="span" color="red.500">
                             0
                           </Text>
