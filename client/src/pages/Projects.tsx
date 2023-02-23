@@ -74,7 +74,7 @@ const Projects = () => {
             <Text
               fontWeight="semibold"
               ml="2"
-              fontSize={{ base: "lg", md: "2xl" }}
+              fontSize={{ base: "lg", md: "xl" }}
             >
               <span style={{ fontWeight: "bold" }}>Company:</span>{" "}
               {activeUser.companyName}
@@ -85,32 +85,33 @@ const Projects = () => {
             <Text
               fontWeight="semibold"
               ml="2"
-              fontSize={{ base: "lg", md: "2xl" }}
+              fontSize={{ base: "lg", md: "xl" }}
             >
               <span style={{ fontWeight: "bold" }}>Owner:</span>{" "}
               {activeUser.name}
             </Text>
           </Flex>
-          <Flex mb="10" align="center">
+          <Flex mb="6" align="center">
             <FaProjectDiagram fontSize={32} />
             <Text
               fontWeight="semibold"
               ml="2"
-              fontSize={{ base: "lg", md: "2xl" }}
+              fontSize={{ base: "lg", md: "xl" }}
             >
               <span style={{ fontWeight: "bold" }}>Number Of Projects:</span>{" "}
               {projects.length}
             </Text>
           </Flex>
 
-          <Text fontSize={{ base: "lg", md: "xl" }} mb="12">
-            <span style={{ fontWeight: "bold" }}>Tip:</span> If you're creating
-            a report for the current project, simply click "generate report" and
-            leave the default settings. If you want to generate a report for a
-            project that took place some time ago, use the option to add salary
-            history for the user <Link to="/salaryHistory">here</Link>. This
-            will ensure that the report is generated with the hourly rates that
-            were in effect at that time.
+          <Text fontSize={{ base: "md", md: "lg" }} mb="12">
+            <span style={{ fontWeight: "bold" }}>Tip:</span> If you want to
+            generate a report for a project that took place some time ago, use
+            the option to add salary history for the user{" "}
+            <Text decoration="underline" as="span">
+              <Link to="/salaryHistory">here</Link>
+            </Text>
+            . This will ensure that the report is generated with the hourly
+            rates that were in effect at that time.
           </Text>
           <Text fontSize={{ base: "2xl", md: "2xl" }} mb="6" fontWeight="bold">
             Report History

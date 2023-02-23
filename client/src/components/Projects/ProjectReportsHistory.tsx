@@ -13,11 +13,23 @@ import {
 import { AccountContext } from "../../context/AccountContext";
 import { ProjectReport } from "../../interfaces/ProjectReportInterface";
 import { baseUrl } from "../../utils/origin";
+import ProjectModal from "./ProjectReportModal";
 
 const ProjectReportsHistory = () => {
-  const { setProjectReport } = useContext(AccountContext);
+  const { setProjectReport, projectReport } = useContext(AccountContext);
   const [error, setError] = useState(null);
   const [reports, setReports] = useState<ProjectReport[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  function handleCloseModal() {
+    setIsOpen(false);
+  }
+
+  function handleOpenModal() {
+    setIsOpen(true);
+  }
 
   useEffect(() => {
     fetchReports();
@@ -73,7 +85,17 @@ const ProjectReportsHistory = () => {
 
   const handleReportClick = (report: ProjectReport) => {
     setProjectReport(report);
+    handleOpenModal();
   };
+
+  const reportsPerPage = 6;
+  const totalPages = Math.ceil(reports.length / reportsPerPage);
+  const indexOfLastProject = currentPage * reportsPerPage;
+  const indexOfFirstProject = indexOfLastProject - reportsPerPage;
+  const currentProjects = reports.slice(
+    indexOfFirstProject,
+    indexOfLastProject
+  );
 
   if (error) return <div>Something went wrong</div>;
 
@@ -89,7 +111,7 @@ const ProjectReportsHistory = () => {
               </Tr>
             </Thead>
             <Tbody h="min-content">
-              {reports.map((report: ProjectReport) => {
+              {currentProjects.map((report: ProjectReport) => {
                 return (
                   <Tr
                     opacity="0.85"
@@ -122,7 +144,27 @@ const ProjectReportsHistory = () => {
                 );
               })}
             </Tbody>
+            {projectReport && (
+              <ProjectModal
+                isOpen={isOpen}
+                projectReport={projectReport}
+                handleCloseModal={handleCloseModal}
+              />
+            )}
           </Table>
+          <Flex justifyContent="center" alignItems="center" mt="4">
+            {Array.from({ length: totalPages }).map((_, i) => (
+              <Button
+                key={i}
+                variant={i + 1 === currentPage ? "solid" : "ghost"}
+                colorScheme="blue"
+                mx="1"
+                onClick={() => setCurrentPage(i + 1)}
+              >
+                {i + 1}
+              </Button>
+            ))}
+          </Flex>
         </Flex>
       ) : (
         "Project History Already Empty"

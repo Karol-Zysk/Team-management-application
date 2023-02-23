@@ -21,6 +21,7 @@ import { baseUrl } from "../../utils/origin";
 
 const ReportsHistory = () => {
   const { setSalaryReport } = useContext(AccountContext);
+  const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [reports, setReports] = useState<TeamReport[]>([]);
   const [error, setError] = useState(null);
@@ -80,6 +81,12 @@ const ReportsHistory = () => {
     }
   }
 
+  const reportsPerPage = 4;
+  const totalPages = Math.ceil(reports.length / reportsPerPage);
+  const indexOfLastProject = currentPage * reportsPerPage;
+  const indexOfFirstProject = indexOfLastProject - reportsPerPage;
+  const currentReports = reports.slice(indexOfFirstProject, indexOfLastProject);
+
   if (isLoading) return <Spinner />;
   if (error) return <div>Something went wrong...</div>;
 
@@ -99,7 +106,7 @@ const ReportsHistory = () => {
           </Tr>
         </Thead>
         <Tbody h="min-content">
-          {reports.map((report: TeamReport) => {
+          {currentReports.map((report: TeamReport) => {
             return (
               <Tr
                 opacity="0.7"
@@ -138,6 +145,19 @@ const ReportsHistory = () => {
           })}
         </Tbody>
       </Table>
+      <Flex justifyContent="center" alignItems="center" mt="4">
+        {Array.from({ length: totalPages }).map((_, i) => (
+          <Button
+            key={i}
+            variant={i + 1 === currentPage ? "solid" : "ghost"}
+            colorScheme="blue"
+            mx="1"
+            onClick={() => setCurrentPage(i + 1)}
+          >
+            {i + 1}
+          </Button>
+        ))}
+      </Flex>
     </Flex>
   );
 };
