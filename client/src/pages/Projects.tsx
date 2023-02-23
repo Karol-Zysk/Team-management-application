@@ -66,7 +66,11 @@ const Projects = () => {
   }
 
   return (
-    <Layout title={`${activeUser.companyName} Projects`}>
+    <Layout
+      title={`${
+        activeUser.companyName ? activeUser.companyName : "Your"
+      } Projects`}
+    >
       <Flex justifyContent="space-around">
         <Flex direction="column" w="50%">
           <Flex mb="6" align="center">
