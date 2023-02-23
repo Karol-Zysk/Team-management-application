@@ -129,7 +129,7 @@ const ProjectsReport = () => {
 
   return (
     <Layout title={`Create ${project && project?.name} Report`}>
-      <Flex justify="space-between" w="full">
+      <Flex justify="space-between" w="full" direction={["column", "row"]}>
         <Flex w="min" direction="column">
           <FormLabel fontSize={["lg", "2xl"]} htmlFor="timeEstimate">
             Time Estimate

@@ -161,24 +161,26 @@ const ApiKeyInput = ({}) => {
               borderColor="white"
               isDisabled={isApiKeyValid || isActive}
             >
-              {isApiKeyValid ? <CheckIcon /> : "Activate"}
+              {isActive ? "Active" : "Activate"}
             </Button>
-            <Button
-              size={["sm", "md", "lg"]}
-              bg="facebook.400"
-              color="white"
-              rounded="xl"
-              border="2px"
-              _hover={{
-                bg: "facebook.200",
-                color: "black",
-                borderColor: "black",
-              }}
-              borderColor="white"
-              onClick={editInputKeyHandler}
-            >
-              Edit
-            </Button>
+            {isActive && (
+              <Button
+                size={["sm", "md", "lg"]}
+                bg="facebook.400"
+                color="white"
+                rounded="xl"
+                border="2px"
+                _hover={{
+                  bg: "facebook.200",
+                  color: "black",
+                  borderColor: "black",
+                }}
+                borderColor="white"
+                onClick={editInputKeyHandler}
+              >
+                Edit
+              </Button>
+            )}
           </ButtonGroup>
         </form>
       ) : (

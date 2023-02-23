@@ -63,6 +63,7 @@ const DateInputs: React.FC<DateInputProps> = ({
         size={["sm", "md", "lg"]}
         bg="facebook.400"
         color="white"
+        w={["50%", "auto"]}
         rounded="xl"
         border="2px"
         _hover={{ bg: "facebook.200", color: "black", borderColor: "black" }}

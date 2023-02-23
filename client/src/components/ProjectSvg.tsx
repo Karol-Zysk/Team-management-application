@@ -2,11 +2,11 @@ import { Flex, Text } from "@chakra-ui/react";
 
 const ProjectSvg = () => {
   return (
-    <Flex direction="column" align="center">
+    <Flex direction="column" display={["none", "flex"]} align="center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         data-name="Layer 1"
-        width="450"
+        width="400"
         viewBox="0 0 727.89313 637.35997"
       >
         <path

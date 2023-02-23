@@ -27,7 +27,7 @@ const ProjectGrid: React.FC<GridProjectInterface> = ({
   const bg = useColorModeValue("facebook.100", "facebook.600");
   const iconColor = useColorModeValue("green", "lightgreen");
 
-  const projectsPerPage = 9;
+  const projectsPerPage = 8;
   const totalPages = Math.ceil(projects.length / projectsPerPage);
   const indexOfLastProject = currentPage * projectsPerPage;
   const indexOfFirstProject = indexOfLastProject - projectsPerPage;
@@ -41,10 +41,10 @@ const ProjectGrid: React.FC<GridProjectInterface> = ({
       <motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }}>
         <Grid
           templateColumns={{
-            base: "repeat(1, 1fr)",
-            md: "repeat(3, 1fr)",
+            base: "repeat(2, 1fr)",
+            md: "repeat(4, 1fr)",
           }}
-          gap={{ base: 4, md: 3 }}
+          gap={{ base: 2, md: 3 }}
         >
           {currentProjects.map((project) => {
             return (
@@ -54,13 +54,13 @@ const ProjectGrid: React.FC<GridProjectInterface> = ({
                   boxShadow={shadow}
                   borderRadius="lg"
                   bg={bg}
-                  maxH={210}
-                  minH={210}
-                  maxW={180}
-                  minW={180}
+                  maxH={[200]}
+                  minH={[200]}
+                  maxW={[140]}
+                  minW={[140]}
                   transition="ease-in-out 300ms"
                   position="relative"
-                  opacity="0.8"
+                  opacity={["1", "0.8"]}
                   key={project.id}
                   _hover={{
                     transform: "scale(1.05)",
@@ -72,26 +72,13 @@ const ProjectGrid: React.FC<GridProjectInterface> = ({
                   flexDirection="column"
                 >
                   <Text
-                    w="full"
-                    display="flex"
-                    fontWeight="bold"
-                    fontSize={{ base: "sm", md: "md" }}
-                    mb="4"
-                    justifyContent="center"
-                  >
-                    {activeUser.companyName}
-                  </Text>
-                  <Text
                     fontWeight="bold"
                     fontSize={{ base: "smaller", md: "smaller" }}
                     mb="6"
                     justifyContent="center"
                     position="relative"
                   >
-                    Project:{" "}
-                    <Text as="span" ml="1" fontWeight="normal">
-                      {project.name}
-                    </Text>
+                    Project: <Text fontWeight="normal">{project.name}</Text>
                   </Text>
                   <Text
                     fontWeight="bold"
@@ -101,9 +88,7 @@ const ProjectGrid: React.FC<GridProjectInterface> = ({
                     position="relative"
                   >
                     Client:{" "}
-                    <Text as="span" ml="1" fontWeight="normal">
-                      {project.clientName}
-                    </Text>
+                    <Text fontWeight="normal">{project.clientName}</Text>
                   </Text>
                   <Box
                     position="absolute"

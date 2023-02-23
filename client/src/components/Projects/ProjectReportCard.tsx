@@ -42,12 +42,12 @@ const ProjectReportCard: React.FC<ProjectReportProps> = ({ projectReport }) => {
   return (
     <Flex
       display="clumn"
-      px="16"
-      py="16"
+      px={["0", "16"]}
+      py={["8", "16"]}
       w="95%"
-      bg={bg}
+      bg={["none", bg]}
       opacity={1}
-      boxShadow={shadow}
+      boxShadow={["none", shadow]}
     >
       <Heading fontSize="2xl" fontWeight="semibold" mb={8}>
         {projectName}

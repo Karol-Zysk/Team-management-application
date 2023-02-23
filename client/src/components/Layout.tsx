@@ -26,7 +26,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
             h="100%"
             paddingX={[2, 8, 24]}
             bg={bg2}
-            paddingY={[12, 16, 0]}
+            paddingY={[2, 8, 0]}
           >
             <motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }}>
               <Flex
@@ -34,8 +34,8 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                 bg={bg}
                 border="4px"
                 mb={[6, 6]}
-                paddingX={[6, 12, 36]}
-                paddingY={[6, 12, 24]}
+                paddingX={[8, 12, 36]}
+                paddingY={[12, 12, 24]}
               >
                 {children}
               </Flex>

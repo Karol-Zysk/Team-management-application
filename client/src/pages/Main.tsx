@@ -19,9 +19,9 @@ const Main = () => {
           w="auto"
           justify="center"
           h="min"
-          mx="20%"
+          mx={["5%", "20%"]}
           px="8"
-          py="4"
+          py={["2", "4"]}
           mb="6"
           transform={["none", "translateY(-30%)"]}
           bg={useColorModeValue("facebook.300", "facebook.600")}
@@ -37,21 +37,21 @@ const Main = () => {
               "3px 3px 3px black",
               "3px 3px 3px  black"
             )}
-            fontSize="4xl"
+            fontSize={["xl", "4xl"]}
             fontWeight="bold"
             as="h1"
           >
-            Hello {activeUser.name}
+            Hi {activeUser.name}!
           </Heading>
         </Flex>
         <Flex>
-          <Box w="50%">
+          <Box w={["100%", "50%"]}>
             <ApiKeyInput />
             <SyncClockifyField />
           </Box>
           <Flex
             flexDirection="column"
-            display={["block", "flex"]}
+            display={["none", "none", "flex"]}
             alignItems="center"
             justify="center"
             width="50%"

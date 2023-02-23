@@ -58,7 +58,12 @@ const SyncClockifyField = () => {
           With a valid API key, you can synchronize your database with Clockify
           API and use most of the application's features.
         </Text>
-        <ButtonGroup w="70%" justifyContent="left" alignContent="right" mt="4">
+        <ButtonGroup
+          w={["100%", "70%"]}
+          justifyContent="left"
+          alignContent="right"
+          mt="4"
+        >
           <Button
             size={["sm", "md", "lg"]}
             bg="facebook.400"
@@ -78,10 +83,10 @@ const SyncClockifyField = () => {
           </Button>
           {loading ? (
             <Spinner
-              size="lg"
+              size={["sm", "lg"]}
               ml="4"
               mt="2"
-              thickness="4px"
+              thickness="3px"
               speed="0.65s"
               emptyColor="gray.300"
               color="facebook.400"
