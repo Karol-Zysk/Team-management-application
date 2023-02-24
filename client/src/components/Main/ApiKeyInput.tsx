@@ -56,8 +56,8 @@ const ApiKeyInput = ({}) => {
           authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
-          clockify_api_key: apiKey,
-          companyName: companyName,
+          clockify_api_key: apiKey && apiKey,
+          companyName: companyName && companyName,
         }),
       });
 

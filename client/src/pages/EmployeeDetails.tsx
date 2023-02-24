@@ -38,8 +38,7 @@ const EmployeeDetails = ({}) => {
   async function handleGetEmployee() {
     const accessToken = localStorage.getItem("access_token");
     if (!accessToken) {
-      setError("You're not logged in!");
-      return;
+      throw new Error("You're not logged in!");
     }
 
     try {
@@ -53,19 +52,16 @@ const EmployeeDetails = ({}) => {
       const data = await response.json();
 
       if (!response.ok) {
-        console.error(`Error: ${data.message}`);
-        throw new Error(data.message);
+        throw new Error(`Error: ${data.message}`);
       }
 
       const employee: Employee = data;
 
       setEmployee(employee);
-
-      setError(null);
     } catch (err: any) {
       toast({
         title: "Error",
-        description: `${error}`,
+        description: `${err.message}`,
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -75,8 +71,10 @@ const EmployeeDetails = ({}) => {
 
   const handleGenerateReport = async () => {
     const accessToken = localStorage.getItem("access_token");
+
     try {
       setLoading(true);
+
       const response = await fetch(
         `${baseUrl}/salary/${employee?.clockifyId}`,
         {
@@ -88,18 +86,18 @@ const EmployeeDetails = ({}) => {
           body: JSON.stringify({ start: startDate, end: endDate }),
         }
       );
-      if (response.status >= 400) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
-      }
-      const data = await response.json();
-      setSalaryReport(data);
 
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+
+      setSalaryReport(data);
       setLoading(false);
     } catch (err: any) {
       setLoading(false);
       console.error(err.message);
-      setError(err.message);
       toast({
         title: "Error",
         description: `${err.message}`,

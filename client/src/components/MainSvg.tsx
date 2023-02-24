@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
 
 const man = {
-  initial: { x: -70 },
+  initial: { x: -80 },
   animate: {
     x: 50,
     transition: {
-      duration: 3,
+      duration: 3.5,
       ease: "easeInOut",
     },
   },
@@ -13,9 +13,9 @@ const man = {
 const head = {
   initial: { rotate: 15 },
   animate: {
-    rotate: [5, -15, 5],
+    rotate: [8, -17, 8],
     transition: {
-      delay: 3,
+      delay: 3.5,
       duration: 5,
       repeatDelay: 2,
       ease: "easeInOut",
