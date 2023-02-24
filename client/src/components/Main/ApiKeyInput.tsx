@@ -10,7 +10,6 @@ import {
 } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import { AccountContext } from "../../context/AccountContext";
-import { motion } from "framer-motion";
 import { baseUrl } from "../../utils/origin";
 
 const ApiKeyInput = ({}) => {
@@ -69,10 +68,8 @@ const ApiKeyInput = ({}) => {
       setIsApiKeyValid(true);
       setCompanyName(companyName);
       setIsActive(true);
-      setError(null);
     } catch (err: any) {
       console.error(err.message);
-      setError(err.message);
       toast({
         title: "Error",
         description: `${err.message}`,
@@ -186,7 +183,7 @@ const ApiKeyInput = ({}) => {
       ) : (
         <>
           <Text fontSize={["xl", "2xl"]} fontWeight="semibold">
-            You have valid api key. Click to edit
+            You have valid api key.
           </Text>
           <ButtonGroup size={["sm", "md", "lg"]} mt="4">
             <Button

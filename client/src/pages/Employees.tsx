@@ -23,13 +23,12 @@ import { AccountContext, UserData } from "../context/AccountContext";
 import { Employee } from "../interfaces/EmployeeInterface";
 import { useQuery } from "react-query";
 import { baseUrl } from "../utils/origin";
-import PageTitle from "../components/PageTitle";
 import Layout from "../components/Layout";
 
 const Employees = () => {
+  const { error, user } = useContext(AccountContext);
   const [isOpen, setIsOpen] = useState(false);
   const [id, setId] = useState<Employee>();
-  const { error, user } = useContext(AccountContext);
 
   function handleCloseModal() {
     setIsOpen(false);

@@ -61,7 +61,7 @@ export default function Nav({}) {
   const [menuHeight, setMenuHeight] = useState("0px");
 
   const handleMenuClick = () => {
-    if (menuHeight === "0px") {
+    if (isOpen) {
       setMenuHeight("100vh");
     } else {
       setMenuHeight("0px");
