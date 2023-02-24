@@ -22,10 +22,6 @@ const EmployeeSalaryReport: React.FC<ReportProps> = ({
   start,
   end,
 }) => {
-  const shadow = useColorModeValue(
-    "4px 4px 4px 2px  black",
-    "2px 2px 1px 2px  white"
-  );
   const {
     clockifyName,
     email,
@@ -35,18 +31,16 @@ const EmployeeSalaryReport: React.FC<ReportProps> = ({
     salary,
   } = salaryReport;
 
-  const bg = useColorModeValue("#f6f6f6", "gray.800");
-
   return (
     <Flex
-      transform={["none", "translate(30px,-20px)"]}
-      display="column"
-      px="8"
-      py="12"
+      display="clumn"
+      px={[0, 4, 8]}
+      py={[8, 12]}
+      border={["none", "1px"]}
       w="100%"
-      bg={bg}
+      bg={["none"]}
       opacity={1}
-      boxShadow={shadow}
+      boxShadow={["none"]}
     >
       {" "}
       {!salaryReport.hoursWorked ? (
@@ -57,19 +51,18 @@ const EmployeeSalaryReport: React.FC<ReportProps> = ({
         <>
           <Flex
             w="full"
-            direction={["column", "row"]}
             justify="space-between"
             align={["flex-start", "center"]}
+            mb={[4, 12]}
           >
-            <Text fontSize="3xl" fontWeight="semibold">
+            <Text fontSize={["xl", "2xl"]} fontWeight="semibold">
               {clockifyName}
             </Text>
             {profilePicture ? (
               <Image
                 src={profilePicture}
-                mr={[0, 12]}
                 mb={[3, 0]}
-                boxSize={["50px", "70px"]}
+                boxSize={["50px", "70px", "90px"]}
                 borderRadius="full"
               />
             ) : (
@@ -85,7 +78,7 @@ const EmployeeSalaryReport: React.FC<ReportProps> = ({
             )}
           </Flex>
           <Box mt={5}>
-            <Text fontSize={["lg", "xl"]} fontWeight="bold">
+            <Text fontSize={["md", "lg"]} fontWeight="bold">
               Email:{" "}
               <Text as="span" fontWeight="semibold">
                 {email}
@@ -93,7 +86,7 @@ const EmployeeSalaryReport: React.FC<ReportProps> = ({
             </Text>
           </Box>
           <Box mt={2}>
-            <Text fontSize={["lg", "xl"]} fontWeight="bold">
+            <Text fontSize={["md", "lg"]} fontWeight="bold">
               Hours worked:{" "}
               <Text as="span" fontWeight="semibold">
                 {hoursWorked ? hoursWorked : 0}
@@ -101,7 +94,7 @@ const EmployeeSalaryReport: React.FC<ReportProps> = ({
             </Text>
           </Box>
           <Box mt={2}>
-            <Text fontSize={["lg", "xl"]} fontWeight="bold">
+            <Text fontSize={["md", "lg"]} fontWeight="bold">
               Hourly rate:{" "}
               <Text as="span" fontWeight="semibold">
                 {hourlyRate ? hourlyRate : 0}zł/h
@@ -109,7 +102,7 @@ const EmployeeSalaryReport: React.FC<ReportProps> = ({
             </Text>
           </Box>
           <Box mt={2} mb="12">
-            <Text fontSize={["lg", "xl"]} fontWeight="bold">
+            <Text fontSize={["md", "lg"]} fontWeight="bold">
               Time Period:{" "}
               <Text as="span" fontWeight="semibold">
                 {start && end
@@ -119,7 +112,7 @@ const EmployeeSalaryReport: React.FC<ReportProps> = ({
             </Text>
           </Box>
           <Box mt={2}>
-            <Text fontSize={["lg", "xl"]} fontWeight="bold">
+            <Text fontSize={["md", "lg"]} fontWeight="bold">
               Salary:{" "}
               <Text as="span" fontWeight="semibold">
                 {salary ? Number(salary.toFixed(1)) : 0}zł

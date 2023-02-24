@@ -35,6 +35,7 @@ const DateInputs: React.FC<DateInputProps> = ({
             <FormLabel htmlFor="start-date">From</FormLabel>
             <Input
               bg="white"
+              size={["sm", "sm", "md"]}
               color="blackAlpha.800"
               w="min-content"
               type="date"
@@ -49,6 +50,7 @@ const DateInputs: React.FC<DateInputProps> = ({
               <Input
                 bg="white"
                 color="blackAlpha.800"
+                size={["sm", "sm", "md"]}
                 w="min-content"
                 type="date"
                 id="end-date"

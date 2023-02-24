@@ -112,22 +112,22 @@ const EmployeeDetails = ({}) => {
 
   return (
     <Layout title={`${employee?.clockifyName} Salary`}>
-      <Flex w="full">
+      <Flex direction={["column", "column", "row"]} w="full">
         <Box flexBasis={{ base: "100%", md: "50%" }}>
-          <Text mb="6" fontWeight="semibold" fontSize="2xl">
+          <Text mb={[2, 4]} fontWeight="semibold" fontSize={["xl", "xl"]}>
             Enter the dates for which you want the report to be calculated.
           </Text>
-          <Text fontSize="xl" my={4}>
+          <Text fontSize={["md", "lg"]} my={[2, 2]}>
             <strong>ClockifyName:</strong> {employee?.clockifyName}
           </Text>
-          <Text fontSize="xl" my={4}>
+          <Text fontSize={["md", "lg"]} my={[2, 2]}>
             <strong>First Name:</strong> {employee?.firstName}
           </Text>
-          <Text fontSize="xl" my={4}>
+          <Text fontSize={["md", "lg"]} my={[2, 2]}>
             <strong>Last Name: </strong>
             {employee?.lastName}
           </Text>
-          <Text fontSize="xl" my={4}>
+          <Text fontSize={["md", "lg"]} my={[2, 2]}>
             <strong>Hourly Rate:</strong> {employee?.hourlyRate} zł/h
           </Text>
 
@@ -138,6 +138,7 @@ const EmployeeDetails = ({}) => {
                 <Input
                   bg="white"
                   color="blackAlpha.800"
+                  size={["sm", "sm", "md"]}
                   w="min-content"
                   type="date"
                   id="start-date"
@@ -150,6 +151,7 @@ const EmployeeDetails = ({}) => {
                 <Input
                   bg="white"
                   color="blackAlpha.800"
+                  size={["sm", "sm", "md"]}
                   w="min-content"
                   type="date"
                   id="end-date"
@@ -177,7 +179,7 @@ const EmployeeDetails = ({}) => {
             Report
           </Button>
         </Box>
-        <Box p="2" w="80%" h="100%">
+        <Flex justify="center" w={["100%", "100%", "50%"]} h="100%">
           {loading ? (
             <Spinner />
           ) : (
@@ -191,7 +193,7 @@ const EmployeeDetails = ({}) => {
               </Box>
             )
           )}
-        </Box>
+        </Flex>
       </Flex>
     </Layout>
   );

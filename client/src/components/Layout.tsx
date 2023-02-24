@@ -34,7 +34,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                 bg={bg}
                 border="4px"
                 mb={[6, 6]}
-                paddingX={[8, 12, 36]}
+                paddingX={[8, 4, 12, 36]}
                 paddingY={[12, 12, 24]}
               >
                 {children}

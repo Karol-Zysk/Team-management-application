@@ -69,8 +69,19 @@ const Projects = () => {
       } Projects`}
     >
       {projects.length >= 0 ? (
-        <Flex direction={["column-reverse", "column", "row"]}>
-          <Flex mt={[12, 0]} direction="column" w={["100%", "100%", "60%"]}>
+        <Flex
+          direction={[
+            "column-reverse",
+            "column-reverse",
+            "column-reverse",
+            "row",
+          ]}
+        >
+          <Flex
+            mt={[12, 12, 0]}
+            direction="column"
+            w={["100%", "100%", "100%", "60%"]}
+          >
             <Flex mb="6" align="center">
               <HiBuildingOffice2 fontSize={32} />
               <Text
@@ -124,7 +135,11 @@ const Projects = () => {
             </Text>
             <ProjectReportsHistory />
           </Flex>
-          <Flex justify="center" p={["0", "4"]} w={["100%", "50%"]}>
+          <Flex
+            justify="center"
+            p={["0", "4"]}
+            w={["100%", "100%", "100%", "50%"]}
+          >
             {!projects ? (
               <Spinner
                 thickness="4px"

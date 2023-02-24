@@ -128,7 +128,7 @@ const ProjectsReport = () => {
   };
 
   return (
-    <Layout title={`Create ${project && project?.name} Report`}>
+    <Layout title={`Create ${project?.name ? project.name : "Project"} Report`}>
       <Flex justify="space-between" w="full" direction={["column", "row"]}>
         <Flex w="min" direction="column">
           <FormLabel fontSize={["lg", "2xl"]} htmlFor="timeEstimate">

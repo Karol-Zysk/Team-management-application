@@ -18,16 +18,13 @@ interface GridProjectInterface {
   activeUser: UserData;
 }
 
-const ProjectGrid: React.FC<GridProjectInterface> = ({
-  projects,
-  activeUser,
-}) => {
+const ProjectGrid: React.FC<GridProjectInterface> = ({ projects }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const shadow = useColorModeValue("2px 2px 4px black", "2px 2px 2px white");
-  const bg = useColorModeValue("facebook.100", "facebook.600");
+  const shadow = useColorModeValue("3px 3px 4px black", "3px 3px 3px white");
+  const bg = useColorModeValue("facebook.200", "facebook.500");
   const iconColor = useColorModeValue("green", "lightgreen");
 
-  const projectsPerPage = 8;
+  const projectsPerPage = 12;
   const totalPages = Math.ceil(projects.length / projectsPerPage);
   const indexOfLastProject = currentPage * projectsPerPage;
   const indexOfFirstProject = indexOfLastProject - projectsPerPage;
@@ -37,58 +34,70 @@ const ProjectGrid: React.FC<GridProjectInterface> = ({
   );
 
   return (
-    <Flex direction="column" transform={["none", "translate(60px , -60px)"]}>
+    <Flex
+      direction="column"
+      m={[-4, -4, -4, 0]}
+      mt={[8, 0, 0, 0]}
+      transform={["none", "none", "none", "translate(60px , -60px)"]}
+    >
       <motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }}>
         <Grid
-          templateColumns={{
-            base: "repeat(2, 1fr)",
-            md: "repeat(4, 1fr)",
-          }}
+          templateColumns={[
+            "repeat(2, 1fr)",
+            "repeat(3, 1fr)",
+            "repeat(4, 1fr)",
+            "repeat(3, 1fr)",
+          ]}
           gap={{ base: 2, md: 3 }}
         >
           {currentProjects.map((project) => {
             return (
               <Link key={project.id} to={`/projects/${project.id}`}>
                 <Flex
-                  border="2px"
+                  border="1px"
+                  rounded="md"
                   boxShadow={shadow}
-                  borderRadius="lg"
                   bg={bg}
-                  maxH={[200]}
-                  minH={[200]}
-                  maxW={[140]}
-                  minW={[140]}
+                  maxH={[160, 200]}
+                  minH={[160, 200]}
+                  maxW={["auto", 140]}
+                  minW={["auto", 140]}
                   transition="ease-in-out 300ms"
                   position="relative"
-                  opacity={["1", "0.8"]}
                   key={project.id}
                   _hover={{
                     transform: "scale(1.05)",
                     zIndex: 10,
                     transition: "ease 200ms",
-                    opacity: 1,
                   }}
                   p={{ base: "4", md: "4" }}
-                  flexDirection="column"
+                  flexDirection={["column"]}
                 >
                   <Text
                     fontWeight="bold"
-                    fontSize={{ base: "smaller", md: "smaller" }}
-                    mb="6"
+                    style={{ fontSize: "12px" }}
                     justifyContent="center"
                     position="relative"
                   >
-                    Project: <Text fontWeight="normal">{project.name}</Text>
+                    Project:
+                  </Text>
+                  <Text
+                    style={{ fontSize: "13px" }}
+                    mb="2"
+                    fontWeight="semibold"
+                  >
+                    {project.name}
                   </Text>
                   <Text
                     fontWeight="bold"
-                    mb="4"
-                    fontSize={{ base: "smaller", md: "smaller" }}
+                    style={{ fontSize: "13px" }}
                     justifyContent="center"
                     position="relative"
                   >
                     Client:{" "}
-                    <Text fontWeight="normal">{project.clientName}</Text>
+                  </Text>
+                  <Text style={{ fontSize: "14px" }} fontWeight="semibold">
+                    {project.clientName}
                   </Text>
                   <Box
                     position="absolute"

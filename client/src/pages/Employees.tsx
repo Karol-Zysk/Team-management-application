@@ -71,7 +71,7 @@ const Employees = () => {
   if (isError) {
     return <Box>{error}</Box>;
   }
-
+  const color = useColorModeValue("black", "white");
   const activeUser = user as UserData;
 
   if (isLoading) {
@@ -92,28 +92,45 @@ const Employees = () => {
     <Layout
       title={`${activeUser.companyName ? activeUser.companyName : "Your"} Team`}
     >
-      <Box
-        p="8"
-        boxShadow={useColorModeValue("3px 3px 3px black", "3px 3px 3px  gray")}
-        minH="50vh"
-        bg={useColorModeValue("facebook.400", "black")}
-        overflowX={["scroll", "auto"]}
-      >
-        <Table size={["sm"]} fontSize={["smaller", "md"]} variant="striped">
+      <Box minH="50vh" mx={[-4, 0]} overflowX={["scroll", "auto"]}>
+        <Table
+          bg={useColorModeValue("facebook.300", "gray.900")}
+          size={["sm"]}
+          fontSize={["smaller", "md"]}
+          variant="striped"
+        >
           <Thead
-            color={useColorModeValue("black", "white")}
+            bg={useColorModeValue("facebook.500", "black")}
             w={["min", "100%"]}
           >
             <Tr>
-              <Th color={useColorModeValue("black", "white")}>Lp.</Th>
-              <Th color={useColorModeValue("black", "white")}>Clockify Name</Th>
-              <Th color={useColorModeValue("black", "white")}>first name</Th>
-              <Th color={useColorModeValue("black", "white")}>last name</Th>
-              <Th color={useColorModeValue("black", "white")}>email</Th>
-              <Th color={useColorModeValue("black", "white")}>hourly rate</Th>
-              <Th color={useColorModeValue("black", "white")}>Avatar</Th>
-              <Th color={useColorModeValue("black", "white")}>Edit</Th>
-              <Th color={useColorModeValue("black", "white")}>Report</Th>
+              <Th py="4" color={color}>
+                Lp.
+              </Th>
+              <Th py="4" color={color}>
+                Clockify Name
+              </Th>
+              <Th py="4" color={color}>
+                first name
+              </Th>
+              <Th py="4" color={color}>
+                last name
+              </Th>
+              <Th py="4" color={color}>
+                email
+              </Th>
+              <Th py="4" color={color}>
+                hourly rate
+              </Th>
+              <Th py="4" color={color}>
+                Avatar
+              </Th>
+              <Th py="4" color={color}>
+                Edit
+              </Th>
+              <Th py="4" color={color}>
+                Report
+              </Th>
             </Tr>
           </Thead>
           <Tbody>

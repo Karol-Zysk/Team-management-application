@@ -28,23 +28,22 @@ const TeamSalaryReport: React.FC<TeamSalaryProps> = ({ salaryReport }) => {
 
   return (
     <Flex
-      transform={["none", "translate(30px,-20px)"]}
-      display="column"
-      px="4"
-      py="12"
-      w="100%"
-      bg={bg}
+      display="clumn"
+      px={[0, 4, 16]}
+      py={[8, 16]}
+      w="95%"
+      bg={["none", bg]}
       opacity={1}
-      boxShadow={shadow}
+      boxShadow={["none", shadow]}
     >
-      <Flex px="4" align="center" mb={5}>
+      <Flex mx={[-4, 0]} px={[4]} align="center" mb={2}>
         <Text fontSize="xl" fontWeight="bold">
           {reportName}
         </Text>
       </Flex>
 
-      <Box p="8" overflowX={["scroll", "auto"]}>
-        <Text px="4" fontSize="xl" mb="8" fontWeight="bold">
+      <Box p={[0, 8]} overflowX={["scroll", "auto"]}>
+        <Text px={[0, 4]} fontSize="xl" mb="8" fontWeight="bold">
           Employees:
         </Text>
         <Table size={["sm"]} fontSize={["smaller", "md"]} variant="striped">

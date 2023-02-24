@@ -61,7 +61,7 @@ const Main = () => {
               w="100%"
               justify="center"
               align="center"
-              display={["none", "block"]}
+              display={["none", "none", "none", "block"]}
             >
               <MainSvg />
             </Flex>

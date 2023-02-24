@@ -4,7 +4,6 @@ import DateInputs from "../components/DateInputs";
 import ReportsHistory from "../components/Employee/EmployeeReportsHistory";
 import TeamSalaryReport from "../components/Employee/TeamSalaryReport";
 import { AccountContext } from "../context/AccountContext";
-import { motion } from "framer-motion";
 import { baseUrl } from "../utils/origin";
 import Layout from "../components/Layout";
 
@@ -58,8 +57,17 @@ const EmployeesSalariesReport = () => {
 
   return (
     <Layout title="Employees Salary Report">
-      <Flex w="full" justify="space-between">
-        <Flex display="column" minW="35%" maxW="35%">
+      <Flex
+        w="full"
+        direction={["column", "column", "row"]}
+        justify="space-between"
+      >
+        <Flex
+          display="column"
+          p={[0, 4, 0]}
+          minW={["100%", "100%", "35%"]}
+          maxW={["100%", "100%", "35%"]}
+        >
           <Text mb="6" fontWeight="semibold" fontSize="2xl">
             Enter the dates for which you want the report to be calculated.
           </Text>
