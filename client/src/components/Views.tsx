@@ -14,6 +14,7 @@ import EmployeeSalariesReport from "../pages/EmployeeSalariesReport";
 import Projects from "../pages/Projects";
 import ProjectReport from "../pages/ProjectReport";
 import Footer from "./Footer";
+import LogoSvg from "./LogoSvg";
 
 const Views = () => {
   const { user } = useContext(AccountContext);
@@ -42,6 +43,7 @@ const Views = () => {
               <Route path="/projects" element={<Projects />} />
               <Route path="/employees/:id" element={<EmployeeDetails />} />
               <Route path="/projects/:id" element={<ProjectReport />} />
+              <Route path="/logo" element={<LogoSvg />} />
             </Route>
 
             <Route element={<AuthRoutes />} path="/">

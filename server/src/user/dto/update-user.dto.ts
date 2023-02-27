@@ -1,10 +1,11 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UpdateUserDto {
+  @IsNotEmpty()
   @IsString()
   @IsOptional()
   clockify_api_key: string;
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   companyName: string;
 }

@@ -25,7 +25,7 @@ interface AccountContextValue {
   setIsApiKeyValid: React.Dispatch<React.SetStateAction<boolean>>;
 
   companyName: string | undefined;
-  setCompanyName: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setCompanyName: React.Dispatch<React.SetStateAction<string>>;
   isActive: boolean | undefined;
   setIsActive: React.Dispatch<React.SetStateAction<boolean | undefined>>;
   error: null | string;
@@ -47,8 +47,8 @@ const initialState: AccountContextValue = {
   isApiKeyValid: false,
   setIsApiKeyValid: () => false,
 
-  companyName: undefined,
-  setCompanyName: () => undefined,
+  companyName: "",
+  setCompanyName: () => "",
   isActive: undefined,
   setIsActive: () => undefined,
   error: null,
@@ -70,7 +70,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isApiKeyValid, setIsApiKeyValid] = useState<boolean>(false);
 
-  const [companyName, setCompanyName] = useState<string | undefined>(undefined);
+  const [companyName, setCompanyName] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [isActive, setIsActive] = useState<boolean | undefined>(undefined);
   const [isSync, setIsSync] = useState<boolean>(false);
@@ -84,7 +84,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
     setIsLoggedIn(false);
     setIsSync(false);
     setIsActive(false);
-    setCompanyName(undefined);
+    setCompanyName("");
     setIsApiKeyValid(false);
   };
 

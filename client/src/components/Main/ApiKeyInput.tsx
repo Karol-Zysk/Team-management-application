@@ -25,7 +25,7 @@ const ApiKeyInput = ({}) => {
     setCompanyName,
   } = useContext(AccountContext);
 
-  const [apiKey, setApiKey] = useState<string | undefined>(undefined);
+  const [apiKey, setApiKey] = useState<string>("");
   const editInputKeyHandler = () => {
     setIsApiKeyValid(false);
     setIsActive(false);
@@ -55,8 +55,8 @@ const ApiKeyInput = ({}) => {
           authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
-          clockify_api_key: apiKey && apiKey,
-          companyName: companyName && companyName,
+          ...(apiKey !== "" ? { clockify_api_key: apiKey } : {}),
+          companyName,
         }),
       });
 
@@ -66,7 +66,7 @@ const ApiKeyInput = ({}) => {
       }
 
       setIsApiKeyValid(true);
-      setCompanyName(companyName);
+      setCompanyName(companyName!);
       setIsActive(true);
     } catch (err: any) {
       console.error(err.message);

@@ -23,20 +23,29 @@ let UserService = class UserService {
     }
     async updateUser(userId, dto) {
         try {
-            const clockify = new clockify_ts_1.default(dto.clockify_api_key);
-            await clockify.workspaces.get();
+            if (dto.clockify_api_key) {
+                const clockify = new clockify_ts_1.default(dto.clockify_api_key);
+                await clockify.workspaces.get();
+            }
         }
         catch (error) {
             throw new common_1.BadRequestException('Invalid Api Key');
         }
         try {
-            const hash_api_key = this.cryptoService.encrypt(dto.clockify_api_key);
+            let hash_api_key;
             let active;
-            if (dto.clockify_api_key)
+            if (dto.clockify_api_key) {
+                hash_api_key = this.cryptoService.encrypt(dto.clockify_api_key);
                 active = true;
+            }
+            console.log(hash_api_key);
             const updatedUser = await this.prisma.user.update({
                 where: { id: userId },
-                data: { hash_api_key, active, companyName: dto.companyName },
+                data: {
+                    hash_api_key: hash_api_key && hash_api_key,
+                    active,
+                    companyName: dto.companyName,
+                },
             });
             delete updatedUser.hash_api_key;
             delete updatedUser.hash;
