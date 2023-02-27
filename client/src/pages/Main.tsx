@@ -9,7 +9,7 @@ import image from "../assets/employee.svg";
 import MainSvg from "../components/MainSvg";
 
 const Main = () => {
-  const { user } = useContext(AccountContext);
+  const { user, isSync } = useContext(AccountContext);
   const activeUser = user as UserData;
 
   return (
@@ -63,7 +63,7 @@ const Main = () => {
               align="center"
               display={["none", "none", "none", "block"]}
             >
-              <MainSvg />
+              <MainSvg animate={isSync} />
             </Flex>
           </Flex>
         </Flex>

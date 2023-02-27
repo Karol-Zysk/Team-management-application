@@ -4,13 +4,10 @@ import {
   Box,
   Button,
   Flex,
-  Heading,
-  Image,
   Spinner,
   Table,
   Tbody,
   Td,
-  Text,
   Th,
   Thead,
   Tr,
@@ -29,6 +26,10 @@ const Employees = () => {
   const { error, user } = useContext(AccountContext);
   const [isOpen, setIsOpen] = useState(false);
   const [id, setId] = useState<Employee>();
+
+  const color = useColorModeValue("black", "white");
+  const bg = useColorModeValue("facebook.300", "gray.900");
+  const bgHead = useColorModeValue("facebook.500", "black");
 
   function handleCloseModal() {
     setIsOpen(false);
@@ -67,11 +68,11 @@ const Employees = () => {
     return data;
   });
 
+  const activeUser = user as UserData;
+
   if (isError) {
     return <Box>{error}</Box>;
   }
-  const color = useColorModeValue("black", "white");
-  const activeUser = user as UserData;
 
   if (isLoading) {
     return (
@@ -93,15 +94,12 @@ const Employees = () => {
     >
       <Box minH="50vh" mx={[-4, 0]} overflowX={["scroll", "auto"]}>
         <Table
-          bg={useColorModeValue("facebook.300", "gray.900")}
+          bg={bg}
           size={["sm"]}
           fontSize={["smaller", "md"]}
           variant="striped"
         >
-          <Thead
-            bg={useColorModeValue("facebook.500", "black")}
-            w={["min", "100%"]}
-          >
+          <Thead bg={bgHead} w={["min", "100%"]}>
             <Tr>
               <Th py="4" color={color}>
                 Lp.

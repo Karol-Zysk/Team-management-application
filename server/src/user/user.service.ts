@@ -3,7 +3,6 @@ import { PrismaService } from '../prisma/prisma.service';
 import { UpdateUserDto } from './dto';
 import { User } from '@prisma/client';
 import { CryptoService } from '../cryptography/crypto.service';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { ClockifyService } from '../clockify/clockify.service';
 import Clockify from 'clockify-ts';
 

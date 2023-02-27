@@ -2,6 +2,7 @@ import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import PageTitle from "./PageTitle";
 import { motion } from "framer-motion";
+import Circle from "./Polygon/Circle";
 
 interface LayoutProps {
   children: ReactNode;
@@ -12,7 +13,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
   const bg = useColorModeValue("gray.100", "gray.900");
   const bg2 = useColorModeValue("facebook.400", "facebook.600");
   return (
-    <>
+    <Flex>
       <Flex
         flexDirection={["column-reverse", "row"]}
         w="100%"
@@ -43,7 +44,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
           </Box>
         </Flex>
       </Flex>
-    </>
+    </Flex>
   );
 };
 export default Layout;
