@@ -20,16 +20,13 @@ import {
 } from "react-query";
 import { AccountContext } from "../../context/AccountContext";
 import { Employee } from "../../interfaces/EmployeeInterface";
-import { baseUrl } from "../../utils/origin";
+import ApiClient from "../../utils/ApiClient";
 
 type ModalProps = {
   handleCloseModal: () => void;
   isOpen: boolean;
   employee: Employee;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  refetch: <TPageData>(
-    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
-  ) => Promise<QueryObserverResult<any, unknown>>;
 };
 
 const EditModal: React.FC<ModalProps> = ({
@@ -37,9 +34,8 @@ const EditModal: React.FC<ModalProps> = ({
   handleCloseModal,
   isOpen,
   setIsOpen,
-  refetch,
 }) => {
-  const { setError, error } = useContext(AccountContext);
+  const { setError } = useContext(AccountContext);
   const toast = useToast();
 
   const [currentEmployee, setCurrentEmployee] = useState<Employee>({
@@ -59,7 +55,7 @@ const EditModal: React.FC<ModalProps> = ({
       setCurrentEmployee(employee);
       setFirstName(currentEmployee.firstName || null);
       setLastName(currentEmployee.lastName || null);
-      setHourlyRate(currentEmployee.hourlyRate || null);
+      setHourlyRate(currentEmployee.hourlyRate || 0);
       setProfilePicture(currentEmployee.profilePicture || null);
     }
   }, [isOpen]);
@@ -76,43 +72,26 @@ const EditModal: React.FC<ModalProps> = ({
   }, [isOpen]);
 
   async function handleEditEmployee(event: any) {
+    const apiClient = new ApiClient();
     event.preventDefault();
     setIsLoading(true);
-    const accessToken = localStorage.getItem("access_token");
-    if (!accessToken) {
-      setError("You're not logged in!");
-      return;
-    }
-
     try {
-      const response = await fetch(`${baseUrl}/employees/${employee.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-          hourlyRate: hourlyRate && hourlyRate,
-          firstName: firstName && firstName,
-          lastName: lastName && lastName,
-          profilePicture: profilePicture && profilePicture,
-        }),
+      await apiClient.patch(`/employees/${employee.id}`, {
+        hourlyRate,
+        firstName,
+        lastName,
+        profilePicture,
       });
-
-      if (!response.ok) {
-        throw new Error();
-      }
 
       setIsLoading(false);
       setIsOpen(false);
       setError(null);
-      refetch();
     } catch (err: any) {
       setIsLoading(false);
-      setError(err.message);
+      setError(err);
       toast({
         title: "Error",
-        description: `${err.message}`,
+        description: `${err}`,
         status: "error",
         duration: 5000,
         isClosable: true,

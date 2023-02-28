@@ -8,24 +8,22 @@ import {
   useToast,
   Spinner,
   Text,
-  Heading,
 } from "@chakra-ui/react";
-import React, { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import Layout from "../components/Layout";
-import PageTitle from "../components/PageTitle";
 import EmployeeSalaryReport from "../components/Employee/EmployeeSalaryReport";
-import { AccountContext } from "../context/AccountContext";
 import { Employee } from "../interfaces/EmployeeInterface";
 import { baseUrl } from "../utils/origin";
+import ApiClient from "../utils/ApiClient";
+import { SalaryReportInterface } from "../interfaces/SalaryReportInterface";
 
 const EmployeeDetails = ({}) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(false);
-  const [salaryReport, setSalaryReport] = useState(null);
+  const [salaryReport, setSalaryReport] = useState<SalaryReportInterface>();
 
-  const { setError, error } = useContext(AccountContext);
   const toast = useToast();
   const { id } = useParams();
 
@@ -35,33 +33,16 @@ const EmployeeDetails = ({}) => {
     handleGetEmployee();
   }, [id]);
 
+  const apiClient = new ApiClient();
+
   async function handleGetEmployee() {
-    const accessToken = localStorage.getItem("access_token");
-    if (!accessToken) {
-      throw new Error("You're not logged in!");
-    }
-
     try {
-      const response = await fetch(`${baseUrl}/employees/${id}`, {
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(`Error: ${data.message}`);
-      }
-
-      const employee: Employee = data;
-
+      const employee = await apiClient.get<Employee>(`/employees/${id}`);
       setEmployee(employee);
-    } catch (err: any) {
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: `${err.message}`,
+        description: error,
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -70,28 +51,16 @@ const EmployeeDetails = ({}) => {
   }
 
   const handleGenerateReport = async () => {
-    const accessToken = localStorage.getItem("access_token");
-
     try {
       setLoading(true);
 
-      const response = await fetch(
-        `${baseUrl}/salary/${employee?.clockifyId}`,
+      const data = await apiClient.post<SalaryReportInterface>(
+        `/salary/${employee?.clockifyId}`,
         {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({ start: startDate, end: endDate }),
+          start: startDate,
+          end: endDate,
         }
       );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message);
-      }
 
       setSalaryReport(data);
       setLoading(false);

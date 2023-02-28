@@ -37,8 +37,9 @@ class ApiClient {
         headers,
         baseURL: this.baseUrl,
       });
+
       //@ts-ignore
-      return response.data!;
+      return response.data;
     } catch (error: any) {
       const message = Array.isArray(error.response.data.message)
         ? error.response.data.message[0]

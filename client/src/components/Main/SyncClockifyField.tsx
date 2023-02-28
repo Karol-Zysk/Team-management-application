@@ -3,46 +3,27 @@ import { useContext, useState } from "react";
 import { AccountContext } from "../../context/AccountContext";
 import { Employee } from "../../interfaces/EmployeeInterface";
 import { motion } from "framer-motion";
-import { baseUrl } from "../../utils/origin";
+import ApiClient from "../../utils/ApiClient";
 
 const SyncClockifyField = () => {
   const [employee, setEmployee] = useState<Employee[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const { isActive, setError, setIsSync } = useContext(AccountContext);
+  const { isActive, setIsSync } = useContext(AccountContext);
 
   const handleSyncronize = async (event: any) => {
-    const accessToken = localStorage.getItem("access_token");
-    if (!accessToken) {
-      setError("You're not logged in!");
-      return;
-    }
+    const apiClient = new ApiClient();
 
     try {
       setLoading(true);
-      const response = await fetch(`${baseUrl}/employees/syncclockify`, {
-        method: "POST",
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message);
-      }
-
-      const employee: Employee[] = data;
-
-      setEmployee(employee);
+      const response = await apiClient.post<Employee[]>(
+        "employees/syncclockify"
+      );
+      setEmployee(response);
       setIsSync(true);
-
-      setError(null);
       setLoading(false);
     } catch (err: any) {
       setLoading(false);
-      console.error(err.message);
-      setError(err.message);
+      console.error(err);
     }
   };
 

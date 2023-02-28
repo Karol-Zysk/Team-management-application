@@ -24,7 +24,7 @@ interface AccountContextValue {
   isApiKeyValid: boolean;
   setIsApiKeyValid: React.Dispatch<React.SetStateAction<boolean>>;
 
-  companyName: string | undefined;
+  companyName: string;
   setCompanyName: React.Dispatch<React.SetStateAction<string>>;
   isActive: boolean | undefined;
   setIsActive: React.Dispatch<React.SetStateAction<boolean | undefined>>;

@@ -12,8 +12,9 @@ import {
   Thead,
   Tr,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import EditModal from "../components/Employee/EditEmployeeModal";
 import { AccountContext, UserData } from "../context/AccountContext";
@@ -21,15 +22,19 @@ import { Employee } from "../interfaces/EmployeeInterface";
 import { useQuery } from "react-query";
 import { baseUrl } from "../utils/origin";
 import Layout from "../components/Layout";
+import ApiClient from "../utils/ApiClient";
 
 const Employees = () => {
   const { error, user } = useContext(AccountContext);
+  const [employees, setEmployees] = useState<Employee[]>();
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [id, setId] = useState<Employee>();
 
   const color = useColorModeValue("black", "white");
   const bg = useColorModeValue("facebook.300", "gray.900");
   const bgHead = useColorModeValue("facebook.500", "black");
+  const toast = useToast();
 
   function handleCloseModal() {
     setIsOpen(false);
@@ -40,39 +45,31 @@ const Employees = () => {
     setId(employee);
   }
 
-  const {
-    data: employees = [],
-    isLoading,
-    isError,
-    refetch,
-  } = useQuery("employees", async () => {
-    const accessToken = localStorage.getItem("access_token");
-    if (!accessToken) {
-      throw new Error("You're not logged in!");
+  useEffect(() => {
+    handleGetEmployees()
+  }, [])
+
+  const apiClient = new ApiClient();
+  const handleGetEmployees = async () => {
+    setIsLoading(true);
+    const response = await apiClient.get<Employee[]>(`/employees`);
+    try {
+      setEmployees(response);
+      setIsLoading(false);
+    } catch (err: any) {
+      setIsLoading(false);
+      console.error(err.message);
+      toast({
+        title: "Error",
+        description: `${err.message}`,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
-
-    const response = await fetch(`${baseUrl}/employees`, {
-      method: "GET",
-      headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.error(`Error: ${data.message}`);
-      throw new Error(data.message);
-    }
-
-    return data;
-  });
+  };
 
   const activeUser = user as UserData;
-
-  if (isError) {
-    return <Box>{error}</Box>;
-  }
 
   if (isLoading) {
     return (
@@ -131,7 +128,7 @@ const Employees = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {employees.map((employee: Employee, index: number) => {
+            {employees?.map((employee: Employee, index: number) => {
               return (
                 <Tr
                   color={useColorModeValue("black", "white")}
@@ -187,7 +184,6 @@ const Employees = () => {
               employee={id!}
               isOpen={isOpen}
               setIsOpen={setIsOpen}
-              refetch={refetch}
             />
           )}
         </Table>

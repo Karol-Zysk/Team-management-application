@@ -38,7 +38,7 @@ const ApiKeyInput = ({}) => {
     event.preventDefault();
 
     try {
-      const response = await apiClient.patch("/users", {
+      await apiClient.patch("/users", {
         ...(apiKey !== "" ? { clockify_api_key: apiKey } : {}),
         companyName,
       });
