@@ -38,7 +38,6 @@ let UserService = class UserService {
                 hash_api_key = this.cryptoService.encrypt(dto.clockify_api_key);
                 active = true;
             }
-            console.log(hash_api_key);
             const updatedUser = await this.prisma.user.update({
                 where: { id: userId },
                 data: {

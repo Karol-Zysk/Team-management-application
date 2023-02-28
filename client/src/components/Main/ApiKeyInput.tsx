@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import { AccountContext } from "../../context/AccountContext";
+import ApiClient from "../../utils/ApiClient";
 import { baseUrl } from "../../utils/origin";
 
 const ApiKeyInput = ({}) => {
@@ -25,6 +26,8 @@ const ApiKeyInput = ({}) => {
     setCompanyName,
   } = useContext(AccountContext);
 
+  const apiClient = new ApiClient();
+
   const [apiKey, setApiKey] = useState<string>("");
   const editInputKeyHandler = () => {
     setIsApiKeyValid(false);
@@ -33,46 +36,20 @@ const ApiKeyInput = ({}) => {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    const accessToken = localStorage.getItem("access_token");
-
-    if (!accessToken) {
-      setError("You're not logged in");
-      toast({
-        title: "Error",
-        description: `${error}`,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
-    }
 
     try {
-      const response = await fetch(`${baseUrl}/users`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-          ...(apiKey !== "" ? { clockify_api_key: apiKey } : {}),
-          companyName,
-        }),
+      const response = await apiClient.patch("/users", {
+        ...(apiKey !== "" ? { clockify_api_key: apiKey } : {}),
+        companyName,
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
-      }
-
       setIsApiKeyValid(true);
       setCompanyName(companyName!);
       setIsActive(true);
     } catch (err: any) {
-      console.error(err.message);
+      console.error(err);
       toast({
         title: "Error",
-        description: `${err.message}`,
+        description: `${err}`,
         status: "error",
         duration: 5000,
         isClosable: true,

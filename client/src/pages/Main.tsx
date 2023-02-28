@@ -3,9 +3,7 @@ import { useContext } from "react";
 import { AccountContext, UserData } from "../context/AccountContext";
 import ApiKeyInput from "../components/Main/ApiKeyInput";
 import SyncClockifyField from "../components/Main/SyncClockifyField";
-import PageTitle from "../components/PageTitle";
 import Layout from "../components/Layout";
-import image from "../assets/employee.svg";
 import MainSvg from "../components/MainSvg";
 
 const Main = () => {

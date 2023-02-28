@@ -12,19 +12,16 @@ import {
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import { AccountContext } from "../../context/AccountContext";
-import { baseUrl, origin } from "../../utils/origin";
+import ApiClient, { ApiResponse, AuthResponse } from "../../utils/ApiClient";
 
 interface FormData {
   email: string;
   password: string;
 }
 
-interface Error {
-  message: string;
-}
-
 const Login: React.FC = () => {
-  const { setIsLoggedIn, error, setError } = useContext(AccountContext);
+  const apiClient = new ApiClient();
+  const { setIsLoggedIn, error } = useContext(AccountContext);
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
@@ -40,38 +37,21 @@ const Login: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      let headers = new Headers();
-      headers.append("Content-Type", "application/json");
-      headers.append("Accept", "application/json");
-      headers.append("Origin", origin);
-      const response = await fetch(`${baseUrl}/auth/signin`, {
-        method: "POST",
-        headers: headers,
-        credentials: "include",
-        cache: "no-store",
-        body: JSON.stringify(formData),
-      });
-      const result = await response.json();
-      if (result.error) {
-        toast({
-          title: "Error",
-          description: `${result.message}`,
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
-        setError(result.message);
-      } else {
-        localStorage.setItem("access_token", result.access_token);
-        localStorage.setItem("refresh_token", result.refreshToken);
-        setIsLoggedIn(true);
+      const result: ApiResponse<AuthResponse> = await apiClient.post(
+        "/auth/signin",
+        formData
+      );
+      console.log(result);
 
-        setTimeout(() => {
-          navigate("/main");
-        }, 500);
-      }
+      localStorage.setItem("access_token", result.access_token);
+
+      localStorage.setItem("refresh_token", result.refreshToken);
+
+      setIsLoggedIn(true);
+      setTimeout(() => {
+        navigate("/main");
+      }, 500);
     } catch (error: any) {
-      setError(error);
       toast({
         title: "Error",
         description: `${error}`,
