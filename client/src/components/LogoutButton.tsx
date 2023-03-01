@@ -5,6 +5,7 @@ import { useToast } from "@chakra-ui/toast";
 import { AccountContext } from "../context/AccountContext";
 import { useNavigate } from "react-router";
 import { baseUrl } from "../utils/origin";
+import axios from "axios";
 
 const LogoutButton = () => {
   const { cleanAfterLogout } = useContext(AccountContext);
@@ -14,8 +15,7 @@ const LogoutButton = () => {
 
   const handleLogout = async () => {
     try {
-      await fetch(`${baseUrl}/auth/logout`, {
-        method: "GET",
+      await axios.get(`${baseUrl}/auth/logout`, {
         headers: {
           authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },

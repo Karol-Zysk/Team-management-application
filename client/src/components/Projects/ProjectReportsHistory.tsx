@@ -8,18 +8,20 @@ import {
   Td,
   Flex,
   Button,
+  useToast,
 } from "@chakra-ui/react";
 import { AccountContext } from "../../context/AccountContext";
 import { ProjectReport } from "../../interfaces/ProjectReportInterface";
 import { baseUrl } from "../../utils/origin";
 import ProjectModal from "./ProjectReportModal";
+import ApiClient from "../../utils/ApiClient";
 
 const ProjectReportsHistory = () => {
   const { setProjectReport, projectReport } = useContext(AccountContext);
   const [error, setError] = useState(null);
   const [reports, setReports] = useState<ProjectReport[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-
+  const toast = useToast();
   const [isOpen, setIsOpen] = useState(false);
 
   function handleCloseModal() {
@@ -35,43 +37,28 @@ const ProjectReportsHistory = () => {
   }, []);
 
   const fetchReports = async () => {
+    const apiClient = new ApiClient();
     try {
-      const accessToken = localStorage.getItem("access_token");
-      if (!accessToken) {
-        throw new Error("You're not logged in!");
-      }
-      const response = await fetch(`${baseUrl}/projects/reports`, {
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
-      });
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.error(`Error: ${data.message}`);
-        throw new Error(data.message);
-      }
-      setReports(data);
+      const response = await apiClient.get<ProjectReport[]>(
+        "/projects/reports"
+      );
+      setReports(response);
     } catch (error: any) {
-      setError(error);
-    } finally {
+      toast({
+        title: "Error",
+        description: `${error.message}`,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 
   async function deleteReport(id: string, event: any) {
+    const apiClient = new ApiClient();
     event.preventDefault();
     try {
-      const accessToken = localStorage.getItem("access_token");
-      if (!accessToken) {
-        throw new Error("You're not logged in!");
-      }
-      await fetch(`${baseUrl}/projects/report/${id}`, {
-        method: "DELETE",
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
-      });
+      await apiClient.delete(`projects/report/${id}`);
 
       setProjectReport(null);
       setReports((reports) => {

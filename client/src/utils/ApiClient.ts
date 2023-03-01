@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
 export interface ApiResponse<T> {
@@ -17,6 +18,8 @@ export const baseUrl =
     ? "https://clock-app-uyb3.onrender.com/api/v1"
     : "http://127.0.0.1:4000/api/v1";
 
+
+
 class ApiClient {
   private baseUrl: string;
   private accessToken: string | null;
@@ -25,6 +28,8 @@ class ApiClient {
     this.baseUrl = baseUrl;
     this.accessToken = localStorage.getItem("access_token");
   }
+
+ 
 
   private async request<T>(config: AxiosRequestConfig): Promise<T> {
     try {

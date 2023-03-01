@@ -4,8 +4,9 @@ import DateInputs from "../components/DateInputs";
 import ReportsHistory from "../components/Employee/EmployeeReportsHistory";
 import TeamSalaryReport from "../components/Employee/TeamSalaryReport";
 import { AccountContext } from "../context/AccountContext";
-import { baseUrl } from "../utils/origin";
 import Layout from "../components/Layout";
+import ApiClient from "../utils/ApiClient";
+import { TeamReport } from "../interfaces/SalaryReportInterface";
 
 const EmployeesSalariesReport = () => {
   const [startDate, setStartDate] = useState("");
@@ -16,32 +17,14 @@ const EmployeesSalariesReport = () => {
   const toast = useToast();
 
   const handleGenerateReport = async () => {
+    const apiClient = new ApiClient();
     try {
-      const accessToken = localStorage.getItem("access_token");
-
       setLoading(true);
-      const response = await fetch(`${baseUrl}/salary/report`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ start: startDate, end: endDate }),
+      const response = await apiClient.post<TeamReport>("/salary/report", {
+        start: startDate,
+        end: endDate,
       });
-      if (!response.ok) {
-        const data = await response.json();
-        toast({
-          title: "Error",
-          description: `${data.message}`,
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
-        return;
-      }
-      const data = await response.json();
-
-      setSalaryReport(data);
+      setSalaryReport(response);
 
       setLoading(false);
     } catch (error: any) {

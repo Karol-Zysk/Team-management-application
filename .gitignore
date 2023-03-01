@@ -1,8 +1,9 @@
 # compiled output
-
+.vscode
 /node_modules
 /data
 data
+/.vscode
 # Logs
 logs
 *.log

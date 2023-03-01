@@ -20,8 +20,9 @@ import PageTitle from "../components/PageTitle";
 import ProjectReportCard from "../components/Projects/ProjectReportCard";
 import { AccountContext } from "../context/AccountContext";
 import { baseUrl } from "../utils/origin";
-import { Project } from "../interfaces/ProjectReportInterface";
+import { Project, ProjectReport } from "../interfaces/ProjectReportInterface";
 import ProjectSvg from "../components/ProjectSvg";
+import ApiClient from "../utils/ApiClient";
 
 const ProjectsReport = () => {
   useEffect(() => {
@@ -42,38 +43,17 @@ const ProjectsReport = () => {
   const { id } = useParams();
 
   const handleGetProject = async () => {
+    const apiClient = new ApiClient();
+    const response = await apiClient.get<Project>(`/projects/${id}`);
     try {
-      const accessToken = localStorage.getItem("access_token");
-
-      setLoading(true);
-      const response = await fetch(`${baseUrl}/projects/${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${accessToken}`,
-        },
-      });
-      if (!response.ok) {
-        const data = await response.json();
-        toast({
-          title: "Error",
-          description: `${data.message}`,
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
-        return;
-      }
-      const data = await response.json();
-
-      if (data) setProject(data);
-
+      setProject(response);
       setLoading(false);
-    } catch (error: any) {
+    } catch (err: any) {
       setLoading(false);
+      console.error(err.message);
       toast({
         title: "Error",
-        description: `${error.message}`,
+        description: `${err.message}`,
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -83,43 +63,25 @@ const ProjectsReport = () => {
 
   const handleGenerateReport = async () => {
     try {
-      const accessToken = localStorage.getItem("access_token");
-
       setLoading(true);
-      const response = await fetch(`${baseUrl}/projects/report/${id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
+      const apiClient = new ApiClient();
+      const response = await apiClient.post<ProjectReport>(
+        `/projects/report/${id}`,
+        {
           timeEstimate: Number(timeEstimate),
           budgetEstimate: Number(budgetEstimate),
           note,
           start: startDate,
-        }),
-      });
-      if (!response.ok) {
-        const data = await response.json();
-        toast({
-          title: "Error",
-          description: `${data.message}`,
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
-        return;
-      }
-      const data = await response.json();
+        }
+      );
 
-      setProjectReport(data);
-
+      setProjectReport(response);
       setLoading(false);
     } catch (error: any) {
       setLoading(false);
       toast({
         title: "Error",
-        description: `${error.message}`,
+        description: `${error}`,
         status: "error",
         duration: 5000,
         isClosable: true,

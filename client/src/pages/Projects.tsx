@@ -9,6 +9,7 @@ import { baseUrl } from "../utils/origin";
 import Layout from "../components/Layout";
 import ProjectGrid from "../components/Projects/ProjectGrid";
 import { Project } from "../interfaces/ProjectReportInterface";
+import ApiClient from "../utils/ApiClient";
 
 const Projects = () => {
   const toast = useToast();
@@ -22,31 +23,14 @@ const Projects = () => {
   }, []);
 
   const fetchData = async () => {
-    const accessToken = localStorage.getItem("access_token");
-    if (!accessToken) {
-      setError("You're not logged in!");
-      return;
-    }
+    const apiClient = new ApiClient();
     try {
-      const response = await fetch(`${baseUrl}/projects`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-
-      const data = await response.json();
-      setProjects(data);
-      setProjectReport(null);
-    } catch (err: any) {
-      setError(err.message);
+      const response = await apiClient.get<Project[]>("/projects");
+      setProjects(response);
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: `${err.message}`,
+        description: `${error.message}`,
         status: "error",
         duration: 5000,
         isClosable: true,

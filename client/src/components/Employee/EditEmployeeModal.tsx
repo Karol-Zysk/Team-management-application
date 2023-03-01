@@ -13,11 +13,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
-import {
-  QueryObserverResult,
-  RefetchOptions,
-  RefetchQueryFilters,
-} from "react-query";
+
 import { AccountContext } from "../../context/AccountContext";
 import { Employee } from "../../interfaces/EmployeeInterface";
 import ApiClient from "../../utils/ApiClient";

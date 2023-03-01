@@ -5,6 +5,7 @@ import {
   SalaryReportInterface,
   TeamReport,
 } from "../interfaces/SalaryReportInterface";
+import ApiClient from "../utils/ApiClient";
 import { baseUrl } from "../utils/origin";
 
 export interface UserData {
@@ -89,27 +90,28 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const refreshAccessToken = async () => {
+    const apiClient = new ApiClient();
     const refreshToken = localStorage.getItem("refresh_token");
     if (!refreshToken) return;
 
     try {
-      const res = await fetch(`${baseUrl}/auth/refresh`, {
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${refreshToken}`,
-        },
+      const refreshToken = localStorage.getItem("refresh_token");
+      if (!refreshToken) {
+        throw new Error("You're not logged in!");
+      }
+
+      const response = await apiClient.get<any>("/auth/refresh", {
+        headers: { authorization: `Bearer ${refreshToken}` },
       });
-      const data = await res.json();
+      const { data } = response;
 
       if (data.access_token) {
         localStorage.setItem("access_token", data.access_token);
         localStorage.setItem("refresh_token", data.refreshToken);
-
         setIsLoggedIn(true);
       }
     } catch (error: any) {
       console.error(error);
-
       setError(error);
       toast({
         title: "Error",

@@ -10,6 +10,7 @@ import {
   Flex,
   Text,
   Button,
+  useToast,
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { AccountContext } from "../../context/AccountContext";
@@ -18,65 +19,56 @@ import {
   TeamReport,
 } from "../../interfaces/SalaryReportInterface";
 import { baseUrl } from "../../utils/origin";
+import ApiClient from "../../utils/ApiClient";
 
 const ReportsHistory = () => {
   const { setSalaryReport } = useContext(AccountContext);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [reports, setReports] = useState<TeamReport[]>([]);
   const [error, setError] = useState(null);
+
+  const toast = useToast();
 
   useEffect(() => {
     fetchReports();
   }, []);
 
   const fetchReports = async () => {
+    const apiClient = new ApiClient();
     try {
-      setIsLoading(true);
-      const accessToken = localStorage.getItem("access_token");
-      if (!accessToken) {
-        throw new Error("You're not logged in!");
-      }
-      const response = await fetch(`${baseUrl}/salary`, {
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
-      });
-      const data = await response.json();
+      const response = await apiClient.get<TeamReport[]>("/salary");
+      setReports(response);
 
-      if (!response.ok) {
-        console.error(`Error: ${data.message}`);
-        throw new Error(data.message);
-      }
-      setIsLoading(false);
-      setReports(data);
+      setLoading(false);
     } catch (error: any) {
-      setError(error);
-    } finally {
-      setIsLoading(false);
+      toast({
+        title: "Error",
+        description: `${error}`,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 
   async function deleteReport(id: string, event: any) {
+    const apiClient = new ApiClient();
     event.preventDefault();
     try {
-      const accessToken = localStorage.getItem("access_token");
-      if (!accessToken) {
-        throw new Error("You're not logged in!");
-      }
-      await fetch(`${baseUrl}/salary/report/${id}`, {
-        method: "DELETE",
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
-      });
+      await apiClient.delete(`/salary/report/${id}`);
 
       setReports((reports) => {
         return reports.filter((report) => report.id !== id);
       });
     } catch (error: any) {
-      setError(error);
+      toast({
+        title: "Error",
+        description: "An error occurred while deleting the salary report.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
       console.error(error);
     }
   }
@@ -87,7 +79,7 @@ const ReportsHistory = () => {
   const indexOfFirstProject = indexOfLastProject - reportsPerPage;
   const currentReports = reports.slice(indexOfFirstProject, indexOfLastProject);
 
-  if (isLoading)
+  if (loading)
     return (
       <Spinner
         thickness="4px"
@@ -143,9 +135,9 @@ const ReportsHistory = () => {
                     }}
                     borderColor="white"
                     onClick={() => deleteReport(report.id, event)}
-                    disabled={isLoading}
+                    disabled={loading}
                   >
-                    {isLoading ? "Deleting..." : "Delete"}
+                    {loading ? "Deleting..." : "Delete"}
                   </Button>
                 </Td>
               </Tr>
