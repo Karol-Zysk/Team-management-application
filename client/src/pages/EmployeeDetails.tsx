@@ -66,10 +66,10 @@ const EmployeeDetails = ({}) => {
       setLoading(false);
     } catch (err: any) {
       setLoading(false);
-      console.error(err.message);
+      console.error(err);
       toast({
         title: "Error",
-        description: `${err.message}`,
+        description: `${err}`,
         status: "error",
         duration: 5000,
         isClosable: true,
