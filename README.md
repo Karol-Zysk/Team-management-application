@@ -1,9 +1,13 @@
 Team management application
 
-An application created for a client whose team uses clockify.me to manage team working hours.
+An application was developed for a client whose team utilizes clockify.me to manage their working hours. Thanks to the integration with the Clockify API, the application offers functionalities that are typically available only for premium accounts on the clockify.me platform.
 
-Using the Clockify API allowed for the creation of functionalities that are only available for premium accounts on the clockify.me platform.
+To get started, the clockify_api_key needs to be entered into the application, allowing for automatic synchronization of our database with clockify, including employee information. With employee hourly rates added, the application enables the generation of earnings reports for any period of time, as well as project reports with possible cost and time estimates. Once the reports are generated, a comparison is made between the estimated and actual costs and time spent.
 
-After entering the clockify_api_key in the application, it is possible to synchronize our database with clockify, automatically synchronize employees. Then, after filling in employee data such as hourly rate, it is possible to generate earnings reports for any period of time, as well as generate reports for projects with possible cost and time estimation. After generating the report, the estimated time and costs are compared to the actual costs and time.
+In summary, the integration with the Clockify API brings enhanced functionality to our application, simplifying the process of managing employee hours and generating comprehensive reports.
 
-All endpoints are available, including generating earnings reports for employees for any period.
+
+Postman Documentation [https://documenter.getpostman.com/view/13343611/2s8ZDbVL5Y](https://documenter.getpostman.com/view/13343611/2s8ZDbVL5Y)
+
+
+
